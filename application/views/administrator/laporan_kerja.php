@@ -12,7 +12,8 @@
         ) 
     ?>
     <div style="overflow-x:auto;">
-  <table class="table table-bordered table-striped">
+    <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
+    <thead>
   	<tr>
   		<th class="text-center">ID</th>
   		<th class="text-center">Nama</th>
@@ -25,6 +26,8 @@
   		<th class="text-center">BBM</th>
     </tr>
     <?php $i=1;foreach($laporan as $l):?>
+    </thead>
+    <tbody>
     <tr>
         <th class="text-center"><?php echo $l->id; ?></th>
         <th class="text-center"><?php echo $l->username; ?></th>
@@ -37,6 +40,7 @@
         <th class="text-center"><?php echo $l->gasoline; ?></th>
     </tr>
     <?php endforeach;?>
+        </tbody>
   </table>
 </div>
 </div>

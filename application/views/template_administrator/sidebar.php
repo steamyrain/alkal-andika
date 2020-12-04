@@ -79,6 +79,34 @@
         </div>
       </li>
 
+    <!-- Nav Item - Alat Berat Collapse Menu -->
+    <li class="nav-item"> 
+        <a 
+            class="nav-link collapsed" 
+            href="#" 
+            data-toggle="collapse" 
+            data-target="#collapseAlatBerat" 
+            aria-expanded="true" 
+            aria-controls="collapseAlatBerat"
+            style="color:black;"
+        >
+        <i class="fas fa-truck" style="color:black;"></i>
+        <span>Alat Berat</span>
+        </a>
+        <div 
+            id="collapseAlatBerat"
+            class="collapse"
+            aria-labelledby="headingAlatBerat"
+            data-parent="#accordionSidebar" 
+        >
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Pilihan :</h6> 
+                <a class="collapse-item" style="color:black;" href="<?php echo base_URL('administrator/alatberat'); ?>">Alat Berat</a>
+                <a class="collapse-item" style="color:black;" href="<?php echo base_URL('administrator/dumptruck'); ?>">Dump Truck</a>
+            </div>
+        </div>
+    </li>
+
       <li class="nav-item">
         <a class="nav-link" href="<?php echo base_url('administrator/auth/logout') ?>">
           <i class="fas fa-sign-out-alt" style="color:black;"></i>
