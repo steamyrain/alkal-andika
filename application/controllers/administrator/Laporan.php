@@ -5,7 +5,7 @@
         // index function will be called as soon as laporan controller
         // called
         public function index() {
-            $data['laporan'] = $this->laporankerja_model->getDatalaporan()->result();
+            $data['laporan'] = $this->LapKerjaModel->getDatalaporanWithName()->result();
             $this->load->view('template_administrator/header');
             $this->load->view('template_administrator/sidebar');
             $this->load->view('administrator/laporan_kerja',$data);
@@ -15,7 +15,6 @@
         // input function will be called when user press
         // the add button 
         public function input() {
-
             $this->load->view('template_administrator/header');
             $this->load->view('template_administrator/sidebar');
             $this->load->view('administrator/laporan_form');
@@ -25,6 +24,7 @@
         // input_aksi function will be called when user press
         // the add button 
         public function input_aksi() {
+            /*
             $this->_rules();
 
             if($this->form_validation->run()==FALSE) {
@@ -52,15 +52,19 @@
                 $this->laporankerja_model->setDataLaporan($data);
                 redirect('administrator/laporan');
             }
+             */
         }
 
         public function _rules() {
+            /*
             $this->form_validation->set_rules('nama','Nama','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('lokasi','Lokasi','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('nopol','Nomer Polisi','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('kmawal','KM Awal','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('kmakhir','KM Akhir','required',['required'=>'%s wajib diisi']);
+            $this->form_validation->set_rules('jarak','Jarak','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('bbm','BBM','required',['required'=>'%s wajib diisi']);
+             */
         }
   
     }
