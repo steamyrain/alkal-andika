@@ -45,7 +45,7 @@
       </li>
 
       <!-- Nav Item - Utilities Collapse Menu -->
-    <?php if (($_SESSION['job_id'] === '1') or ($_SESSION['job_id']===2)) { ?>
+    <?php if (($_SESSION['job_id'] === '1') or ($_SESSION['job_id']=== '2')) { ?>
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-fw fa-wrench" style="color:black;"></i>
@@ -56,7 +56,7 @@
             <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
             <!--a class="collapse-item" href="<?php echo base_url('pegawai/atpm') ?>">ATPM</a-->
             <!--a class="collapse-item" href="<?php echo base_url('pegawai/swakelola') ?>">Swakelola</a-->
-            <?php if (($_SESSION['job_id'] === '1') or ($_SESSION['job_id']===2)) { ?>
+            <?php if (($_SESSION['job_id'] === '1') or ($_SESSION['job_id']==='2')) { ?>
                 <a class="collapse-item" href="<?php echo base_url('pegawai/laporan') ?>">Laporan Kerja</a>
             <?php } ?>
           </div>
