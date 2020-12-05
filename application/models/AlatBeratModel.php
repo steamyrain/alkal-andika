@@ -26,4 +26,12 @@ class AlatBeratModel extends CI_Model {
         );
         return $this->db->get();
     }
+    public function getPlateAndSerial() {
+        $this->db->select(
+            'plate_number,serial_number'
+        );
+        $this->db->from($this->table);
+        $this->db->where("plate_number<>'NULL' or serial_number<>'NULL'");
+        return $this->db->get();
+    }
 }

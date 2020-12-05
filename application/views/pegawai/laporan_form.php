@@ -16,15 +16,21 @@
 
 		<div class="form-group">
 			<label>Nomer Polisi :</label>
-			<input type="text" name="plate_number"
-			placeholder="Masukkan Nomer Polisi Kendaraan" class="form-control">
-			<?php echo form_error('plate_number', '<div class="text-danger small" ml-3>') ?>
+			<select name="plate_number" class="form-control">
+            <?php foreach ($plate_number as $pn):?>
+                <option><?php echo $pn; ?>
+            <?php endforeach; ?>
+            </select>
+            <?php echo form_error('plate_number', '<div class="text-danger small" ml-3>') ?>
 		</div>
 
 		<div class="form-group">
 			<label>Nomer Seri :</label>
-			<input type="text" name="serial_number"
-			placeholder="Masukkan Nomer Seri Kendaraan" class="form-control">
+			<select name="serial_number" class="form-control">
+            <?php foreach ($serial_number as $sn):?>
+                <option><?php echo $sn; ?>
+            <?php endforeach; ?>
+            </select>
 			<?php echo form_error('serial_number', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">

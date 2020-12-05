@@ -18,13 +18,17 @@
             }
         }
 
+        private function is_operator() {
+            if(($this->session->userdata['job_id'] != 2) and ($this->session->userdata['job_id'] != 1)) {
+               redirect('pegawai/dashboard'); 
+            }
+        }
+
         // index function will be called as soon as laporan controller
         // called
         public function index() {
             $this->is_loggedIn();
-            if(($this->session->userdata['job_id'] != 2) and ($this->session->userdata['job_id'] != 1)) {
-               redirect('pegawai/dashboard'); 
-            }
+            $this->is_operator();
             $data['laporan'] = $this->LapKerjaModel->getOperatorsDatalaporan($this->session->userdata['user_id'])->result();
             $this->load->view('template_pegawai/header');
             $this->load->view('template_pegawai/sidebar');
@@ -36,9 +40,25 @@
         // the add button 
         public function input() { 
             $this->is_loggedIn();
+            $this->is_operator();
+            $vin = $this->AlatBeratModel->getPlateAndSerial()->result();
+            $plate_number = array();
+            $serial_number = array();
+            foreach ($vin as $v):
+                if($v->plate_number != NULL) {
+                    array_push($plate_number,$v->plate_number);
+                }
+                if($v->serial_number != NULL) {
+                    array_push($serial_number,$v->serial_number);
+                }
+            endforeach;
+            $data = [
+                'plate_number'=>$plate_number,
+                'serial_number'=>$serial_number
+            ];
             $this->load->view('template_pegawai/header');
             $this->load->view('template_pegawai/sidebar');
-            $this->load->view('pegawai/laporan_form');
+            $this->load->view('pegawai/laporan_form',$data);
             $this->load->view('template_pegawai/footer');
         }
 

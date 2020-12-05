@@ -38,7 +38,7 @@
             $this->db->from($this->table);
             $this->db->where('userId',$uid);
             return $this->db->get();
-        }
+        } 
 
         // public method to insert data to table
         public function setDataLaporan($data) {
