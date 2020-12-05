@@ -1,12 +1,56 @@
 <div class="container-fluid">
 
-	<!-- <?php echo form_open_multipart('administrator/laporan/input_aksi'); ?> -->
-        <form>
+	    <?php echo form_open('administrator/laporan/input_aksi'); ?> 
 		<div class="form-group">
-			<label> User ID :</label>
-			<input type="text" name="userId" class="form-control" placeholder="masukkan user id">
-			<?php echo form_error('userId', '<div class="text-danger small" ml-3>') ?>
+            <label> Nama :</label>
+			<select name="username" class="form-control">
+            <?php foreach ($username as $uname):?>
+                <option><?php echo $uname; ?></option>
+            <?php endforeach; ?>
+            </select>
+			<?php echo form_error('username', '<div class="text-danger small" ml-3>') ?>
 		</div>
+
+		<div class="form-group">
+			<label>Jenis Kendaraan :</label>
+            <input type="radio" id="lk__alat_berat" name="lk__jenis_alat" value="alat_berat" checked/>
+            <label for="alat_berat">Alat Berat</label>
+            <input type="radio" id="lk__dump_truck" name="lk__jenis_alat" value="dump_truck"/>
+            <label for="dump_truck">Dump Truck</label>
+			<?php echo form_error('lk__jenis_alat', '<div class="text-danger small" ml-3>') ?>
+		</div>
+
+		<div class="form-group" id="lk__vin_group" style="display: none;">
+			<label>Tanda Pengenal Kendaraan :</label>
+            <input type="radio" id="lk__vin_pn" name="lk__jenis_vin" value="plate_number" checked/>
+            <label for="plate_number">Nomor Polisi</label>
+            <input type="radio" id="lk__vin_sn" name="lk__jenis_vin" value="serial_number"/>
+            <label for="dump_truck">Nomor Seri</label>
+			<?php echo form_error('lk__jenis_vin', '<div class="text-danger small" ml-3>') ?>
+		</div>
+
+		<div class="form-group" name="lk__pn_group" style="display: none;">
+			<label>Nomor Polisi :</label>
+			<select name="plate_number" class="form-control">
+                <option selected="selected">NULL</option>
+            <?php foreach ($plate_number as $pn):?>
+                <option><?php echo $pn; ?></option>
+            <?php endforeach; ?>
+            </select>
+            <?php echo form_error('plate_number', '<div class="text-danger small" ml-3>') ?>
+		</div>
+
+		<div class="form-group" name="lk__sn_group" style="display: none;">
+			<label>Nomor Seri :</label>
+			<select name="serial_number" class="form-control">
+                <option selected="selected">NULL</option>
+            <?php foreach ($serial_number as $sn):?>
+                <option><?php echo $sn; ?></option>
+            <?php endforeach; ?>
+            </select>
+			<?php echo form_error('serial_number', '<div class="text-danger small" ml-3>') ?>
+		</div>
+
 		<div class="form-group">
 			<label>Lokasi Kerja :</label>
 			<input type="text" name="project_location"
@@ -14,44 +58,31 @@
 			<?php echo form_error('project_location', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
-			<label>Nomer Polisi :</label>
-			<input type="text" name="plate_number"
-			placeholder="Masukkan Nomer Polisi Kendaraan" class="form-control">
-			<?php echo form_error('plate_number', '<div class="text-danger small" ml-3>') ?>
-		</div>
-		<div class="form-group">
-			<label>Nomer Seri :</label>
-			<input type="text" name="serial_number"
-			placeholder="Masukkan Nomer Seri Kendaraan" class="form-control">
-			<?php echo form_error('serial_number', '<div class="text-danger small" ml-3>') ?>
-		</div>
-		<div class="form-group">
-			<label>km awal :</label>
+			<label>km/hm awal :</label>
             <input 
                 type="text" 
-                name="km_onStart"
+                name="lk__km_onStart"
                 placeholder="Masukkan KM Awal"
                 class="form-control"
             >
-			<?php echo form_error('km_onStart', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('lk__km_onStart', '<div class="text-danger small" ml-3>') ?>
         </div>
         <div class="form-group">
-            <label>km akhir :</label>
+            <label>km/hm akhir :</label>
             <input 
                 type="text" 
-                name="km_onFinish"
+                name="lk__km_onFinish"
                 placeholder="Masukkan KM Akhir" 
                 class="form-control"
             >
-			<?php echo form_error('km_onFinish', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('lk__km_onFinish', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
 			<label>Jarak :</label>
-			<input type="text" name="km_total"
-			placeholder="Masukkan Jarak" class="form-control">
-			<?php echo form_error('km_total', '<div class="text-danger small" ml-3>') ?>
+			<input id="lk__jarak" type="text" name="km_total"
+            placeholder="KM Awal - KM Akhir" class="form-control" readonly>
 		</div>
-		<div class="form-group">
+		<div class="form-group" style="display: none;">
 			<label>BBM :</label>
 			<input type="text" name="gasoline"
 			placeholder="Masukkan BBM" class="form-control">

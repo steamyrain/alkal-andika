@@ -53,15 +53,15 @@
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-            <a class="collapse-item" href="<?php echo base_url('administrator/atpm') ?>">ATPM</a>
-            <a class="collapse-item" href="<?php echo base_url('administrator/swakelola') ?>">Swakelola</a>
+            <!--a class="collapse-item" href="<?php echo base_url('administrator/atpm') ?>">ATPM</a-->
+            <!--a class="collapse-item" href="<?php echo base_url('administrator/swakelola') ?>">Swakelola</a-->
             <a class="collapse-item" href="<?php echo base_url('administrator/laporan') ?>">Laporan Kerja</a>
           </div>
         </div>
       </li>
 
 
-      <!-- Nav Item - Pages Collapse Menu -->
+      <!-- Nav Item - Pages Collapse Menu 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
           <i class="fas fa-truck" style="color:black;"></i>
@@ -77,7 +77,7 @@
             <a class="collapse-item" href="<?php echo base_url('administrator/filter') ?>">Filter</a>
           </div>
         </div>
-      </li>
+      </li>-->
 
     <!-- Nav Item - Alat Berat Collapse Menu -->
     <li class="nav-item"> 

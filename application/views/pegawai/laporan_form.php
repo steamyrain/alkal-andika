@@ -1,7 +1,6 @@
 <div class="container-fluid">
 
 	    <?php echo form_open('pegawai/laporan/input_aksi'); ?> 
-        <form>
         <input type="hidden" name="userId" value=<?php $this->session->userdata['user_id']; ?> >
 		<div class="form-group">
             <label> Nama :</label>

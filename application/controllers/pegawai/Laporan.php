@@ -100,7 +100,7 @@
                     'gasoline' => $gasoline
                 );
                 $this->LapKerjaModel->setDataLaporan($data);
-                redirect('administrator/laporan');
+                redirect('pegawai/laporan');
             }
         }
 
