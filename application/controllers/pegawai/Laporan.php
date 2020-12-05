@@ -25,7 +25,7 @@
             if(($this->session->userdata['job_id'] != 2) and ($this->session->userdata['job_id'] != 1)) {
                redirect('pegawai/dashboard'); 
             }
-            $data['laporan'] = $this->LapKerjaModel->getDatalaporanWithName()->result();
+            $data['laporan'] = $this->LapKerjaModel->getOperatorsDatalaporan($this->session->userdata['user_id'])->result();
             $this->load->view('template_pegawai/header');
             $this->load->view('template_pegawai/sidebar');
             $this->load->view('pegawai/laporan_kerja',$data);

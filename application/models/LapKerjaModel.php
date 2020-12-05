@@ -33,11 +33,10 @@
                 $this->table.'.km_onFinish,'.
                 $this->table.'.km_total,'.
                 $this->table.'.gasoline,'.
-                $this->table.'.project_location,'.
-                'user.username'
+                $this->table.'.project_location'
             );
             $this->db->from($this->table);
-            $this->db->where($this->table.'.userId ='.$uId);
+            $this->db->where('userId',$uid);
             return $this->db->get();
         }
 
