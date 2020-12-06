@@ -12,6 +12,7 @@ class user_model extends CI_Model{
         $this->db->select("id,username");
         $this->db->from("user");
         $this->db->where("job_id = 1 or job_id = 2");
+        $this->db->order_by("username");
         return $this->db->get();
     }
 
