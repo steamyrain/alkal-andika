@@ -2,7 +2,7 @@
 
 class Dumptruck extends CI_Controller {
     public function index() {
-        $dumpTruck = $this->DumpTruckModel->tampilTrukDanMerek()->result();
+        $dumpTruck = $this->DumpTruckModel->getDTBrandCategory()->result();
         $data = [
             'dumpTruck'=> $dumpTruck
         ];
