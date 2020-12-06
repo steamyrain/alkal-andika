@@ -30,6 +30,7 @@
             $this->is_loggedIn();
             $this->is_operator();
             $data['laporan'] = $this->LapKerjaModel->getOperatorsDatalaporan($this->session->userdata['user_id'])->result();
+            $data['username'] = $this->session->userdata['username'];
             $this->load->view('template_pegawai/header');
             $this->load->view('template_pegawai/sidebar');
             $this->load->view('pegawai/laporan_kerja',$data);

@@ -26,13 +26,12 @@
 
         public function getOperatorsDataLaporan(int $uid) {
             $this->db->select(
-                $this->table.'.id,'.
+                $this->table.'.created_at,'.
                 $this->table.'.plate_number,'.
                 $this->table.'.serial_number,'.
                 $this->table.'.km_onStart,'.
                 $this->table.'.km_onFinish,'.
                 $this->table.'.km_total,'.
-                $this->table.'.gasoline,'.
                 $this->table.'.project_location'
             );
             $this->db->from($this->table);
