@@ -14,6 +14,7 @@
         </button>'
     ) 
     ?>
+    <div style="overflow-x: auto;">
   <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
     <thead>
   	<tr>
@@ -25,6 +26,8 @@
   		<th class="text-center">Nomer Rangka</th>
   		<th class="text-center">Nomer Mesin</th>
   		<th class="text-center">Aktif</th>
+  		<th class="text-center">Keterangan</th>
+  		<th class="text-center">Lokasi</th>
     </tr>
     </thead>
     <tbody>
@@ -32,14 +35,17 @@
   		<tr>
   			<td width="20px"><?php echo $dt->plate_number ?></td>
   			<td><?php echo $dt->type ?></td>
-  			<td><?php echo $dt->size_cubic_meter ?></td>
+  			<td><?php echo $dt->category ?></td>
   			<td><?php echo $dt->brand ?></td>
   			<td><?php echo $dt->year ?></td>
   			<td><?php echo $dt->chassis_number ?></td>
   			<td><?php echo $dt->engine_number ?></td>
   			<td><?php echo $dt->active ?></td>
+  			<td><?php echo $dt->condition_info ?></td>
+  			<td><?php echo $dt->location ?></td>
   		</tr>
   	<?php endforeach; ?>
     </tbody>
   </table>
+</div>
 </div>
