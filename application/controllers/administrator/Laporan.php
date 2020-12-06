@@ -15,6 +15,7 @@
                 redirect('administrator/auth');
             }
         }
+
         // index function will be called as soon as laporan controller
         // called
         public function index() {
@@ -28,29 +29,14 @@
         // input function will be called when user press
         // the add button 
         public function input() {
-            $operator = $this->user_model->getUserOperator()->result();
-            $vin = $this->AlatBeratModel->getPlateAndSerial()->result();
-            $plate_number = array();
-            $serial_number = array();
-            $username = array();
-            $uId = array();
-            foreach ($operator as $o):
-                array_push($username,$o->username);
-                array_push($uId,$o->id);
-            endforeach;
-            foreach ($vin as $v):
-                if($v->plate_number != NULL) {
-                    array_push($plate_number,$v->plate_number);
-                }
-                if($v->serial_number != NULL) {
-                    array_push($serial_number,$v->serial_number);
-                }
-            endforeach;
+            // Populate username for form field username
+            $username = $this->populateOperator();
+            // Populate vin for form field plate_number and serial_number
+            $vin = $this->populateVin();
             $data = [
-                'plate_number'=>$plate_number,
-                'serial_number'=>$serial_number,
                 'username'=>$username,
-                'uId'=>$uId
+                'plate_number'=>$vin['plate_number'],
+                'serial_number'=>$vin['serial_number']
             ];
             $this->load->view('template_administrator/header');
             $this->load->view('template_administrator/sidebar');
@@ -118,6 +104,33 @@
             else {
                 return true;
             }
+        }
+
+        private function populateOperator() {
+            $username = array();
+            $operator = $this->user_model->getUserOperator()->result();
+            foreach ($operator as $o):
+                array_push($username,$o->username);
+            endforeach;
+            return $username;
+        }
+
+        private function populateVin() {
+            $plate_number = array();
+            $serial_number = array();
+            $data = array();
+            $vin = $this->AlatBeratModel->getPlateAndSerial()->result();
+            foreach ($vin as $v):
+                if($v->plate_number != NULL) {
+                    array_push($plate_number,$v->plate_number);
+                }
+                if($v->serial_number != NULL) {
+                    array_push($serial_number,$v->serial_number);
+                }
+            endforeach;
+            $data['plate_number'] = $plate_number;
+            $data ['serial_number']=$serial_number;
+            return $data;
         }
   
     }
