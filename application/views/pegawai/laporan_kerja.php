@@ -16,7 +16,6 @@
     <thead>
   	<tr>
   		<th class="text-center">ID</th>
-  		<th class="text-center">Nama</th>
   		<th class="text-center">Lokasi Kerja</th>
   		<th class="text-center">Nomer Polisi</th>
   		<th class="text-center">Nomer Seri</th>
@@ -30,7 +29,6 @@
     <tbody>
     <tr>
         <th class="text-center"><?php echo $l->id; ?></th>
-        <th class="text-center"><?php echo $l->username; ?></th>
         <th class="text-center"><?php echo $l->project_location; ?></th>
         <th class="text-center"><?php echo $l->plate_number; ?></th>
         <th class="text-center"><?php echo $l->serial_number; ?></th>
