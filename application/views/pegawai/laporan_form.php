@@ -1,10 +1,12 @@
 <div class="container-fluid">
 
 	    <?php echo form_open('pegawai/laporan/input_aksi'); ?> 
+        <h5 style="text-align: center;">LAPORAN KERJA ALAT BERAT</h5>
+        <br>
         <input type="hidden" name="userId" value=<?php $this->session->userdata['user_id']; ?> >
 		<div class="form-group">
             <label> Nama :</label>
-            <label> <?php echo $this->session->userdata['username'] ?></label>
+            <label> <b><?php echo $this->session->userdata['username'] ?></b></label>
 		</div>
 
 		<div class="form-group" id="lk__vin_group"> 
