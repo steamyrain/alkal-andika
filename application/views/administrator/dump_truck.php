@@ -22,7 +22,7 @@
   		<th class="text-center">Nomor Polisi</th>
   		<th class="text-center">Nomor Pintu</th>
   		<th class="text-center">Tipe</th>
-  		<th class="text-center">Kapasitas</th>
+  		<th class="text-center">Kategori/Kapasitas</th>
   		<th class="text-center">Merek</th>
   		<th class="text-center">Tahun</th>
   		<th class="text-center">Nomer Rangka</th>
@@ -37,17 +37,22 @@
   		<tr>
             <td>
                 <div class="aksi" style="display: inline-grid; grid-gap: 5px;">
-                    <form style="display: none;" id="form-id" method="post" action=<?php echo base_URL('administrator/dumptruck/hapus_aksi') ?>>
-                    <input type="text" name="id" value="<?php echo $dt->id; ?>">
+                    <form style="display: none;" id="form-hapus" method="post" action=<?php echo base_URL('administrator/dumptruck/hapus_aksi') ?>>
+                        <input type="text" name="id" value="<?php echo $dt->id; ?>">
+                    </form>
+                    <form style="display: none;" id="form-edit" method="post" action=<?php echo base_URL('administrator/dumptruck/edit') ?>>
+                        <input type="text" name="id" value="<?php echo $dt->id; ?>">
                     </form>
                     <a 
-                        onclick="document.getElementById('form-id').submit()"
+                        onclick="document.getElementById('form-hapus').submit()"
                     >
                         <div class="btn btn-danger btn-sm" onclick="javascript: return confirm('Yakin Hapus?')">
                             <i class="fa fa-trash"></i>
                         </div>
                     </a>
-                    <a href="<?php echo'#'; ?>">
+                    <a 
+                        onclick="document.getElementById('form-edit').submit()"
+                    >
                         <div class="btn btn-warning btn-sm">
                             <i class="fa fa-edit"></i>
                         </div>
