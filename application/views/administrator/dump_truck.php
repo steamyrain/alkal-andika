@@ -36,14 +36,16 @@
   		<tr>
             <td>
                 <div class="aksi" style="display: inline-grid; grid-gap: 5px;">
-                    <div class="btn btn-danger btn-sm" onclick="javascript: return confirm('Yakin Hapus?')">
-                        <i class="fa fa-trash"></i>
-                        <a href="<?php echo 'administrator/dumptruck/hapus_aksi/'.$dt->plate_number; ?>"></a>
-                    </div> 
-                    <div class="btn btn-warning btn-sm" onclick="javascript: return confirm('Yakin Hapus?')">
-                        <i class="fa fa-edit"></i>
-                        <a href="<?php echo'administrator/dumptruck/hapus_aksi'; ?>"></a>
-                    </div> 
+                    <a href="<?php echo 'dumptruck/hapus_aksi/'.$dt->id; ?>">
+                        <div class="btn btn-danger btn-sm" onclick="javascript: return confirm('Yakin Hapus?')">
+                            <i class="fa fa-trash"></i>
+                        </div>
+                    </a>
+                    <a href="<?php echo'#'; ?>">
+                        <div class="btn btn-warning btn-sm">
+                            <i class="fa fa-edit"></i>
+                        </div>
+                    </a>
                 </div>
             </td>
   			<td width="20px"><?php echo $dt->plate_number ?></td>
