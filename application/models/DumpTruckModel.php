@@ -13,4 +13,28 @@ class DumpTruckModel extends CI_Model {
     public function insertDT($data){
         $this->db->insert($this->table,$data);
     }
+    public function getDTBrandCategory() {
+        $this->db->select($this->table.'.*,'.'alkal_brand.brand, alkal_category_dt.category');
+        $this->db->from($this->table);
+        $this->db->join('alkal_brand','alkal_brand.id='.$this->table.'.brandId');
+        $this->db->join('alkal_category_dt','alkal_category_dt.id='.$this->table.'.catId');
+        return $this->db->get();
+    }
+
+    public function getDTBrandCategoryWhere($dtId) {
+        $this->db->select($this->table.'.*,'.'alkal_brand.brand, alkal_category_dt.category');
+        $this->db->from($this->table);
+        $this->db->join('alkal_brand','alkal_brand.id='.$this->table.'.brandId');
+        $this->db->join('alkal_category_dt','alkal_category_dt.id='.$this->table.'.catId');
+        $this->db->where($this->table.'.id='.$dtId);
+        return $this->db->get();
+    }
+
+    public function deleteDT($dtId){
+        $this->db->delete($this->table,array('id'=>$dtId));
+    }
+
+    public function editDt($data,$id){
+        $this->db->update($this->table,$data,'id='.$id);
+    }
 }
