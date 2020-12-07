@@ -20,6 +20,7 @@
   	<tr>
   		<th class="text-center">Aksi</th>
   		<th class="text-center">Nomor Polisi</th>
+  		<th class="text-center">Nomor Pintu</th>
   		<th class="text-center">Tipe</th>
   		<th class="text-center">Kapasitas</th>
   		<th class="text-center">Merek</th>
@@ -49,6 +50,7 @@
                 </div>
             </td>
   			<td width="20px"><?php echo $dt->plate_number ?></td>
+  			<td width="20px"><?php echo $dt->door_number ?></td> 
   			<td><?php echo $dt->type ?></td>
   			<td><?php echo $dt->category ?></td>
   			<td><?php echo $dt->brand ?></td>
