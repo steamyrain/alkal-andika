@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="alert alert-success" role="alert">
-        <i class="fas fa-clipboard"></i> Laporan Kerja 
+        <i class="fas fa-clipboard"></i> Laporan Kerja Alat Berat
     </div>
     <?php 
         echo anchor(

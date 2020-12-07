@@ -5,23 +5,14 @@
             <label> Nama :</label>
 			<select name="uId" class="form-control">
             <?php $no=0; foreach ($username as $uname):?>
-                <option value="<?php echo $oId[$no]?>;"><?php echo $uname; ?></option>
+                <option value="<?php echo $oId[$no]; ?>"><?php echo $uname; ?></option>
                 <?php $no++; ?>
             <?php endforeach; ?>
             </select>
 			<?php echo form_error('uId', '<div class="text-danger small" ml-3>') ?>
 		</div>
 
-		<div class="form-group">
-			<label>Jenis Kendaraan :</label>
-            <input type="radio" id="lk__alat_berat" name="lk__jenis_alat" value="alat_berat" checked/>
-            <label for="alat_berat">Alat Berat</label>
-            <input type="radio" id="lk__dump_truck" name="lk__jenis_alat" value="dump_truck"/>
-            <label for="dump_truck">Dump Truck</label>
-			<?php echo form_error('lk__jenis_alat', '<div class="text-danger small" ml-3>') ?>
-		</div>
-
-		<div class="form-group" id="lk__vin_group" style="display: none;">
+		<div class="form-group" id="lk__vin_group">
 			<label>Tanda Pengenal Kendaraan :</label>
             <input type="radio" id="lk__vin_pn" name="lk__jenis_vin" value="plate_number" checked/>
             <label for="plate_number">Nomor Polisi</label>

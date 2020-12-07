@@ -1,6 +1,6 @@
 <?php 
     // Controller for laporan kerja
-    class Laporan extends CI_Controller {
+    class Laporandt extends CI_Controller {
 
         function __construct(){
             parent::__construct();
@@ -19,10 +19,10 @@
         // index function will be called as soon as laporan controller
         // called
         public function index() {
-            $data['laporan'] = $this->LapKerjaModel->getDatalaporanWithName()->result();
+            $data['laporan'] = $this->LKDTModel->getDatalaporanWithName()->result();
             $this->load->view('template_administrator/header');
             $this->load->view('template_administrator/sidebar');
-            $this->load->view('administrator/laporan_kerja',$data);
+            $this->load->view('administrator/lk_dt',$data);
             $this->load->view('template_administrator/footer');
         }
 
@@ -32,16 +32,15 @@
             // Populate username for form field username
             $operators = $this->populateOperator();
             // Populate vin for form field plate_number and serial_number
-            $vin = $this->populateVin();
+            $plate_number = $this->populateVin();
             $data = [
                 'username'=>$operators['username'],
                 'oId'=>$operators['oId'],
-                'plate_number'=>$vin['plate_number'],
-                'serial_number'=>$vin['serial_number']
+                'plate_number'=>$plate_number,
             ];
             $this->load->view('template_administrator/header');
             $this->load->view('template_administrator/sidebar');
-            $this->load->view('administrator/laporan_form',$data);
+            $this->load->view('administrator/lk_dt_form',$data);
             $this->load->view('template_administrator/footer');
         }
 
@@ -55,16 +54,7 @@
             }
             else {
                 $userId = $this->input->post('uId');
-                if ($this->input->post('plate_number') == 'NULL') {
-                    $plate_number = NULL;
-                } else {
-                    $plate_number = $this->input->post('plate_number');
-                }
-                if ($this->input->post('serial_number') == 'NULL') {
-                    $serial_number = NULL;
-                } else {
-                    $serial_number = $this->input->post('serial_number');
-                }
+                $plate_number = $this->input->post('plate_number');
                 $project_location = $this->input->post('project_location');
                 $km_onStart = $this->input->post('lk__km_onStart');
                 $km_onFinish = $this->input->post('lk__km_onFinish');
@@ -74,35 +64,23 @@
                 $data = array(
                     'userId' => $userId,
                     'plate_number' => $plate_number,
-                    'serial_number' => $serial_number,
                     'project_location' => $project_location,
                     'km_onStart' => $km_onStart,
                     'km_onFinish' => $km_onFinish,
                     'km_total' => $km_total,
                     'gasoline' => $gasoline
                 );
-                $this->LapKerjaModel->setDataLaporan($data);
-                redirect('administrator/laporan');
+                $this->LKDTModel->setDataLaporan($data);
+                redirect('administrator/laporandt');
             }
         }
 
         public function _rules() {
             $this->form_validation->set_rules('uId','Username','required',['required'=>'%s wajib diisi']);
-            //$this->form_validation->set_rules('plate_number','plate_number','callback_vin_check');
-            //$this->form_validation->set_rules('serial_number','serial_number','callback_vin_check');
+            $this->form_validation->set_rules('plate_number','Nomor Polisi','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('project_location','Lokasi kerja','required',['required'=>'%s  wajib diisi']);
             $this->form_validation->set_rules('lk__km_onStart','KM awal','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('lk__km_onFinish','KM akhir','required',['required'=>'%s wajib diisi']);
-        }
-
-        public function vin_check() {
-            if (($this->input->post('plate_number') == 'NULL') && ($this->input->post('serial_number') == 'NULL')) {
-                $this->form_validation->set_message('vin_check',"Nomor Wajib diisi");
-                return false;
-            }
-            else {
-                return true;
-            }
         }
 
         private function populateOperator() {
@@ -119,20 +97,13 @@
 
         private function populateVin() {
             $plate_number = array();
-            $serial_number = array();
-            $data = array();
-            $vin = $this->AlatBeratModel->getPlateAndSerial()->result();
+            $vin = $this->DumpTruckModel->getDTPN()->result();
             foreach ($vin as $v):
                 if($v->plate_number != NULL) {
                     array_push($plate_number,$v->plate_number);
                 }
-                if($v->serial_number != NULL) {
-                    array_push($serial_number,$v->serial_number);
-                }
             endforeach;
-            $data['plate_number'] = $plate_number;
-            $data ['serial_number']=$serial_number;
-            return $data;
+            return $plate_number;
         }
   
     }

@@ -1,11 +1,11 @@
 <div class="container-fluid">
 
-	    <?php echo form_open('administrator/laporan/input_aksi'); ?> 
+	    <?php echo form_open('administrator/laporandt/input_aksi'); ?> 
 		<div class="form-group">
             <label> Nama :</label>
 			<select name="uId" class="form-control">
             <?php $no=0; foreach ($username as $uname):?>
-                <option value="<?php echo $oId[$no]?>;"><?php echo $uname; ?></option>
+                <option value="<?php echo $oId[$no]; ?>"><?php echo $uname; ?></option>
                 <?php $no++; ?>
             <?php endforeach; ?>
             </select>

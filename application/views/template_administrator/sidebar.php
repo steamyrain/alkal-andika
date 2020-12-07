@@ -55,7 +55,8 @@
             <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
             <!--a class="collapse-item" href="<?php echo base_url('administrator/atpm') ?>">ATPM</a-->
             <!--a class="collapse-item" href="<?php echo base_url('administrator/swakelola') ?>">Swakelola</a-->
-            <a class="collapse-item" href="<?php echo base_url('administrator/laporan') ?>">Laporan Kerja</a>
+            <a class="collapse-item" href="<?php echo base_url('administrator/laporan') ?>">Laporan Kerja Alat Berat</a>
+            <a class="collapse-item" href="<?php echo base_url('administrator/laporandt') ?>">Laporan Kerja Dump Truck</a>
           </div>
         </div>
       </li>

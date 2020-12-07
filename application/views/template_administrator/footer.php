@@ -38,51 +38,20 @@
   </script>
     <script type="text/JavaScript">
     $(document).ready(function() {
-        if ($('#lk__alat_berat').is(':checked')){ 
-            $("#lk__vin_group").css('display','block');
+        if ($('#lk__vin_pn').is(':checked')){ 
+            $("div[name='lk__pn_group']").css('display','block');
+            $("div[name='lk__sn_group']").css('display','none');
+        } else if ($('#lk__vin_sn').is(':checked')){ 
+            $("div[name='lk__sn_group']").css('display','block');
+            $("div[name='lk__pn_group']").css('display','none');
+        }
+        $("input[name='lk__jenis_vin']").change(function(e){
             if ($('#lk__vin_pn').is(':checked')){ 
                 $("div[name='lk__pn_group']").css('display','block');
                 $("div[name='lk__sn_group']").css('display','none');
             } else if ($('#lk__vin_sn').is(':checked')){ 
                 $("div[name='lk__sn_group']").css('display','block');
                 $("div[name='lk__pn_group']").css('display','none');
-            }
-            $("input[name='lk__jenis_vin']").change(function(e){
-                if ($('#lk__vin_pn').is(':checked')){ 
-                    $("div[name='lk__pn_group']").css('display','block');
-                    $("div[name='lk__sn_group']").css('display','none');
-                } else if ($('#lk__vin_sn').is(':checked')){ 
-                    $("div[name='lk__sn_group']").css('display','block');
-                    $("div[name='lk__pn_group']").css('display','none');
-                }
-            });
-        } else {
-            $("#lk__vin_group").css('display','none');
-            $("div[name='lk__pn_group']").css('display','block');
-            $("div[name='lk__sn_group']").css('display','none');
-        }
-        $("input[name='lk__jenis_alat']").change(function(e){
-            if ($('#lk__alat_berat').is(':checked')){ 
-                // Show Vin Radio Group
-                $("#lk__vin_group").css('display','block');
-
-                // Select which VIN will be used
-                $("input[name='lk__jenis_vin']").change(function(e){
-                    if ($('#lk__vin_pn').is(':checked')){ 
-                        $("div[name='lk__pn_group']").css('display','block');
-                        $("div[name='lk__sn_group']").css('display','none');
-                    } else if ($('#lk__vin_sn').is(':checked')){ 
-                        $("div[name='lk__sn_group']").css('display','block');
-                        $("div[name='lk__pn_group']").css('display','none');
-                    }
-                });
-            } else if ($('#lk__dump_truck').is(':checked')){
-                $("#lk__vin_group").css('display','none');
-                $("div[name='lk__pn_group']").css('display','block');
-                $("div[name='lk__sn_group']").css('display','none');
-            } else {
-                $("div[name='lk__pn_group']").css('display','none');
-                $("div[name='lk__sn_group']").css('display','none');
             }
         });
         monitorKM();
