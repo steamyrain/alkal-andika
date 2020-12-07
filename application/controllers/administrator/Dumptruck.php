@@ -57,7 +57,6 @@ class Dumptruck extends CI_Controller {
     }
 
     public function input_aksi(){
-
         $this->is_loggedIn();
         $this->is_admin();
         $this->_rules();
@@ -122,9 +121,73 @@ class Dumptruck extends CI_Controller {
 
     }
 
-    public function hapus_aksi($dtId) {
+    public function edit_aksi(){
         $this->is_loggedIn();
         $this->is_admin();
+        $this->_rules();
+        if($this->form_validation->run() === FALSE) {
+            $this->input();
+        }
+
+        else {
+            // assign form input values to variables
+            $plate_number = $this->input->post('plate_number');    
+            $door_number = ($this->input->post('door_number') == "")?NULL:$this->input->post('door_number');    
+            $type = ($this->input->post('type')=="")?NULL:$this->input->post('type');
+            $catId = $this->input->post('catId');
+            $brandId = $this->input->post('brandId');
+            $year = ($this->input->post('year')=="")?NULL:$this->input->post('year');
+            $chassis_number = ($this->input->post('chassis_number')=="")?NULL:$this->input->post('chassis_number');
+            $engine_number = ($this->input->post('engine_number')=="")?NULL:$this->input->post('engine_number');
+            $active = $this->input->post('active');
+            $condition_info = ($this->input->post('condition_info')=="")?NULL:$this->input->post('condition_info');
+            $location = ($this->input->post('location')=="")?NULL:$this->input->post('location');
+
+
+            $data = [
+                'plate_number'=>$plate_number,
+                'door_number'=>$door_number,
+                'type'=>$type,
+                'catId'=>$catId,
+                'brandId'=>$brandId,
+                'year'=>$year,
+                'chassis_number'=>$chassis_number,
+                'engine_number'=>$engine_number,
+                'active'=>$active,
+                'condition_info'=>$condition_info,
+                'location'=>$location
+            ];
+
+            $this->DumpTruckModel->insertDT($data);
+            $this->session->set_flashdata('pesan',
+                '<div 
+                    class=" alert 
+                            alert-success 
+                            dismissible 
+                            fade 
+                            show
+                            " 
+                    role="alert">
+                Data Berhasil Ditambahkan!
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="alert" 
+                    aria-label="Close">
+                <span 
+                    aria-hidden="true">
+                &times;
+                </span>
+                </button>
+                </div>');
+            redirect(base_URL('administrator/dumptruck'));
+        }
+
+    }
+    public function hapus_aksi() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $dtId = $this->input->post('id');
         $this->DumpTruckModel->deleteDT($dtId);
         $this->session->set_flashdata('pesan',
             '<div 
