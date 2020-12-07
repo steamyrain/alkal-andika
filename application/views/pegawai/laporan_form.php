@@ -7,16 +7,7 @@
             <label> <?php echo $this->session->userdata['username'] ?></label>
 		</div>
 
-		<div class="form-group">
-			<label>Jenis Kendaraan :</label>
-            <input type="radio" id="lk__alat_berat" name="lk__jenis_alat" value="alat_berat" checked/>
-            <label for="alat_berat">Alat Berat</label>
-            <input type="radio" id="lk__dump_truck" name="lk__jenis_alat" value="dump_truck"/>
-            <label for="dump_truck">Dump Truck</label>
-			<?php echo form_error('lk__jenis_alat', '<div class="text-danger small" ml-3>') ?>
-		</div>
-
-		<div class="form-group" id="lk__vin_group" style="display: none;">
+		<div class="form-group" id="lk__vin_group"> 
 			<label>Tanda Pengenal Kendaraan :</label>
             <input type="radio" id="lk__vin_pn" name="lk__jenis_vin" value="plate_number" checked/>
             <label for="plate_number">Nomor Polisi</label>

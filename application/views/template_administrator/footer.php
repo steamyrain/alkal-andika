@@ -59,7 +59,6 @@
     function monitorKM() {
         $("input[name^='lk__km']").change(function(e){
             if(checkInputs()) {
-                console.log(calculate());
                 $("#lk__jarak").val(calculate());
             }
         });
