@@ -30,11 +30,12 @@
         // the add button 
         public function input() {
             // Populate username for form field username
-            $username = $this->populateOperator();
+            $operators = $this->populateOperator();
             // Populate vin for form field plate_number and serial_number
             $vin = $this->populateVin();
             $data = [
-                'username'=>$username,
+                'username'=>$operators['username'],
+                'oId'=>$operators['oId'],
                 'plate_number'=>$vin['plate_number'],
                 'serial_number'=>$vin['serial_number']
             ];
@@ -53,8 +54,7 @@
                 $this->input();
             }
             else {
-                $username = $this->input->post('username');
-                $userId = $this->user_model->getId($username)->result()[0]->id;
+                $userId = $this->input->post('uId');
                 if ($this->input->post('plate_number') == 'NULL') {
                     $plate_number = NULL;
                 } else {
@@ -87,7 +87,7 @@
         }
 
         public function _rules() {
-            $this->form_validation->set_rules('username','Username','required',['required'=>'%s wajib diisi']);
+            $this->form_validation->set_rules('uId','Username','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('lk__jenis_alat','jenis alat','required',['required'=>'%s wajib diisi']);
             //$this->form_validation->set_rules('plate_number','plate_number','callback_vin_check');
             //$this->form_validation->set_rules('serial_number','serial_number','callback_vin_check');
@@ -108,11 +108,14 @@
 
         private function populateOperator() {
             $username = array();
+            $id = array();
             $operator = $this->user_model->getUserOperator()->result();
             foreach ($operator as $o):
                 array_push($username,$o->username);
+                array_push($id,$o->id);
             endforeach;
-            return $username;
+            $data = ['username'=>$username,'oId'=>$id];
+            return $data;
         }
 
         private function populateVin() {
