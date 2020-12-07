@@ -4,7 +4,11 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" style="background:#fff200;color:black;" id="accordionSidebar">
+    <ul 
+        class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" 
+        style="background:#fff200;color:black;" 
+        id="accordionSidebar"
+    >
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -13,15 +17,19 @@
         </div>
         <div class="sidebar-brand-text mx-1" style="color:black;">SILOLABIMA</div>
       </a>
+
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
-      <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item active">
         <a class="nav-link" href="dashboard">
-          <img src="<?php echo base_url() ?>assets/img/BM.png" alt="ab" width="42">
-          <span style="color:black;">UNIT PERALATAN DAN PERBEKALAN BINA MARGA</span></a>
-      </li>
+            <img src="<?php echo base_url() ?>assets/img/BM.png" alt="ab" width="42">
+            <span style="color:black;">
+                UNIT PERALATAN DAN PERBEKALAN BINA MARGA
+            </span>
+        </a>
+    </li>
 
 
       <!-- Nav Item - Pages Collapse Menu -->
@@ -44,13 +52,24 @@
         </div>
       </li>
 
-      <!-- Nav Item - Utilities Collapse Menu -->
+      <!-- Nav Item - Peralatan Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+        <a 
+            class="nav-link collapsed" 
+            href="#" 
+            data-toggle="collapse" 
+            data-target="#collapsePeralatan" 
+            data-parent="#accordionSidebar"
+            aria-expanded="true" 
+            aria-controls="collapsePeralatan"
+        >
           <i style="color:black;" class="fas fa-fw fa-wrench"></i>
           <span style="color:black;">Peralatan</span>
         </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+        <div 
+            id="collapsePeralatan" 
+            class="collapse" 
+        >
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
             <!--a class="collapse-item" href="<?php echo base_url('administrator/atpm') ?>">ATPM</a-->
@@ -91,8 +110,8 @@
             aria-controls="collapseAlatBerat"
             style="color:black;"
         >
-        <i class="fas fa-truck" style="color:black;"></i>
-        <span>Alat Berat</span>
+            <i class="fas fa-truck" style="color:black;"></i>
+            <span>Alat Berat</span>
         </a>
         <div 
             id="collapseAlatBerat"
