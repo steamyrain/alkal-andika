@@ -15,7 +15,8 @@
     <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
     <thead>
   	<tr>
-  		<th class="text-center">ID</th>
+  		<th class="text-center">Aksi</th>
+  		<th class="text-center">Tanggal</th>
   		<th class="text-center">Nama</th>
   		<th class="text-center">Lokasi Kerja</th>
   		<th class="text-center">Nomer Polisi</th>
@@ -29,15 +30,47 @@
     </thead>
     <tbody>
     <tr>
-        <th class="text-center"><?php echo $l->id; ?></th>
-        <th class="text-center"><?php echo $l->username; ?></th>
-        <th class="text-center"><?php echo $l->project_location; ?></th>
-        <th class="text-center"><?php echo $l->plate_number; ?></th>
-        <th class="text-center"><?php echo $l->serial_number; ?></th>
-        <th class="text-center"><?php echo $l->km_onStart; ?></th>
-        <th class="text-center"><?php echo $l->km_onFinish; ?></th>
-        <th class="text-center"><?php echo $l->km_total; ?></th>
-        <th class="text-center"><?php echo $l->gasoline; ?></th>
+        <td>
+        <div 
+            class="aksi" 
+            style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 5px;"
+        >
+            <form 
+                style="display: none;" 
+                id="form-hapus" 
+                method="post" 
+                action="<?php echo base_URL('administrator/laporankerja/hapus_aksi')?>"
+            >
+                <input type="text" name="id" value="<?php echo $l->id ?>"/>
+            </form>
+            <a 
+                onclick="document.getElementById('form-hapus').submit()"
+            >
+                <div 
+                    class="btn btn-danger btn-sm" 
+                    onclick="javascript: return confirm('Yakin Hapus?')"
+                >
+                    <i class="fa fa-trash"></i>
+                </div>
+            </a>
+            <a 
+                href="<?php echo base_URL('administrator/laporankerja/edit/'.$l->id)?>"
+            >
+                <div class="btn btn-warning btn-sm">
+                    <i class="fa fa-edit"></i>
+                </div>
+            </a>
+        </div>
+        </td>
+        <td class="text-center"><?php echo $l->created_at; ?></td>
+        <td class="text-center"><?php echo $l->username; ?></td>
+        <td class="text-center"><?php echo $l->project_location; ?></td>
+        <td class="text-center"><?php echo $l->plate_number; ?></td>
+        <td class="text-center"><?php echo $l->serial_number; ?></td>
+        <td class="text-center"><?php echo $l->km_onStart; ?></td>
+        <td class="text-center"><?php echo $l->km_onFinish; ?></td>
+        <td class="text-center"><?php echo $l->km_total; ?></td>
+        <td class="text-center"><?php echo $l->gasoline; ?></td>
     </tr>
     <?php endforeach;?>
         </tbody>
