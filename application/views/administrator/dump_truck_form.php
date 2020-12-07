@@ -12,44 +12,48 @@
 			<?php echo form_error('plate_number', '<div class="text-danger small" ml-3>') ?>
 		</div>
 
-        <!-- Tipe -->
+        <!-- Nomer Pintu -->
 		<div class="form-group">
-			<label>Tipe/Jenis DT :</label>
-			<input type="text" name="type"
-			placeholder="Masukkan Jenis/Tipe DT" class="form-control">
-			<?php echo form_error('type', '<div class="text-danger small" ml-3>') ?>
+			<label> Nomor Pintu :</label>
+			<input type="text" name="door_number" class="form-control" placeholder= "Masukkan Nomor Pintu Kendaraan Dump Truck Jika Ada">
+			<?php echo form_error('plate_number', '<div class="text-danger small" ml-3>') ?>
 		</div>
 
-        <!-- Kapasitas -->
+        <!-- Category -->
 		<div class="form-group">
-			<label>Kapasitas DT :</label>
-            <span>
+			<label>Kategori/Kapasitas DT :</label>
+            <select name="catId">
+                <?php foreach ($jenis as $j): ?>
+                <option value=<?php echo $j->id ?>><?php echo $j->category ?></option>
+                <?php endforeach; ?>
+            </select>
+			<?php echo form_error('catId', '<div class="text-danger small" ml-3>') ?>
+		</div>
+
+        <!-- Tipe -->
+		<div class="form-group">
+			<label>Tipe DT :</label>
                 <input 
                     type="text" 
-                    name="capacity"
-                    placeholder="Kapasitas"
-                    maxlength="3"
-                    size="10"
+                    name="type"
+                    placeholder="Masukkan tipe DT"
                 />
-                <label>Meter Kubik</label>
-            </span>
-			<?php echo form_error('capacity', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('type', '<div class="text-danger small" ml-3>') ?>
 		</div>
 
         <!-- Merek -->
 		<div class="form-group">
-            <p>Pilih Merek :</p>
+            <label> Pilih Merek :</label>
+            <select name="brandId">
             <?php foreach ($brand as $b) :?>
-                <input 
-                    type="radio" 
-                    id="<?php $b->brand; ?>" 
-                    name="brand" 
+                <option 
                     value="<?php echo $b->id; ?>"
                 >
-                <label for="<?php $b->brand; ?>"><?php echo $b->brand; ?></label>
-                <br>
+                    <?php echo $b->brand; ?>
+                </option>
             <?php endforeach; ?>
-			<?php echo form_error('brand', '<div class="text-danger small" ml-3>') ?>
+            </select>
+			<?php echo form_error('brandId', '<div class="text-danger small" ml-3>') ?>
 		</div>
 
         <!-- Tahun -->
@@ -102,6 +106,30 @@
             >
             <label for="nonaktif">Non-Aktif</label>
 			<?php echo form_error('active', '<div class="text-danger small" ml-3>') ?>
+		</div>
+
+        <!-- Keterangan Tambahan -->
+		<div class="form-group">
+			<label>Keterangan tambahan :</label>
+            <input 
+                type="text" 
+                name="condition_info"
+                placeholder="Masukkan Keterangan Kondisi DT"
+                class="form-control"
+            />
+			<?php echo form_error('condition_info', '<div class="text-danger small" ml-3>') ?>
+		</div>
+
+        <!-- Lokasi -->
+		<div class="form-group">
+			<label>Lokasi :</label>
+            <input 
+                type="text" 
+                name="location"
+                placeholder="Masukkan Lokasi DT"
+                class="form-control"
+            />
+			<?php echo form_error('location', '<div class="text-danger small" ml-3>') ?>
 		</div>
 
         <!-- Input -->
