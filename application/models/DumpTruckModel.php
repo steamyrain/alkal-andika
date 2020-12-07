@@ -20,4 +20,7 @@ class DumpTruckModel extends CI_Model {
         $this->db->join('alkal_category_dt','alkal_category_dt.id='.$this->table.'.catId');
         return $this->db->get();
     }
+    public function deleteDT($plate_number){
+        $this->db->delete($this->table,$plate_number);
+    }
 }
