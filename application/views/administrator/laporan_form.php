@@ -9,7 +9,7 @@
                 <?php $no++; ?>
             <?php endforeach; ?>
             </select>
-			<?php echo form_error('username', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('uId', '<div class="text-danger small" ml-3>') ?>
 		</div>
 
 		<div class="form-group">
