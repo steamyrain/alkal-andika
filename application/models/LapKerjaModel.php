@@ -8,6 +8,7 @@
         public function getDataLaporanWithName() {
             $this->db->select(
                 $this->table.'.id,'.
+                $this->table.'.created_at,'.
                 $this->table.'.plate_number,'.
                 $this->table.'.serial_number,'.
                 $this->table.'.km_onStart,'.
@@ -18,6 +19,27 @@
                 'user.username'
             );
             $this->db->from($this->table);
+            $this->db->join('user','user.id = '
+                .$this->table.'.userId'
+            );
+            return $this->db->get();
+        }
+
+        public function getDataLaporanSpecific($id) {
+            $this->db->select(
+                $this->table.'.id,'.
+                $this->table.'.created_at,'.
+                $this->table.'.plate_number,'.
+                $this->table.'.serial_number,'.
+                $this->table.'.km_onStart,'.
+                $this->table.'.km_onFinish,'.
+                $this->table.'.km_total,'.
+                $this->table.'.gasoline,'.
+                $this->table.'.project_location,'.
+                'user.username'
+            );
+            $this->db->from($this->table);
+            $this->db->where($this->table.'.id',$id);
             $this->db->join('user','user.id = '
                 .$this->table.'.userId'
             );
