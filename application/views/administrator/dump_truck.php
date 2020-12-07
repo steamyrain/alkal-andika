@@ -36,7 +36,7 @@
   	<?php foreach($dumpTruck as $dt) : ?>
   		<tr>
             <td>
-                <div class="aksi" style="display: inline-grid; grid-gap: 5px;">
+                <div class="aksi" style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 5px;">
                     <form style="display: none;" id="form-hapus" method="post" action=<?php echo base_URL('administrator/dumptruck/hapus_aksi') ?>>
                         <input type="text" name="id" value="<?php echo $dt->id; ?>">
                     </form>
