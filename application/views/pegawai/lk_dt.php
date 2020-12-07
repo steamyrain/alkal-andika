@@ -1,10 +1,10 @@
 <div class="container-fluid">
     <div class="alert alert-success" role="alert">
-    <i class="fas fa-clipboard"></i> Laporan Kerja Alat Berat <b><?php echo $username ?></b>
+    <i class="fas fa-clipboard"></i> Laporan Kerja Dump Truck <b><?php echo $this->session->userdata['username']?> </b>
     </div>
     <?php 
         echo anchor(
-            base_url('pegawai/laporan/input'),
+            base_url('pegawai/laporandt/input'),
             '<button class="btn btn-sm btn-primary mb-3">
                 <i class="fas fa-plus fa-sm"></i> 
                 Tambah Data
@@ -18,7 +18,6 @@
   		<th class="text-center">Tanggal</th>
   		<th class="text-center">Lokasi Kerja</th>
   		<th class="text-center">Nomer Polisi</th>
-  		<th class="text-center">Nomer Seri</th>
   		<th class="text-center">KM Awal</th>
   		<th class="text-center">KM Akhir</th>
   		<th class="text-center">KM Total</th>
@@ -26,11 +25,10 @@
     <?php $i=1;foreach($laporan as $l):?>
     </thead>
     <tbody>
-    <tr> 
+    <tr>
         <th class="text-center"><?php echo $l->created_at; ?></th>
         <th class="text-center"><?php echo $l->project_location; ?></th>
         <th class="text-center"><?php echo $l->plate_number; ?></th>
-        <th class="text-center"><?php echo $l->serial_number; ?></th>
         <th class="text-center"><?php echo $l->km_onStart; ?></th>
         <th class="text-center"><?php echo $l->km_onFinish; ?></th>
         <th class="text-center"><?php echo $l->km_total; ?></th>
