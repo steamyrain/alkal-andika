@@ -30,6 +30,11 @@ class DumpTruckModel extends CI_Model {
         return $this->db->get();
     }
 
+    public function getDTPN() {
+        $this->db->select('plate_number');
+        return $this->db->get($this->table);
+    }
+
     public function deleteDT($dtId){
         $this->db->delete($this->table,array('id'=>$dtId));
     }
