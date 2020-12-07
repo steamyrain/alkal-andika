@@ -38,7 +38,7 @@
                 <div class="aksi" style="display: inline-grid; grid-gap: 5px;">
                     <div class="btn btn-danger btn-sm" onclick="javascript: return confirm('Yakin Hapus?')">
                         <i class="fa fa-trash"></i>
-                        <a href="<?php echo'administrator/dumptruck/hapus_aksi'; ?>"></a>
+                        <a href="<?php echo 'administrator/dumptruck/hapus_aksi/'.$dt->plate_number; ?>"></a>
                     </div> 
                     <div class="btn btn-warning btn-sm" onclick="javascript: return confirm('Yakin Hapus?')">
                         <i class="fa fa-edit"></i>
