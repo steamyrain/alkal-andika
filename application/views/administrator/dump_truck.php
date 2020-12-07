@@ -33,11 +33,16 @@
     </tr>
     </thead>
     <tbody>
-  	<?php $no=1; foreach($dumpTruck as $dt) : ?>
+  	<?php foreach($dumpTruck as $dt) : ?>
   		<tr>
             <td>
                 <div class="aksi" style="display: inline-grid; grid-gap: 5px;">
-                    <a href="<?php echo 'dumptruck/hapus_aksi/'.$dt->id; ?>">
+                    <form style="display: none;" id="form-id" method="post" action=<?php echo base_URL('administrator/dumptruck/hapus_aksi') ?>>
+                    <input type="text" name="id" value="<?php echo $dt->id; ?>">
+                    </form>
+                    <a 
+                        onclick="document.getElementById('form-id').submit()"
+                    >
                         <div class="btn btn-danger btn-sm" onclick="javascript: return confirm('Yakin Hapus?')">
                             <i class="fa fa-trash"></i>
                         </div>
