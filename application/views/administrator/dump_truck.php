@@ -40,9 +40,6 @@
                     <form style="display: none;" id="form-hapus" method="post" action=<?php echo base_URL('administrator/dumptruck/hapus_aksi') ?>>
                         <input type="text" name="id" value="<?php echo $dt->id; ?>">
                     </form>
-                    <form style="display: none;" id="form-edit" method="post" action=<?php echo base_URL('administrator/dumptruck/edit') ?>>
-                        <input type="text" name="id" value="<?php echo $dt->id; ?>">
-                    </form>
                     <a 
                         onclick="document.getElementById('form-hapus').submit()"
                     >
@@ -51,7 +48,7 @@
                         </div>
                     </a>
                     <a 
-                        onclick="document.getElementById('form-edit').submit()"
+                        href="<?php echo base_URL('administrator/dumptruck/edit/'.$dt->id)?>"
                     >
                         <div class="btn btn-warning btn-sm">
                             <i class="fa fa-edit"></i>

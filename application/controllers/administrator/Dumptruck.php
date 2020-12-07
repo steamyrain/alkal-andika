@@ -56,6 +56,25 @@ class Dumptruck extends CI_Controller {
         $this->load->view('template_administrator/footer');
     }
 
+    public function edit($dtId) {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $brandQ = $this->db->get('alkal_brand');
+        $brand = $brandQ->result();
+        $jenisQ = $this->db->get('alkal_category_dt');
+        $jenis = $jenisQ->result();
+        $record = $this->DumpTruckModel->getDTBrandCategoryWhere($dtId)->row();
+        $data = [
+            'brand'=>$brand,
+            'jenis'=>$jenis,
+            'record'=>$record
+        ];
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/dump_truck_edit',$data);
+        $this->load->view('template_administrator/footer');
+    }
+
     public function input_aksi(){
         $this->is_loggedIn();
         $this->is_admin();
@@ -126,11 +145,12 @@ class Dumptruck extends CI_Controller {
         $this->is_admin();
         $this->_rules();
         if($this->form_validation->run() === FALSE) {
-            $this->input();
+            $dtId = $this->input->post('id');
+            $this->edit($dtId);
         }
-
         else {
             // assign form input values to variables
+            $id = $this->input->post('id');    
             $plate_number = $this->input->post('plate_number');    
             $door_number = ($this->input->post('door_number') == "")?NULL:$this->input->post('door_number');    
             $type = ($this->input->post('type')=="")?NULL:$this->input->post('type');
@@ -142,7 +162,6 @@ class Dumptruck extends CI_Controller {
             $active = $this->input->post('active');
             $condition_info = ($this->input->post('condition_info')=="")?NULL:$this->input->post('condition_info');
             $location = ($this->input->post('location')=="")?NULL:$this->input->post('location');
-
 
             $data = [
                 'plate_number'=>$plate_number,
@@ -157,8 +176,7 @@ class Dumptruck extends CI_Controller {
                 'condition_info'=>$condition_info,
                 'location'=>$location
             ];
-
-            $this->DumpTruckModel->insertDT($data);
+            $this->DumpTruckModel->editDt($data,$id);
             $this->session->set_flashdata('pesan',
                 '<div 
                     class=" alert 
@@ -168,7 +186,7 @@ class Dumptruck extends CI_Controller {
                             show
                             " 
                     role="alert">
-                Data Berhasil Ditambahkan!
+                Data Berhasil Diubah!
                 <button 
                     type="button" 
                     class="close" 
@@ -182,8 +200,8 @@ class Dumptruck extends CI_Controller {
                 </div>');
             redirect(base_URL('administrator/dumptruck'));
         }
-
     }
+
     public function hapus_aksi() {
         $this->is_loggedIn();
         $this->is_admin();
