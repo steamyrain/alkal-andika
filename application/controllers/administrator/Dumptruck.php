@@ -1,7 +1,34 @@
 <?php 
 
 class Dumptruck extends CI_Controller {
+
+    private function is_loggedIn() {
+        if (!isset($this->session->userdata['username'])){
+            $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
+                Anda Belum Login!
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                 </button>
+                </div>');
+            redirect('administrator/auth');
+        }
+    }
+
+    private function is_admin() {
+        if($this->session->userdata['level'] !== 'admin'){
+            $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
+                Anda Belum Login!
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                 </button>
+                </div>');
+            redirect('administrator/auth');
+        }
+    }
+
     public function index() {
+        $this->is_loggedIn();
+        $this->is_admin();
         $dumpTruck = $this->DumpTruckModel->getDTBrandCategory()->result();
         $data = [
             'dumpTruck'=> $dumpTruck
@@ -11,7 +38,10 @@ class Dumptruck extends CI_Controller {
         $this->load->view('administrator/dump_truck',$data);
         $this->load->view('template_administrator/footer');
     }
+
     public function input() {
+        $this->is_loggedIn();
+        $this->is_admin();
         $brandQ = $this->db->get('alkal_brand');
         $brand = $brandQ->result();
         $data = [
@@ -22,8 +52,11 @@ class Dumptruck extends CI_Controller {
         $this->load->view('administrator/dump_truck_form',$data);
         $this->load->view('template_administrator/footer');
     }
+
     public function input_aksi(){
 
+        $this->is_loggedIn();
+        $this->is_admin();
         $this->_rules();
 
         if($this->form_validation->run() === FALSE) {
@@ -75,9 +108,37 @@ class Dumptruck extends CI_Controller {
                 </span>
                 </button>
                 </div>');
-            redirect(route('dump-truck-admin'));
+            redirect(base_URL('dumptruck'));
         }
 
+    }
+
+    public function hapus_aksi($plate_number) {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->DumpTruckModel->deleteDT($plate_number);
+        $this->session->set_flashdata('pesan',
+            '<div 
+                class=" alert 
+                        alert-success 
+                        dismissible 
+                        fade 
+                        show
+                        " 
+                role="alert">
+            Data Berhasil Dihapus!
+            <button 
+                type="button" 
+                class="close" 
+                data-dismiss="alert" 
+                aria-label="Close">
+            <span 
+                aria-hidden="true">
+            &times;
+            </span>
+            </button>
+            </div>');
+        redirect(base_URL('dumptruck'));
     }
     
     // _rules function is a set of dt_form specific 
