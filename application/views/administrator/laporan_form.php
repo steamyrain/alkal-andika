@@ -3,9 +3,10 @@
 	    <?php echo form_open('administrator/laporan/input_aksi'); ?> 
 		<div class="form-group">
             <label> Nama :</label>
-			<select name="username" class="form-control">
-            <?php foreach ($username as $uname):?>
-                <option><?php echo $uname; ?></option>
+			<select name="uId" class="form-control">
+            <?php $no=0; foreach ($username as $uname):?>
+                <option value="<?php echo $oId[$no]?>;"><?php echo $uname; ?></option>
+                <?php $no++; ?>
             <?php endforeach; ?>
             </select>
 			<?php echo form_error('username', '<div class="text-danger small" ml-3>') ?>
