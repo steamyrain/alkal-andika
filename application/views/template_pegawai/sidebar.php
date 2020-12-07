@@ -56,8 +56,10 @@
             <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
             <!--a class="collapse-item" href="<?php echo base_url('pegawai/atpm') ?>">ATPM</a-->
             <!--a class="collapse-item" href="<?php echo base_url('pegawai/swakelola') ?>">Swakelola</a-->
-            <?php if (($_SESSION['job_id'] === '1') or ($_SESSION['job_id']==='2')) { ?>
+            <?php if ($_SESSION['job_id'] === '1') { ?>
                 <a class="collapse-item" href="<?php echo base_url('pegawai/laporan') ?>">Laporan Kerja Alat Berat</a>
+            <?php } ?>
+            <?php if(($_SESSION['job_id']==='2') or ($_SESSION['job_id']==='1')) { ?>
                 <a class="collapse-item" href="<?php echo base_url('pegawai/laporandt') ?>">Laporan Kerja Dump Truck</a>
             <?php } ?>
           </div>
