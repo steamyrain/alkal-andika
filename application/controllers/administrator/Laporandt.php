@@ -2,9 +2,7 @@
     // Controller for laporan kerja
     class Laporandt extends CI_Controller {
 
-        function __construct(){
-            parent::__construct();
-
+        private function is_loggedIn() {
             if (!isset($this->session->userdata['username'])){
                 $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
                     Anda Belum Login!
@@ -16,9 +14,23 @@
             }
         }
 
+        private function is_admin() {
+            if($this->session->userdata['level'] !== 'admin'){
+                $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
+                    Anda Belum Login!
+                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                     </button>
+                    </div>');
+                redirect('administrator/auth');
+            }
+        }
+        //
         // index function will be called as soon as laporan controller
         // called
         public function index() {
+            $this->is_loggedIn();
+            $this->is_admin();
             $data['laporan'] = $this->LKDTModel->getDatalaporanWithName()->result();
             $this->load->view('template_administrator/header');
             $this->load->view('template_administrator/sidebar');
@@ -29,6 +41,8 @@
         // input function will be called when user press
         // the add button 
         public function input() {
+            $this->is_loggedIn();
+            $this->is_admin();
             // Populate username for form field username
             $operators = $this->populateOperator();
             // Populate vin for form field plate_number and serial_number
@@ -44,9 +58,15 @@
             $this->load->view('template_administrator/footer');
         }
 
+        public function hapus_aksi() { 
+            $this->is_loggedIn();
+            $this->is_admin();
+        }
         // input_aksi function will be called when user press
         // the add button 
         public function input_aksi() {
+            $this->is_loggedIn();
+            $this->is_admin();
             $this->_rules();
 
             if($this->form_validation->run()==FALSE) {
