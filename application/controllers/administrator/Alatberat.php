@@ -85,15 +85,37 @@ class Alatberat extends CI_Controller {
                 'type'=>$type,
                 'active'=>$active
             ];
-            print_r($data);
+            $this->AlatBeratModel->setAlatBerat($data);
+            $this->session->set_flashdata('pesan',
+                '<div 
+                    class=" alert 
+                            alert-success 
+                            dismissible 
+                            fade 
+                            show
+                            " 
+                    role="alert">
+                Data Berhasil Ditambahkan!
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="alert" 
+                    aria-label="Close">
+                <span 
+                    aria-hidden="true">
+                &times;
+                </span>
+                </button>
+                </div>');
+            redirect(base_URL('administrator/alatberat'));
         }
     }
 
     public function hapus_aksi() {
         $this->is_loggedIn();
         $this->is_admin();
-        $id = $this->input->post('id');
-        $this->AlatBeratModel->deleteAlatBerat($id);
+        $vId = $this->input->post('id');
+        $this->AlatBeratModel->deleteAlatBerat($vId);
         $this->session->set_flashdata('pesan',
             '<div 
                 class=" alert 
@@ -115,7 +137,7 @@ class Alatberat extends CI_Controller {
             </span>
             </button>
             </div>');
-        redirect(base_URL('administrator/alatberat'),'refresh');
+       redirect(base_URL('administrator/alatberat'),'refresh');
     }
 
     public function _rules(){
