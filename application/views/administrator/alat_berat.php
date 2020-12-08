@@ -5,7 +5,6 @@
     </div>
 
     <?php echo $this->session->flashdata('pesan') ?>
-    <!-- tambah data 
     <?php 
     echo anchor(
         base_URL('administrator/alatberat/input'),
@@ -15,11 +14,10 @@
         </button>'
     ) 
     ?>
-    -->
   <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
     <thead>
   	<tr>
-  		<th class="text-center">ID</th>
+  		<th class="text-center">Aksi</th>
   		<th class="text-center">S/N</th>
   		<th class="text-center">Nomor Polisi</th>
   		<th class="text-center">Kategori</th>
@@ -32,7 +30,27 @@
     <tbody>
   	<?php $no=1; foreach($alatBerat as $a) : ?>
   		<tr>
-  			<td width="20px"><?php echo $a->id ?></td>
+            <td>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 5px;">
+                <form style="display: none;" id="form-hapus-<?php echo $a->id; ?>">
+                    <input type="number" value="<?php echo $a->id; ?>" readonly />
+                </form>
+                    <a
+                    onclick="document.getElementById('form-hapus-<?php echo $a->id; ?>').submit()"
+                    >
+                        <div class="btn btn-danger btn-sm" onclick="javascript: return confirm('Yakin Hapus?')">
+                            <i class="fa fa-trash"></i>
+                        </div>
+                    </a>
+                    <a
+                        href="<?php echo base_URL('administrator/alatberat/edit').$a->id; ?>"
+                    >
+                        <div class="btn btn-warning btn-sm">
+                            <i class="fa fa-edit"></i>
+                        </div>
+                    </a>
+                </div>
+            </td>
   			<td><?php echo $a->serial_number?></td>
   			<td><?php echo $a->plate_number?></td>
   			<td><?php echo $a->category ?></td>
