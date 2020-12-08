@@ -34,6 +34,14 @@
 		</div>
 
 		<div class="form-group">
+			<label>Tanggal :</label>
+			<input type="datetime-local" name="created_at"
+            value="<?php echo $record->created_at; ?>"
+			placeholder="Masukkan Tanggal dan Waktu Kerja" class="form-control">
+			<?php echo form_error('created_at', '<div class="text-danger small" ml-3>') ?>
+		</div>
+
+		<div class="form-group">
 			<label>km/hm awal :</label>
             <input 
                 type="text" 
