@@ -58,6 +58,27 @@
             $this->load->view('template_administrator/footer');
         }
 
+        public function edit($lapId) {
+            $this->is_loggedIn();
+            $this->is_admin();
+            // Populate username for form field username
+            $operators = $this->populateOperator();
+            // Populate vin for form field plate_number and serial_number
+            $vin = $this->populateVin();
+            $record = $this->LKDTModel->getDataLaporanSpecific($lapId)->row();
+            $data = [
+                'username'=>$operators['username'],
+                'oId'=>$operators['oId'],
+                'plate_number'=>$vin['plate_number'],
+                'serial_number'=>$vin['serial_number'],
+                'record'=>$record
+            ];
+            $this->load->view('template_administrator/header');
+            $this->load->view('template_administrator/sidebar');
+            $this->load->view('administrator/laporan_kerja_edit',$data);
+            $this->load->view('template_administrator/footer');
+        }
+
         public function hapus_aksi() { 
             $this->is_loggedIn();
             $this->is_admin();
