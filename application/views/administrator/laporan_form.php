@@ -72,7 +72,7 @@
 		<div class="form-group">
 			<label>Jarak :</label>
 			<input id="lk__jarak" type="text" name="km_total"
-            placeholder="KM Awal - KM Akhir" class="form-control" readonly>
+            placeholder="HM Awal - HM Akhir" class="form-control" readonly>
 		</div>
 		<div class="form-group" style="display: none;">
 			<label>BBM :</label>
