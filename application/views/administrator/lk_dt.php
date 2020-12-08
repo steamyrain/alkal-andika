@@ -50,7 +50,7 @@
                     </div> 
                 </a>
                 <a
-                    href="#"
+                href="<?php echo base_URL('administrator/laporandt/edit'); ?>"
                 >
                     <div class="btn btn-warning btn-sm">
                         <i class="fa fa-edit"></i>
