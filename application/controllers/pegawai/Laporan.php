@@ -74,15 +74,12 @@
             }
             else {
                 $userId = $this->session->userdata['user_id'] ;
-                if ($this->input->post('plate_number') == 'NULL') {
+                if ($this->input->post('lk__jenis_vin') === "serial_number") {
                     $plate_number = NULL;
-                } else {
-                    $plate_number = $this->input->post('plate_number');
-                }
-                if ($this->input->post('serial_number') == 'NULL') {
-                    $serial_number = NULL;
-                } else {
                     $serial_number = $this->input->post('serial_number');
+                } else if ($this->input->post('lk__jenis_vin') === "plate_number") {
+                    $serial_number = NULL;
+                    $plate_number = $this->input->post('plate_number');
                 }
                 $project_location = $this->input->post('project_location');
                 $km_onStart = $this->input->post('lk__km_onStart');
