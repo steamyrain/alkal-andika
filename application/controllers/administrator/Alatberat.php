@@ -24,6 +24,7 @@ class Alatberat extends CI_Controller {
             redirect('administrator/auth');
         }
     }
+
     public function index() {
         $this->is_loggedIn();
         $this->is_admin();
@@ -35,5 +36,32 @@ class Alatberat extends CI_Controller {
         $this->load->view('template_administrator/sidebar');
         $this->load->view('administrator/alat_berat',$data);
         $this->load->view('template_administrator/footer');
+    }
+
+    public function hapus_aksi() {
+        $id = $this->input->post('id');
+        $this->AlatBeratModel->deleteAlatBerat($id);
+        $this->session->set_flashdata('pesan',
+            '<div 
+                class=" alert 
+                        alert-success 
+                        dismissible 
+                        fade 
+                        show
+                        " 
+                role="alert">
+            Data Berhasil Dihapus!
+            <button 
+                type="button" 
+                class="close" 
+                data-dismiss="alert" 
+                aria-label="Close">
+            <span 
+                aria-hidden="true">
+            &times;
+            </span>
+            </button>
+            </div>');
+        redirect(base_URL('administrator/alatberat'),'refresh');
     }
 }
