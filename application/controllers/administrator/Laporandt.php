@@ -107,6 +107,60 @@
             redirect(base_URL('administrator/laporandt'),'refresh');
         }
 
+        public function edit_aksi(){
+            $this->is_loggedIn();
+            $this->is_admin();
+            $this->_rules();
+            if($this->form_validation->run() === FALSE) {
+                $lId = $this->input->post('id');
+                $this->edit($lId);
+            }
+            else {
+                // assign form input values to variables
+                $id = $this->input->post('id');    
+                $userId = $this->input->post('uId');
+                $plate_number = $this->input->post('plate_number');
+                $project_location = $this->input->post('project_location');
+                $km_onStart = $this->input->post('lk__km_onStart');
+                $km_onFinish = $this->input->post('lk__km_onFinish');
+                $km_total = $this->input->post('km_total');
+                $gasoline = 0;
+
+                $data = array(
+                    'userId' => $userId,
+                    'plate_number' => $plate_number,
+                    'project_location' => $project_location,
+                    'km_onStart' => $km_onStart,
+                    'km_onFinish' => $km_onFinish,
+                    'km_total' => $km_total,
+                    'gasoline' => $gasoline
+                );
+                $this->LKDTModel->editLaporan($data,$id);
+                $this->session->set_flashdata('pesan',
+                    '<div 
+                        class=" alert 
+                                alert-success 
+                                dismissible 
+                                fade 
+                                show
+                                " 
+                        role="alert">
+                    Data Berhasil Diubah!
+                    <button 
+                        type="button" 
+                        class="close" 
+                        data-dismiss="alert" 
+                        aria-label="Close">
+                    <span 
+                        aria-hidden="true">
+                    &times;
+                    </span>
+                    </button>
+                    </div>');
+                redirect(base_URL('administrator/laporandt'));
+            }
+        }
+
         // input_aksi function will be called when user press
         // the add button 
         public function input_aksi() {
