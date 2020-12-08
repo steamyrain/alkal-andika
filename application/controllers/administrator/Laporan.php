@@ -67,7 +67,9 @@
             // Populate vin for form field plate_number and serial_number
             $vin = $this->populateVin();
             $record = $this->LapKerjaModel->getDataLaporanSpecific($lapId)->row();
+            $isPlateNumber = $this->isPlateNumber($record);
             $data = [
+                'isPlateNumber'=>$isPlateNumber,
                 'username'=>$operators['username'],
                 'oId'=>$operators['oId'],
                 'plate_number'=>$vin['plate_number'],
@@ -78,6 +80,13 @@
             $this->load->view('template_administrator/sidebar');
             $this->load->view('administrator/laporan_kerja_edit',$data);
             $this->load->view('template_administrator/footer');
+        }
+
+        private function isPlateNumber($record){
+            if($record->plate_number == NULL){
+                return FALSE; 
+            } 
+                return TRUE;
         }
 
         // input_aksi function will be called when user press
