@@ -38,7 +38,26 @@ class Alatberat extends CI_Controller {
         $this->load->view('template_administrator/footer');
     }
 
+    public function input() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $brandQ = $this->db->get('alkal_brand');
+        $brand = $brandQ->result();
+        $jenisQ = $this->db->get('alkal_category_alat_berat');
+        $jenis = $jenisQ->result();
+        $data = [
+            'brand'=>$brand,
+            'jenis'=>$jenis
+        ];
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/alat_berat_form',$data);
+        $this->load->view('template_administrator/footer');
+    }
+
     public function hapus_aksi() {
+        $this->is_loggedIn();
+        $this->is_admin();
         $id = $this->input->post('id');
         $this->AlatBeratModel->deleteAlatBerat($id);
         $this->session->set_flashdata('pesan',
