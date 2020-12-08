@@ -44,7 +44,7 @@
 			<label>Sub Kategori Alat Berat:</label>
                 <input 
                     type="text" 
-                    name="type"
+                    name="sub_category"
                     placeholder="Masukkan sub kategori alat berat"
                 />
 			<?php echo form_error('sub_category', '<div class="text-danger small" ml-3>','</div>') ?>
