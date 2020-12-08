@@ -197,6 +197,7 @@
 
         public function _rules() {
             $this->form_validation->set_rules('uId','Username','required',['required'=>'%s wajib diisi']);
+            $this->form_validation->set_rules('created_at','Tanggal','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('plate_number','Nomor Polisi','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('project_location','Lokasi kerja','required',['required'=>'%s  wajib diisi']);
             $this->form_validation->set_rules('lk__km_onStart','KM awal','required',['required'=>'%s wajib diisi']);
