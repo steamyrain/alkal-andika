@@ -55,6 +55,40 @@ class Alatberat extends CI_Controller {
         $this->load->view('template_administrator/footer');
     }
 
+    public function input_aksi() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->_rules();
+        if ($this->form_validation->run() == FALSE) {
+            $this->input();
+        }
+        else {
+            $vin=$this->input->post('lk__jenis_vin');
+            if ($vin=='plate_number') {
+                $serial_number=NULL;
+                $plate_number=$this->input->post('plate_number');
+            } else if ($vin=='serial_number') {
+                $plate_number=NULL;
+                $serial_number=$this->input->post('serial_number');
+            }
+            $catId = $this->input->post('catId');
+            $sub_category = $this->input->post('sub_category');
+            $type = $this->input->post('type');
+            $active = $this->input->post('active');
+            $brandId = $this->input->post('brandId');
+            $data = [
+                'serial_number'=>$serial_number,
+                'plate_number'=>$plate_number,
+                'catId'=>$catId,
+                'brandId'=>$brandId,
+                'sub_category'=>$sub_category,
+                'type'=>$type,
+                'active'=>$active
+            ];
+            print_r($data);
+        }
+    }
+
     public function hapus_aksi() {
         $this->is_loggedIn();
         $this->is_admin();
@@ -82,5 +116,25 @@ class Alatberat extends CI_Controller {
             </button>
             </div>');
         redirect(base_URL('administrator/alatberat'),'refresh');
+    }
+
+    public function _rules(){
+		$this->form_validation->set_rules('sub_category','Sub Kategori','required',['required' => '%s Wajib Diisi']);
+		$this->form_validation->set_rules('type','Tipe','required',['required' => '%s Wajib Diisi']);
+		$this->form_validation->set_rules('catId','Kategori','required',['required' => '%s Wajib Diisi']);
+		$this->form_validation->set_rules('brandId','Merek','required',['required' => '%s Wajib Diisi']);
+		$this->form_validation->set_rules('active','active','required',['required' => 'Status Aktif Wajib Diisi']);
+        $this->form_validation->set_rules('plate_number','plate_number','callback_vin_check');
+        $this->form_validation->set_rules('serial_number','serial_number','callback_vin_check');
+    }
+
+    public function vin_check() {
+        if (($this->input->post('plate_number') == '') && ($this->input->post('serial_number') == '')) {
+            $this->form_validation->set_message('vin_check',"Salah Satu Nomor Pengenal Wajib diisi");
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }
