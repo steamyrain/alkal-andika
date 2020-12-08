@@ -8,6 +8,7 @@
         public function getDataLaporanWithName() {
             $this->db->select(
                 $this->table.'.id,'.
+                $this->table.'.created_at,'.
                 $this->table.'.plate_number,'.
                 $this->table.'.km_onStart,'.
                 $this->table.'.km_onFinish,'.
@@ -40,6 +41,10 @@
         // public method to insert data to table
         public function setDataLaporan($data) {
            $this->db->insert($this->table,$data); 
+        }
+
+        public function deleteLKDT($id) {
+            $this->db->delete($this->table,array('id'=>$id));
         }
     }
 ?>
