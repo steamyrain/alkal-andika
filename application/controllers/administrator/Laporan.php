@@ -213,6 +213,7 @@
 
         public function _rules() {
             $this->form_validation->set_rules('uId','Username','required',['required'=>'%s wajib diisi']);
+            $this->form_validation->set_rules('created_at','Tanggal Waktu','required',['required'=>'%s wajib diisi']);
             //$this->form_validation->set_rules('plate_number','plate_number','callback_vin_check');
             //$this->form_validation->set_rules('serial_number','serial_number','callback_vin_check');
             $this->form_validation->set_rules('project_location','Lokasi kerja','required',['required'=>'%s  wajib diisi']);
