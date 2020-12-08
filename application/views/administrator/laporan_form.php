@@ -50,21 +50,21 @@
 			<?php echo form_error('project_location', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
-			<label>km/hm awal :</label>
+			<label>HM awal :</label>
             <input 
                 type="text" 
                 name="lk__km_onStart"
-                placeholder="Masukkan KM Awal"
+                placeholder="Masukkan HM Awal"
                 class="form-control"
             >
 			<?php echo form_error('lk__km_onStart', '<div class="text-danger small" ml-3>') ?>
         </div>
         <div class="form-group">
-            <label>km/hm akhir :</label>
+            <label>HM akhir :</label>
             <input 
                 type="text" 
                 name="lk__km_onFinish"
-                placeholder="Masukkan KM Akhir" 
+                placeholder="Masukkan HM Akhir" 
                 class="form-control"
             >
 			<?php echo form_error('lk__km_onFinish', '<div class="text-danger small" ml-3>') ?>
