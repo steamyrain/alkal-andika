@@ -72,7 +72,7 @@
 		</div>
 
 		<div class="form-group">
-			<label>km/hm awal :</label>
+			<label>HM awal :</label>
             <input 
                 type="text" 
                 name="lk__km_onStart"
@@ -83,7 +83,7 @@
 			<?php echo form_error('lk__km_onStart', '<div class="text-danger small" ml-3>') ?>
         </div>
         <div class="form-group">
-            <label>km/hm akhir :</label>
+            <label>HM akhir :</label>
             <input 
                 type="text" 
                 name="lk__km_onFinish"
@@ -97,7 +97,7 @@
 			<label>Jarak :</label>
 			<input id="lk__jarak" type="text" name="km_total"
             value="<?php echo $record->km_total; ?>"
-            placeholder="KM Awal - KM Akhir" class="form-control" readonly>
+            placeholder="HM Awal - HM Akhir" class="form-control" readonly>
 		</div>
 		<div class="form-group"> 
 			<label>BBM :</label>
