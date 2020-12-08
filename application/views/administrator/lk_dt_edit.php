@@ -1,4 +1,5 @@
 <div class="container-fluid">
+        <h5 style="text-align: center;">LAPORAN KERJA DUMP TRUCK</h5>
 	    <?php echo form_open('administrator/laporandt/edit_aksi'); ?> 
         <div class="form-group" style="display: none;">
             <input name="id" value="<?php echo $id; ?>" readonly/>
