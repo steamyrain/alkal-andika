@@ -36,6 +36,7 @@
                 $this->table.'.km_total,'.
                 $this->table.'.gasoline,'.
                 $this->table.'.project_location,'.
+                $this->table.'.userId,'.
                 'user.username'
             );
             $this->db->from($this->table);
@@ -64,6 +65,14 @@
         // public method to insert data to table
         public function setDataLaporan($data) {
            $this->db->insert($this->table,$data); 
+        }
+        
+        public function editLaporan($data,$id) {
+           $this->db->update($this->table,$data,'id='.$id); 
+        }
+
+        public function deleteLaporan($id) {
+           $this->db->delete($this->table,array('id'=>$id)); 
         }
     }
 ?>
