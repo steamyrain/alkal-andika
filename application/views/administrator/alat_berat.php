@@ -32,8 +32,8 @@
   		<tr>
             <td>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 5px;">
-                <form style="display: none;" id="form-hapus-<?php echo $a->id; ?>">
-                    <input type="number" value="<?php echo $a->id; ?>" readonly />
+                <form style="display: none;" id="form-hapus-<?php echo $a->id; ?>" method="post" action="<?php echo base_URL('administrator/alatberat/hapus_aksi'); ?>">
+                    <input type="number" name="id" value="<?php echo $a->id; ?>" readonly />
                 </form>
                     <a
                     onclick="document.getElementById('form-hapus-<?php echo $a->id; ?>').submit()"
