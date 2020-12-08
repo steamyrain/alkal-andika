@@ -61,7 +61,32 @@
         public function hapus_aksi() { 
             $this->is_loggedIn();
             $this->is_admin();
+            $id = $this->input->post('id');
+            $this->LKDTModel->deleteLKDT($id);
+            $this->session->set_flashdata('pesan',
+                '<div 
+                    class=" alert 
+                            alert-success 
+                            dismissible 
+                            fade 
+                            show
+                            " 
+                    role="alert">
+                Data Berhasil Dihapus!
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="alert" 
+                    aria-label="Close">
+                <span 
+                    aria-hidden="true">
+                &times;
+                </span>
+                </button>
+                </div>');
+            redirect(base_URL('administrator/laporandt'),'refresh');
         }
+
         // input_aksi function will be called when user press
         // the add button 
         public function input_aksi() {
