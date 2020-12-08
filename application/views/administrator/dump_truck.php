@@ -37,11 +37,11 @@
   		<tr>
             <td>
                 <div class="aksi" style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 5px;">
-                    <form style="display: none;" id="form-hapus" method="post" action=<?php echo base_URL('administrator/dumptruck/hapus_aksi') ?>>
+                    <form style="display: none;" id="form-hapus-<?php echo $dt->id; ?>" method="post" action=<?php echo base_URL('administrator/dumptruck/hapus_aksi') ?>>
                         <input type="text" name="id" value="<?php echo $dt->id; ?>">
                     </form>
                     <a 
-                        onclick="document.getElementById('form-hapus').submit()"
+                    onclick="document.getElementById('form-hapus-<?php echo $dt->id; ?>').submit()"
                     >
                         <div class="btn btn-danger btn-sm" onclick="javascript: return confirm('Yakin Hapus?')">
                             <i class="fa fa-trash"></i>
