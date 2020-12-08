@@ -135,7 +135,7 @@
                     'km_total' => $km_total,
                     'gasoline' => $gasoline
                 );
-                $this->LKDTModel->editLaporan($data,$id);
+                $this->LKDTModel->editLKDT($data,$id);
                 $this->session->set_flashdata('pesan',
                     '<div 
                         class=" alert 
