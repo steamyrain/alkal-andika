@@ -85,7 +85,7 @@
             name="submit"
             class="btn btn-primary mb-5 mt-3"
         >
-            Simpan
+            Ubah
         </button>
 	 <?php echo "</form>"; ?>
 </div>
