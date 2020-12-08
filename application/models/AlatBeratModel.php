@@ -34,4 +34,7 @@ class AlatBeratModel extends CI_Model {
         $this->db->where("plate_number<>'NULL' or serial_number<>'NULL'");
         return $this->db->get();
     }
+    public function deleteAlatBerat($id){
+        $this->db->delete($this->table,array('id'=>$id));
+    }
 }
