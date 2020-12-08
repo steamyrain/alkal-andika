@@ -39,7 +39,7 @@
                 style="display: none;" 
                 id="form-hapus" 
                 method="post" 
-                action="<?php echo base_URL('administrator/laporankerja/hapus_aksi')?>"
+                action="<?php echo base_URL('administrator/laporan/hapus_aksi')?>"
             >
                 <input type="text" name="id" value="<?php echo $l->id ?>"/>
             </form>
@@ -54,7 +54,7 @@
                 </div>
             </a>
             <a 
-                href="<?php echo base_URL('administrator/laporankerja/edit/'.$l->id)?>"
+                href="<?php echo base_URL('administrator/laporan/edit/'.$l->id)?>"
             >
                 <div class="btn btn-warning btn-sm">
                     <i class="fa fa-edit"></i>
