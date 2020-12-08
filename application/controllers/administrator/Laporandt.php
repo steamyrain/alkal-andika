@@ -67,6 +67,7 @@
             $plate_number = $this->populateVin();
             $record = $this->LKDTModel->getDataLaporanSpecific($lapId)->row();
             $data = [
+                'id'=>$lapId,
                 'username'=>$operators['username'],
                 'oId'=>$operators['oId'],
                 'plate_number'=>$plate_number,
