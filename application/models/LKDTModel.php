@@ -24,6 +24,22 @@
             return $this->db->get();
         }
 
+        public function getDataLaporanSpecific($id) {
+            $this->db->select(
+                $this->table.'.userId,'.
+                $this->table.'.created_at,'.
+                $this->table.'.plate_number,'.
+                $this->table.'.km_onStart,'.
+                $this->table.'.km_onFinish,'.
+                $this->table.'.km_total,'.
+                $this->table.'.gasoline,'.
+                $this->table.'.project_location'
+            );
+            $this->db->from($this->table);
+            $this->db->where('id',$id);
+            return $this->db->get();
+        }
+
         public function getOperatorsDataLaporan(int $uid) {
             $this->db->select(
                 $this->table.'.created_at,'.
