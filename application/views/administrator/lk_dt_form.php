@@ -1,5 +1,6 @@
 <div class="container-fluid">
 
+        <h5 style="text-align: center;">LAPORAN KERJA DUMP TRUCK</h5>
 	    <?php echo form_open('administrator/laporandt/input_aksi'); ?> 
 		<div class="form-group">
             <label> Nama :</label>
