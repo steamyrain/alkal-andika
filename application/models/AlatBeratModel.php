@@ -37,7 +37,7 @@ class AlatBeratModel extends CI_Model {
     public function setAlatBerat($data) {
         $this->db->insert($this->table,$data);
     }
-    public function deleteAlatBerat($id){
-        $this->db->delete($this->table,array('id'=>$id));
+    public function deleteAlatBerat($vId){
+        $this->db->delete($this->table,array('id'=>$vId));
     }
 }
