@@ -1,8 +1,9 @@
 <div class="container-fluid">
 	    <?php echo form_open('administrator/laporandt/edit_aksi'); ?> 
         <div class="form-group" style="display: none;">
-            <input name="id" value="<?php $record->id; ?>" readonly/>
+            <input name="id" value="<?php echo $id; ?>" readonly/>
         </div>
+
 		<div class="form-group">
             <label> Nama :</label>
 			<select name="uId" class="form-control">
