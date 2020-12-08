@@ -62,5 +62,9 @@
         public function deleteLKDT($id) {
             $this->db->delete($this->table,array('id'=>$id));
         }
+
+        public function editLKDT($data,$id) {
+            $this->db->delete($this->table,$data,'id='.$id);
+        }
     }
 ?>
