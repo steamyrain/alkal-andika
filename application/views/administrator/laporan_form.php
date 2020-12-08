@@ -1,5 +1,5 @@
 <div class="container-fluid">
-
+        <h5 style="text-align: center;">LAPORAN KERJA ALAT BERAT</h5>
 	    <?php echo form_open('administrator/laporan/input_aksi'); ?> 
 		<div class="form-group">
             <label> Nama :</label>
