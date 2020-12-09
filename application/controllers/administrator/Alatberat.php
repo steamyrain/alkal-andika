@@ -85,6 +85,7 @@ class Alatberat extends CI_Controller {
             $id = $this->input->post('id');
             $this->edit($id);
         } else { 
+            $id = $this->input->post('id');
             $vin=$this->input->post('lk__jenis_vin');
             if ($vin=='plate_number') {
                 $serial_number=NULL;
@@ -107,7 +108,7 @@ class Alatberat extends CI_Controller {
                 'type'=>$type,
                 'active'=>$active
             ];
-            $this->AlatBeratModel->setAlatBerat($data);
+            $this->AlatBeratModel->updateAlatBerat($data,$id);
             $this->session->set_flashdata('pesan',
                 '<div 
                     class=" alert 
