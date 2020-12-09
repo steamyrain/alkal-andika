@@ -55,6 +55,31 @@ class Alatberat extends CI_Controller {
         $this->load->view('template_administrator/footer');
     }
 
+    public function edit($id) {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $record = $this->AlatBeratModel->getAlatBeratSpecific($id)->row();
+        $isPlateNumber = $this->isPlateNumber($record->plate_number);
+        $jenisQ = $this->db->get('alkal_category_alat_berat');
+        $jenis = $jenisQ->result();
+        $brandQ = $this->db->get('alkal_brand');
+        $brand = $brandQ->result(); 
+        $data = [
+            'isPlateNumber'=>$isPlateNumber,
+            'category'=>$jenis,
+            'brand'=>$brand,
+            'record'=>$record
+        ];
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/alat_berat_edit',$data);
+        $this->load->view('template_administrator/footer');
+    }
+
+    public function isPlateNumber($plate_number){
+        return ($plate_number==NULL)?FALSE:TRUE;
+    }
+
     public function input_aksi() {
         $this->is_loggedIn();
         $this->is_admin();
