@@ -9,7 +9,7 @@
                 <?php $no++; ?>
             <?php endforeach; ?>
             </select>
-			<?php echo form_error('uId', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('uId', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 
 		<div class="form-group" id="lk__vin_group">
@@ -18,7 +18,7 @@
             <label for="plate_number">Nomor Polisi</label>
             <input type="radio" id="lk__vin_sn" name="lk__jenis_vin" value="serial_number"/>
             <label for="dump_truck">Nomor Seri</label>
-			<?php echo form_error('lk__jenis_vin', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('lk__jenis_vin', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 
 		<div class="form-group" name="lk__pn_group" style="display: none;">
@@ -29,7 +29,7 @@
                 <option><?php echo $pn; ?></option>
             <?php endforeach; ?>
             </select>
-            <?php echo form_error('plate_number', '<div class="text-danger small" ml-3>') ?>
+            <?php echo form_error('plate_number', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 
 		<div class="form-group" name="lk__sn_group" style="display: none;">
@@ -40,14 +40,14 @@
                 <option><?php echo $sn; ?></option>
             <?php endforeach; ?>
             </select>
-			<?php echo form_error('serial_number', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('serial_number', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 
 		<div class="form-group">
 			<label>Lokasi Kerja :</label>
 			<input type="text" name="project_location"
 			placeholder="Masukkan Lokasi Kerja" class="form-control">
-			<?php echo form_error('project_location', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('project_location', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 		<div class="form-group">
 			<label>HM awal :</label>
@@ -57,7 +57,7 @@
                 placeholder="Masukkan HM Awal"
                 class="form-control"
             >
-			<?php echo form_error('lk__km_onStart', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('lk__km_onStart', '<div class="text-danger small" ml-3>','</div>') ?>
         </div>
         <div class="form-group">
             <label>HM akhir :</label>
@@ -67,7 +67,7 @@
                 placeholder="Masukkan HM Akhir" 
                 class="form-control"
             >
-			<?php echo form_error('lk__km_onFinish', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('lk__km_onFinish', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 		<div class="form-group">
 			<label>Jarak :</label>
@@ -78,7 +78,7 @@
 			<label>BBM :</label>
 			<input type="text" name="gasoline"
 			placeholder="Masukkan BBM" class="form-control">
-			<?php echo form_error('gasoline', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('gasoline', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
         <button 
             type="submit" 
