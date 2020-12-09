@@ -103,8 +103,8 @@
         }
 
         public function _rules() {
-            //$this->form_validation->set_rules('plate_number','plate_number','callback_vin_check');
-            //$this->form_validation->set_rules('serial_number','serial_number','callback_vin_check');
+            $this->form_validation->set_rules('plate_number','plate_number','callback_vin_check');
+            $this->form_validation->set_rules('serial_number','serial_number','callback_vin_check');
             $this->form_validation->set_rules('project_location','Lokasi kerja','required',['required'=>'%s  wajib diisi']);
             $this->form_validation->set_rules('lk__km_onStart','KM awal','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('lk__km_onFinish','KM akhir','required',['required'=>'%s wajib diisi']);
@@ -112,7 +112,7 @@
 
         public function vin_check() {
             if (($this->input->post('plate_number') == 'NULL') && ($this->input->post('serial_number') == 'NULL')) {
-                $this->form_validation->set_message('vin_check',"Nomor Wajib diisi");
+                $this->form_validation->set_message('vin_check',"Salah Satu Nomor Wajib diisi");
                 return false;
             }
             else {
