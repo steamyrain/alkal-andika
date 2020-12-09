@@ -41,17 +41,21 @@
         if ($('#lk__vin_pn').is(':checked')){ 
             $("div[name='lk__pn_group']").css('display','block');
             $("div[name='lk__sn_group']").css('display','none');
+            $("div[name='lk__sn_group'] > select[name='serial_number']").val('NULL').change()
         } else if ($('#lk__vin_sn').is(':checked')){ 
             $("div[name='lk__sn_group']").css('display','block');
             $("div[name='lk__pn_group']").css('display','none');
+            $("div[name='lk__pn_group'] > select[name='plate_number']").val('NULL').change()
         }
         $("input[name='lk__jenis_vin']").change(function(e){
             if ($('#lk__vin_pn').is(':checked')){ 
                 $("div[name='lk__pn_group']").css('display','block');
                 $("div[name='lk__sn_group']").css('display','none');
+            $("div[name='lk__sn_group'] > select[name='serial_number']").val('NULL').change()
             } else if ($('#lk__vin_sn').is(':checked')){ 
                 $("div[name='lk__sn_group']").css('display','block');
                 $("div[name='lk__pn_group']").css('display','none');
+                $("div[name='lk__pn_group'] > select[name='plate_number']").val('NULL').change()
             }
         });
         monitorKM();
