@@ -76,6 +76,63 @@ class Alatberat extends CI_Controller {
         $this->load->view('template_administrator/footer');
     }
 
+    public function edit_aksi() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->_rules();
+
+        if ($this->form_validation->run() == FALSE){
+            $id = $this->input->post('id');
+            $this->edit($id);
+        } else { 
+            $vin=$this->input->post('lk__jenis_vin');
+            if ($vin=='plate_number') {
+                $serial_number=NULL;
+                $plate_number=$this->input->post('plate_number');
+            } else if ($vin=='serial_number') {
+                $plate_number=NULL;
+                $serial_number=$this->input->post('serial_number');
+            }
+            $catId = $this->input->post('catId');
+            $sub_category = $this->input->post('sub_category');
+            $type = $this->input->post('type');
+            $active = $this->input->post('active');
+            $brandId = $this->input->post('brandId');
+            $data = [
+                'serial_number'=>$serial_number,
+                'plate_number'=>$plate_number,
+                'catId'=>$catId,
+                'brandId'=>$brandId,
+                'sub_category'=>$sub_category,
+                'type'=>$type,
+                'active'=>$active
+            ];
+            $this->AlatBeratModel->setAlatBerat($data);
+            $this->session->set_flashdata('pesan',
+                '<div 
+                    class=" alert 
+                            alert-success 
+                            dismissible 
+                            fade 
+                            show
+                            " 
+                    role="alert">
+                Data Berhasil Diubah!
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="alert" 
+                    aria-label="Close">
+                <span 
+                    aria-hidden="true">
+                &times;
+                </span>
+                </button>
+                </div>');
+            redirect(base_URL('administrator/alatberat'));
+        }
+    }
+
     public function isPlateNumber($plate_number){
         return ($plate_number==NULL)?FALSE:TRUE;
     }
