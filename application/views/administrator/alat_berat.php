@@ -43,7 +43,7 @@
                         </div>
                     </a>
                     <a
-                        href="<?php echo base_URL('administrator/alatberat/edit').$a->id; ?>"
+                        href="<?php echo base_URL('administrator/alatberat/edit/').$a->id; ?>"
                     >
                         <div class="btn btn-warning btn-sm">
                             <i class="fa fa-edit"></i>
