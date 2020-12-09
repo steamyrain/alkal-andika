@@ -17,7 +17,7 @@
                 <?php $no++; ?>
             <?php endforeach; ?>
             </select>
-			<?php echo form_error('uId', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('uId', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 
 		<div class="form-group" id="lk__vin_group">
@@ -26,7 +26,7 @@
             <label for="plate_number">Nomor Polisi</label>
             <input type="radio" id="lk__vin_sn" name="lk__jenis_vin" value="serial_number" <?php echo ($isPlateNumber)?'':'checked'; ?>/>
             <label for="dump_truck">Nomor Seri</label>
-			<?php echo form_error('lk__jenis_vin', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('lk__jenis_vin', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 
 		<div class="form-group" name="lk__pn_group" style="display: none;">
@@ -37,7 +37,7 @@
                 <option <?php echo ($pn == $record->plate_number)?'selected':''; ?>><?php echo $pn; ?></option>
             <?php endforeach; ?>
             </select>
-            <?php echo form_error('plate_number', '<div class="text-danger small" ml-3>') ?>
+            <?php echo form_error('plate_number', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 
 		<div class="form-group" name="lk__sn_group" style="display: none;">
@@ -48,7 +48,7 @@
                 <option <?php echo ($sn == $record->serial_number)?'selected':''; ?>><?php echo $sn; ?></option>
             <?php endforeach; ?>
             </select>
-			<?php echo form_error('serial_number', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('serial_number', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 
 		<div class="form-group">
@@ -58,7 +58,7 @@
                 placeholder="Masukkan Lokasi Kerja" class="form-control"
                 value="<?php echo $record->project_location ?>"
             >
-			<?php echo form_error('project_location', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('project_location', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 
 		<div class="form-group">
@@ -68,7 +68,7 @@
                 placeholder="Masukkan Tanggal dan Waktu Kerja" class="form-control"
                 value="<?php echo $record->created_at ?>"
             >
-			<?php echo form_error('created_at', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('created_at', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 
 		<div class="form-group">
@@ -80,7 +80,7 @@
                 class="form-control"
                 value="<?php echo $record->km_onStart; ?>"
             >
-			<?php echo form_error('lk__km_onStart', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('lk__km_onStart', '<div class="text-danger small" ml-3>','</div>') ?>
         </div>
         <div class="form-group">
             <label>HM akhir :</label>
@@ -91,7 +91,7 @@
                 class="form-control"
                 value="<?php echo $record->km_onFinish; ?>"
             >
-			<?php echo form_error('lk__km_onFinish', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('lk__km_onFinish', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
 		<div class="form-group">
 			<label>Jarak :</label>
@@ -104,7 +104,7 @@
 			<input type="text" name="gasoline"
             value="<?php echo $record->gasoline; ?>"
 			placeholder="Masukkan BBM" class="form-control">
-			<?php echo form_error('gasoline', '<div class="text-danger small" ml-3>') ?>
+			<?php echo form_error('gasoline', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
         <button 
             type="submit" 
