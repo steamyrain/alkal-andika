@@ -6,6 +6,9 @@
         form_open(
             base_URL('administrator/alatberat/edit_aksi')); 
     ?>
+        <div class="form-group" style="display: none;">
+            <input type="number" name="id" value="<?php echo $record->id; ?>" readonly/>
+        </div>
 
 		<div class="form-group" id="lk__vin_group">
 			<label>Tanda Pengenal Kendaraan :</label>
