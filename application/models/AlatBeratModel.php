@@ -37,6 +37,9 @@ class AlatBeratModel extends CI_Model {
     public function getAlatBeratSpecific($id) {
         $this->db->get_where($this->table,array('id'=>$id));
     }
+    public function updateAlatBerat($data,$id) {
+        $this->db->update($this->table,$data,'id='.$id);
+    }
     public function setAlatBerat($data) {
         $this->db->insert($this->table,$data);
     }
