@@ -89,6 +89,12 @@
                 return TRUE;
         }
 
+        public function print() {
+            $this->is_loggedIn();
+            $this->is_admin();
+            $data['laporan'] = $this->LapKerjaModel->getDatalaporanWithName()->result();
+        }
+
         // input_aksi function will be called when user press
         // the add button 
         public function input_aksi() {
