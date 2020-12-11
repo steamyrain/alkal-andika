@@ -17,9 +17,10 @@
 		<tr>
 			<th>No</th>
             <th>Tanggal</th>
+            <th>Nomer Polisi</th>
+            <th>Kategori/Kapasitas</th>
             <th>Nama</th>
             <th>Lokasi Kerja</th>
-            <th>Nomer Polisi</th>
             <th>KM Awal</th>
             <th>KM Akhir</th>
             <th>KM Total</th>
@@ -32,9 +33,10 @@
 		<tr>
 			<td><?php echo $no++ ?></td>
             <td><?php echo $l->created_at; ?></td>
+            <td><?php echo $l->plate_number; ?></td>
+            <td><?php echo $l->category; ?></td>
             <td><?php echo $l->username; ?></td>
             <td><?php echo $l->project_location; ?></td>
-            <td><?php echo $l->plate_number; ?></td>
             <td><?php echo $l->km_onStart; ?></td>
             <td><?php echo $l->km_onFinish; ?></td>
             <td><?php echo $l->km_total; ?></td>
