@@ -11,6 +11,15 @@
             </button>'
         ) 
     ?>
+    <?php
+    echo anchor(
+        base_URL('administrator/laporandt/print'),
+        '<button class="btn btn-sm btn-info mb-3">
+            <i class="fa fa-print"></i> 
+            Print
+        </button>'
+    ) 
+    ?>
     <div style="overflow-x:auto;">
     <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
     <thead>
