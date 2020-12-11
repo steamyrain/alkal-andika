@@ -17,10 +17,11 @@
 		<tr>
 			<th>No</th>
             <th>Tanggal</th>
-            <th>Nama</th>
+            <th>Kategori Alat</th>
+            <th>Sub-Kategori Alat</th>
+            <th>Nomer Seri/Nomor Polisi</th>
             <th>Lokasi Kerja</th>
-            <th>Nomer Polisi</th>
-            <th>Nomer Seri</th>
+            <th>Nama</th>
             <th>HM Awal</th>
             <th>HM Akhir</th>
             <th>HM Total</th>
@@ -33,10 +34,11 @@
 		<tr>
 			<td><?php echo $no++ ?></td>
             <td><?php echo $l->created_at; ?></td>
-            <td><?php echo $l->username; ?></td>
+            <td><?php echo $l->category; ?></td>
+            <td><?php echo $l->sub_category; ?></td>
+            <td><?php echo ($l->plate_number == NULL)?$l->serial_number:$l->plate_number; ?></td>
             <td><?php echo $l->project_location; ?></td>
-            <td><?php echo $l->plate_number; ?></td>
-            <td><?php echo $l->serial_number; ?></td>
+            <td><?php echo $l->username; ?></td>
             <td><?php echo $l->km_onStart; ?></td>
             <td><?php echo $l->km_onFinish; ?></td>
             <td><?php echo $l->km_total; ?></td>
