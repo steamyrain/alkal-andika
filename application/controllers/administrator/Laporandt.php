@@ -37,6 +37,13 @@
             $this->load->view('administrator/lk_dt',$data);
             $this->load->view('template_administrator/footer');
         }
+    
+        public function print() {
+            $this->is_loggedIn();
+            $this->is_admin();
+            $data['laporan'] = $this->LKDTModel->getDatalaporanWithName()->result();
+            $this->load->view('administrator/print_lk_dt',$data);
+        }
 
         // input function will be called when user press
         // the add button 
