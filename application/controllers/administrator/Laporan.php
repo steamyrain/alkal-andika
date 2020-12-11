@@ -93,6 +93,7 @@
             $this->is_loggedIn();
             $this->is_admin();
             $data['laporan'] = $this->LapKerjaModel->getDatalaporanWithName()->result();
+            $this->load->view('administrator/print_lk_ab',$data);
         }
 
         // input_aksi function will be called when user press
