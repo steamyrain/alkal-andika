@@ -66,5 +66,24 @@
         public function editLKDT($data,$id) {
             $this->db->delete($this->table,$data,'id='.$id);
         }
+
+        public function printAllFormat() {
+            $this->db->select(
+                $this->table.'.id,'.
+                $this->table.'.created_at,'.
+                $this->table.'.plate_number,'.
+                $this->table.'.km_onStart,'.
+                $this->table.'.km_onFinish,'.
+                $this->table.'.km_total,'.
+                $this->table.'.gasoline,'.
+                $this->table.'.project_location,'.
+                'user.username, alkal_category_dt.category'
+            );
+            $this->db->from($this->table);
+            $this->db->join('user',$this->table.'.userId = user.id');
+            $this->db->join('alkal_dump_truck',$this->table.'.plate_number = alkal_dump_truck.plate_number');
+            $this->db->join('alkal_category_dt','alkal_dump_truck.catId= alkal_category_dt.id');
+            return $this->db->get();
+        }
     }
 ?>
