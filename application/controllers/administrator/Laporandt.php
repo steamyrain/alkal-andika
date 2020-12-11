@@ -41,7 +41,7 @@
         public function print() {
             $this->is_loggedIn();
             $this->is_admin();
-            $data['laporan'] = $this->LKDTModel->getDatalaporanWithName()->result();
+            $data['laporan'] = $this->LKDTModel->printAllFormat()->result();
             $this->load->view('administrator/print_lk_dt',$data);
         }
 
