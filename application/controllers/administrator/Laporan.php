@@ -92,7 +92,7 @@
         public function print() {
             $this->is_loggedIn();
             $this->is_admin();
-            $data['laporan'] = $this->LapKerjaModel->getDatalaporanWithName()->result();
+            $data['laporan'] = $this->LapKerjaModel->printAllFormat()->result();
             $this->load->view('administrator/print_lk_ab',$data);
         }
 
