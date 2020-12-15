@@ -14,9 +14,9 @@
 
 		<div class="form-group" id="lk__vin_group">
 			<label>Tanda Pengenal Kendaraan :</label>
-            <input type="radio" id="lk__vin_pn" name="lk__jenis_vin" value="plate_number" checked/>
+            <input type="radio" id="lk__vin_pn" name="lk__jenis_vin" value="plate_number" />
             <label for="plate_number">Nomor Polisi</label>
-            <input type="radio" id="lk__vin_sn" name="lk__jenis_vin" value="serial_number"/>
+            <input type="radio" id="lk__vin_sn" name="lk__jenis_vin" value="serial_number" checked/>
             <label for="dump_truck">Nomor Seri</label>
 			<?php echo form_error('lk__jenis_vin', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
