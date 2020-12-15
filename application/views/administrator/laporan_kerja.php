@@ -32,9 +32,9 @@
             <th class="text-center">Lokasi Kerja</th>
             <th class="text-center">Nomer Polisi</th>
             <th class="text-center">Nomer Seri</th>
-            <th class="text-center">KM Awal</th>
-            <th class="text-center">KM Akhir</th>
-            <th class="text-center">KM Total</th>
+            <th class="text-center">KM/HM Awal</th>
+            <th class="text-center">KM/HM Akhir</th>
+            <th class="text-center">KM/HM Total</th>
             <th class="text-center">BBM</th>
         </tr>
     </thead>
