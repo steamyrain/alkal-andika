@@ -113,66 +113,6 @@ function __construct(){
             }
 		}
     }
-            /*
-			$dokumentasi 	= $_FILES['dokumentasi'];
-            if($dokumentasi['size'] == 0) { 
-                echo "file empty\n";
-            } 
-            elseif($dokumentasi['error'] > 0) { 
-                if ($dokumentasi['error'] == 1) {
-                    echo "filesize exceeds php maxlimit\n";
-                }
-                elseif ($dokumentasi['error'] == 2) {
-                    echo "filesize exceeds html form maxlimit\n";
-                }
-                elseif ($dokumentasi['error'] == 3) {
-                    echo "file partially uploaded\n";
-                }
-                elseif ($dokumentasi['error'] == 4) {
-                    echo "No file uploaded\n";
-                }
-                elseif ($dokumentasi['error'] == 6) {
-                    echo "Missing temp folder\n";
-                }
-                elseif ($dokumentasi['error'] == 7) {
-                    echo "failed write file to disk\n";
-                }
-                elseif ($dokumentasi['error'] == 8) {
-                    echo "upload process stopped\n";
-                }
-            }
-            else {
-                echo "file not empty and uploaded with success\n";
-                echo $_FILES['dokumentasi']['name']."\n";
-                $config['upload_path'] = './assets/upload/';
-                $config['allowed_types'] = 'gif|jpg|png';
-                $config['max_size'] = 2000; 
-                $this->load->library('upload', $config);
-                if(!$this->upload->do_upload('dokumentasi'))
-                {
-                    echo "Upload Gagal\n"; 
-                } 
-                else {
-                    echo "upload berhasil\n";
-                    $dokumentasi = $this->upload->data('file_name');
-                    $data = array(
-                        'nama'			=> $nama,
-                        'bidang'		=> $bidang,
-                        'kegiatan'		=> $kegiatan,
-                        'dokumentasi'	=> $dokumentasi
-                    );
-                    $this->kinerja_model->input_data($data);
-                }
- 			}	
-             */
-            /*$this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
-                    Data Berhasil Ditambahkan!
-                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                     </button>
-                    </div>');
-             */
-            //redirect('administrator/kinerja');
 	
 	public function _rules()
 	{
