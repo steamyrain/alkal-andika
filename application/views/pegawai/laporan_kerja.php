@@ -19,9 +19,9 @@
   		<th class="text-center">Lokasi Kerja</th>
   		<th class="text-center">Nomer Polisi</th>
   		<th class="text-center">Nomer Seri</th>
-  		<th class="text-center">KM Awal</th>
-  		<th class="text-center">KM Akhir</th>
-  		<th class="text-center">KM Total</th>
+  		<th class="text-center">HM Awal</th>
+  		<th class="text-center">HM Akhir</th>
+  		<th class="text-center">HM Total</th>
     </tr>
     <?php $i=1;foreach($laporan as $l):?>
     </thead>
