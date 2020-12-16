@@ -26,7 +26,7 @@
 			<select name="plate_number" class="form-control">
                 <option selected="selected">NULL</option>
                 <?php $i=0; foreach ($plate_number as $pn):?>
-                    <option>
+                    <option value="<?php echo $pn; ?>">
                         <?php 
                             echo $pn.' / '.$type_p[$i]; 
                             $i++;
@@ -42,7 +42,7 @@
 			<select name="serial_number" class="form-control">
                 <option selected="selected">NULL</option>
                 <?php $i=0;foreach ($serial_number as $sn):?>
-                <option value=<?php echo $sn; ?>>
+                <option value="<?php echo $sn; ?>">
                     <?php 
                         echo $sn.' / '.$type_s[$i]; 
                         $i++;
