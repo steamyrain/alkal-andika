@@ -22,9 +22,14 @@
 			<label>Nomor Polisi :</label>
 			<select name="plate_number" class="form-control">
                 <option selected="selected">NULL</option>
-            <?php foreach ($plate_number as $pn):?>
-                <option><?php echo $pn; ?></option>
-            <?php endforeach; ?>
+                <?php $i=0; foreach ($plate_number as $pn):?>
+                <option value="<?php echo $pn; ?>">
+                        <?php 
+                            echo $pn.' / '.$type_p[$i]; 
+                            $i++;
+                        ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
             <?php echo form_error('plate_number', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
@@ -33,9 +38,14 @@
 			<label>Nomor Seri :</label>
 			<select name="serial_number" class="form-control">
                 <option selected="selected">NULL</option>
-            <?php foreach ($serial_number as $sn):?>
-                <option><?php echo $sn; ?></option>
-            <?php endforeach; ?>
+                <?php $i=0; foreach ($serial_number as $sn):?>
+                    <option value="<?php echo $sn; ?>">
+                        <?php 
+                            echo $sn.' / '.$type_s[$i]; 
+                            $i++;
+                        ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
 			<?php echo form_error('serial_number', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
@@ -46,6 +56,7 @@
 			placeholder="Masukkan Lokasi Kerja" class="form-control">
 			<?php echo form_error('project_location', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
+
 		<div class="form-group">
 			<label>km/hm awal :</label>
             <input 
