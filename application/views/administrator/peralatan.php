@@ -65,3 +65,69 @@
   </table>
   </tbody>
 </div>
+<script type="text/JavaScript">
+$(document).ready(function() 
+{
+    // initialize data table & its necessary config
+    var table = $("#data-tabel").DataTable({
+
+        order: [[0, "desc"]],
+        dom: "lBfrtip",
+        buttons: [
+          {
+            extend: "collection",
+            text: "Table controls",
+            buttons: [
+              {
+                extend: "print",
+                //title: "<h4 style="text-align:center;">Kinerja PJLP</h4>",
+                messageTop: 'UNIT ALKAL BINA MARGA PROVINSI DKI JAKARTA',
+                exportOptions: {
+                  columns: [0, 1, 2, 3, 4, 5]
+                }
+              },
+              {
+                extend: "copyHtml5",
+                exportOptions: {
+                  columns: [0, 1, 2, 3, 4, 5]
+                }
+              },
+              {
+                extend: "excelHtml5",
+                exportOptions: {
+                  columns: [0, 1, 2, 3, 4, 5, 6]
+                }
+              },
+              {
+                extend: "csvHtml5",
+                exportOptions: {
+                  columns: [0, 1, 2, 3, 4, 5]
+                }
+              },
+              {
+                extend: "pdfHtml5",
+                exportOptions: {
+                  columns: [0, 1, 2, 3, 4, 5]
+                }
+              },
+              {
+                extend: "colvis",
+                //text: 'Column Selection',
+                collectionLayout: "fixed two-column",
+                collectionTitle: "Select Columns to Display",
+                postfixButtons: ["colvisRestore"],
+                columnText: function(dt, idx, title) {
+                  return idx + 1 + ": " + title;
+                }
+              }
+            ]
+        }]
+    });
+
+    // append data table's button container for button collection
+    table
+    .buttons()
+    .container()
+    .appendTo($(".col-md-6:eq(0)", table.table().container()));
+});
+</script>
