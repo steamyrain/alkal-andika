@@ -107,6 +107,29 @@
             </div>
         </div>
     </li>
+    <!-- Nav Item - Surat Kerja Collapse Menu -->
+    <li class="nav-item">
+    <a 
+        class="nav-link collapsed" 
+        href="#" 
+        data-toggle="collapse" 
+        data-target="#collapseSurat" 
+        aria-expanded="true" 
+        aria-controls="collapseSurat"
+    >
+        <i class="fas fa-file" style="color:black;"></i>
+        <span style="color:black;">Surat</span>
+    </a>
+    <div    
+        id="collapseSurat" 
+        class="collapse" 
+        aria-labelledby="headingSurat" 
+        data-parent="#accordionSidebar"
+    >
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
+            <a class="collapse-item" href="#">Surat</a>
+    </li>
 
       <!-- Mateiral Collapse Menu -->
       <li class="nav-item">
