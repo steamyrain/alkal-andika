@@ -118,7 +118,7 @@
         aria-controls="collapseSurat"
     >
         <i class="fas fa-file" style="color:black;"></i>
-        <span style="color:black;">Surat</span>
+        <span style="color:black;">Surat Tugas</span>
     </a>
     <div    
         id="collapseSurat" 
@@ -128,7 +128,9 @@
     >
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-            <a class="collapse-item" href="#">Surat</a>
+            <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas'); ?>">Surat Tugas</a>
+        </div>
+    </div>
     </li>
 
       <!-- Mateiral Collapse Menu -->
