@@ -193,7 +193,7 @@
           </button>
 
           <!-- Topbar Search -->
-          <h5 class="font-weight-bold" style="color:black;">SISTEM PENGELOLAAN PERALATAN KEBINAMARGAAN</h5>
+          <h5 class="font-weight-bold" style="color:black; font-size: clamp(0.75rem,1.25vw,2rem)">SISTEM PENGELOLAAN PERALATAN KEBINAMARGAAN</h5>
 
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
