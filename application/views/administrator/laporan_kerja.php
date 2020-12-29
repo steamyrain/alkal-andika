@@ -32,9 +32,9 @@
             <th class="text-center">Lokasi Kerja</th>
             <th class="text-center">Nomer Polisi</th>
             <th class="text-center">Nomer Seri</th>
-            <th class="text-center">KM Awal</th>
-            <th class="text-center">KM Akhir</th>
-            <th class="text-center">KM Total</th>
+            <th class="text-center">KM/HM Awal</th>
+            <th class="text-center">KM/HM Akhir</th>
+            <th class="text-center">KM/HM Total</th>
             <th class="text-center">BBM</th>
         </tr>
     </thead>
@@ -88,3 +88,50 @@
   </table>
 </div>
 </div>
+<script type="text/JavaScript">
+$(document).ready(function() 
+{
+    // initialize data table & its necessary config
+    var table = $("#data-tabel").DataTable({
+
+        order: [[1, "desc"]],
+        dom: "lBfrtip",
+        buttons: [
+            {
+                extend: "collection",
+                text: "Print",
+                buttons: [
+                    {
+                        extend: "print",
+                        text: "Print Table",
+                        //title: "<h4 style="text-align:center;">Kinerja PJLP</h4>",
+                        messageTop: 'UNIT ALKAL BINA MARGA PROVINSI DKI JAKARTA',
+                        exportOptions: {
+                          columns: [1, 2, 3, 4, 5,6,7,8,9]
+                        }
+                    }
+                ]
+            },
+            {
+                extend: "collection",
+                text: "Export",
+                buttons: [
+                    {
+                        extend: "csvHtml5",
+                        text: "As CSV",
+                        exportOptions: {
+                          columns: [1, 2, 3, 4, 5,6,7,8,9]
+                        }
+                    }
+                ]
+            }
+        ]
+    });
+
+    // append data table's button container for button collection
+    table
+    .buttons()
+    .container()
+    .appendTo($(".col-md-6:eq(0)", table.table().container()));
+});
+</script>

@@ -42,20 +42,29 @@
         public function input() { 
             $this->is_loggedIn();
             $this->is_operator();
-            $vin = $this->AlatBeratModel->getPlateAndSerial()->result();
+            
+            //populate vin
+            $vin = $this->AlatBeratModel->getPlateSerialType()->result();
             $plate_number = array();
             $serial_number = array();
+            $type_p = array();
+            $type_s = array();
+            
             foreach ($vin as $v):
                 if($v->plate_number != NULL) {
                     array_push($plate_number,$v->plate_number);
+                    array_push($type_p,$v->plate_number);
                 }
                 if($v->serial_number != NULL) {
                     array_push($serial_number,$v->serial_number);
+                    array_push($type_s,$v->serial_number);
                 }
             endforeach;
             $data = [
                 'plate_number'=>$plate_number,
-                'serial_number'=>$serial_number
+                'serial_number'=>$serial_number,
+                'type_p'=>$type_p,
+                'type_s'=>$type_s
             ];
             $this->load->view('template_pegawai/header');
             $this->load->view('template_pegawai/sidebar');

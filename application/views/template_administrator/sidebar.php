@@ -80,25 +80,6 @@
         </div>
       </li>
 
-
-      <!-- Nav Item - Pages Collapse Menu 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-truck" style="color:black;"></i>
-          <span style="color:black;">Material</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-            <a class="collapse-item" href="<?php echo base_url('administrator/bbm') ?>">BBM</a>
-            <a class="collapse-item" href="<?php echo base_url('administrator/tire') ?>">Tire</a>
-            <a class="collapse-item" href="<?php echo base_url('administrator/oil') ?>">Oil</a>
-            <a class="collapse-item" href="<?php echo base_url('administrator/accu') ?>">Accu</a>
-            <a class="collapse-item" href="<?php echo base_url('administrator/filter') ?>">Filter</a>
-          </div>
-        </div>
-      </li>-->
-
     <!-- Nav Item - Alat Berat Collapse Menu -->
     <li class="nav-item"> 
         <a 
@@ -126,6 +107,50 @@
             </div>
         </div>
     </li>
+    <!-- Nav Item - Surat Kerja Collapse Menu -->
+    <li class="nav-item">
+    <a 
+        class="nav-link collapsed" 
+        href="#" 
+        data-toggle="collapse" 
+        data-target="#collapseSurat" 
+        aria-expanded="true" 
+        aria-controls="collapseSurat"
+    >
+        <i class="fas fa-file" style="color:black;"></i>
+        <span style="color:black;">Surat Tugas</span>
+    </a>
+    <div    
+        id="collapseSurat" 
+        class="collapse" 
+        aria-labelledby="headingSurat" 
+        data-parent="#accordionSidebar"
+    >
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
+            <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas'); ?>">Surat Tugas</a>
+        </div>
+    </div>
+    </li>
+
+      <!-- Mateiral Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+          <i class="fas fa-oil-can" style="color:black;"></i>
+          <span style="color:black;">Material</span>
+        </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
+            <a class="collapse-item" href="#">BBM</a>
+            <!-- a class="collapse-item" href="<?php echo base_url('administrator/tire') ?>">Tire</a-->
+            <!--a class="collapse-item" href="<?php echo base_url('administrator/oil') ?>">Oil</a-->
+            <!--a class="collapse-item" href="<?php echo base_url('administrator/accu') ?>">Accu</a-->
+            <!--a class="collapse-item" href="<?php echo base_url('administrator/filter') ?>">Filter</a-->
+          </div>
+        </div>
+      </li>
+
 
       <li class="nav-item">
         <a class="nav-link" href="<?php echo base_url('administrator/auth/logout') ?>">

@@ -14,9 +14,9 @@
 
 		<div class="form-group" id="lk__vin_group">
 			<label>Tanda Pengenal Kendaraan :</label>
-            <input type="radio" id="lk__vin_pn" name="lk__jenis_vin" value="plate_number" checked/>
+            <input type="radio" id="lk__vin_pn" name="lk__jenis_vin" value="plate_number" />
             <label for="plate_number">Nomor Polisi</label>
-            <input type="radio" id="lk__vin_sn" name="lk__jenis_vin" value="serial_number"/>
+            <input type="radio" id="lk__vin_sn" name="lk__jenis_vin" value="serial_number" checked/>
             <label for="dump_truck">Nomor Seri</label>
 			<?php echo form_error('lk__jenis_vin', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
@@ -25,9 +25,14 @@
 			<label>Nomor Polisi :</label>
 			<select name="plate_number" class="form-control">
                 <option selected="selected">NULL</option>
-            <?php foreach ($plate_number as $pn):?>
-                <option><?php echo $pn; ?></option>
-            <?php endforeach; ?>
+                <?php $i=0; foreach ($plate_number as $pn):?>
+                    <option value="<?php echo $pn; ?>">
+                        <?php 
+                            echo $pn.' / '.$type_p[$i]; 
+                            $i++;
+                        ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
             <?php echo form_error('plate_number', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
@@ -36,8 +41,13 @@
 			<label>Nomor Seri :</label>
 			<select name="serial_number" class="form-control">
                 <option selected="selected">NULL</option>
-            <?php foreach ($serial_number as $sn):?>
-                <option><?php echo $sn; ?></option>
+                <?php $i=0;foreach ($serial_number as $sn):?>
+                <option value="<?php echo $sn; ?>">
+                    <?php 
+                        echo $sn.' / '.$type_s[$i]; 
+                        $i++;
+                    ?>
+                </option>
             <?php endforeach; ?>
             </select>
 			<?php echo form_error('serial_number', '<div class="text-danger small" ml-3>','</div>') ?>

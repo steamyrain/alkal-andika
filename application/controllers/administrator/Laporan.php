@@ -46,12 +46,14 @@
             // Populate username for form field username
             $operators = $this->populateOperator();
             // Populate vin for form field plate_number and serial_number
-            $vin = $this->populateVin();
+            $vin = $this->populateVinType();
             $data = [
                 'username'=>$operators['username'],
                 'oId'=>$operators['oId'],
                 'plate_number'=>$vin['plate_number'],
-                'serial_number'=>$vin['serial_number']
+                'serial_number'=>$vin['serial_number'],
+                'type_p'=>$vin['type_p'],
+                'type_s'=>$vin['type_s']
             ];
             $this->load->view('template_administrator/header');
             $this->load->view('template_administrator/sidebar');
@@ -101,7 +103,7 @@
         public function input_aksi() {
             $this->is_loggedIn();
             $this->is_admin();
-            $this->_rules();
+            $this->input_rules();
 
             if($this->form_validation->run()==FALSE) {
                 $this->input();
@@ -227,6 +229,15 @@
             }
         }
 
+        public function input_rules() {
+            $this->form_validation->set_rules('uId','Username','required',['required'=>'%s wajib diisi']);
+            $this->form_validation->set_rules('plate_number','plate_number','callback_vin_check');
+            $this->form_validation->set_rules('serial_number','serial_number','callback_vin_check');
+            $this->form_validation->set_rules('project_location','Lokasi kerja','required',['required'=>'%s  wajib diisi']);
+            $this->form_validation->set_rules('lk__km_onStart','HM awal','required',['required'=>'%s wajib diisi']);
+            $this->form_validation->set_rules('lk__km_onFinish','HM akhir','required',['required'=>'%s wajib diisi']);
+        }
+
         public function _rules() {
             $this->form_validation->set_rules('uId','Username','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('created_at','Tanggal Waktu','required',['required'=>'%s wajib diisi']);
@@ -274,6 +285,30 @@
             endforeach;
             $data['plate_number'] = $plate_number;
             $data ['serial_number']=$serial_number;
+            return $data;
+        }
+
+        private function populateVinType() {
+            $plate_number = array();
+            $serial_number = array();
+            $type_p = array();
+            $type_s = array();
+            $data = array();
+            $vin = $this->AlatBeratModel->getPlateSerialType()->result();
+            foreach ($vin as $v):
+                if($v->plate_number != NULL) {
+                    array_push($plate_number,$v->plate_number);
+                    array_push($type_p,$v->type);
+                }
+                if($v->serial_number != NULL) {
+                    array_push($serial_number,$v->serial_number);
+                    array_push($type_s,$v->type);
+                }
+            endforeach;
+            $data['plate_number'] = $plate_number;
+            $data ['serial_number']=$serial_number;
+            $data ['type_p']=$type_p;
+            $data ['type_s']=$type_s;
             return $data;
         }
   
