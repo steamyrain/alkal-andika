@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.4.8",
-		"datatables.net/editor-php": "^1.9"
+		"datatables.net/editor-php": "^1.9",
+		"fpdf/fpdf": "^1.82"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

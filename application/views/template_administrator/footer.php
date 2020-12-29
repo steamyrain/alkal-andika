@@ -10,14 +10,6 @@
         </footer>
         <!-- End of Footer -->  
 
-        <!-- common custom scripts for all pages 
-        <script type="text/JavaScript">
-            $(document).ready(function() 
-            {
-                // initialize data table & its necessary config
-                $("#data-tabel").DataTable({});
-            });
-        </script>-->
         <script type="text/JavaScript">
             $(document).ready(function() {
                 if ($('#lk__vin_pn').is(':checked')){ 
@@ -61,5 +53,8 @@
                 return finish-start;
             }
         </script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="<?php echo base_url() ?>assets/js/sb-admin-2.js"></script>
     </body>
 </html>

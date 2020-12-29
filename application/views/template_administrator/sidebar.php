@@ -11,7 +11,7 @@
     >
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo base_URL('administrator/dashboard')?>">
         <div class="sidebar-brand-icon">
           <img src="<?php echo base_url() ?>assets/img/ab.png" alt="ab" width="60">
         </div>
@@ -23,7 +23,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="dashboard">
+        <a class="nav-link" href="<?php echo base_URL('administrator/dashboard')?>">
             <img src="<?php echo base_url() ?>assets/img/BM.png" alt="ab" width="42">
             <span style="color:black;">
                 UNIT PERALATAN DAN PERBEKALAN BINA MARGA
@@ -72,8 +72,6 @@
         >
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-            <!--a class="collapse-item" href="<?php echo base_url('administrator/atpm') ?>">ATPM</a-->
-            <!--a class="collapse-item" href="<?php echo base_url('administrator/swakelola') ?>">Swakelola</a-->
             <a class="collapse-item" href="<?php echo base_url('administrator/laporan') ?>">Laporan Kerja Alat Berat</a>
             <a class="collapse-item" href="<?php echo base_url('administrator/laporandt') ?>">Laporan Kerja Dump Truck</a>
           </div>
@@ -107,65 +105,75 @@
             </div>
         </div>
     </li>
+
     <!-- Nav Item - Surat Kerja Collapse Menu -->
     <li class="nav-item">
-    <a 
-        class="nav-link collapsed" 
-        href="#" 
-        data-toggle="collapse" 
-        data-target="#collapseSurat" 
-        aria-expanded="true" 
-        aria-controls="collapseSurat"
-    >
-        <i class="fas fa-file" style="color:black;"></i>
-        <span style="color:black;">Surat Tugas</span>
-    </a>
-    <div    
-        id="collapseSurat" 
-        class="collapse" 
-        aria-labelledby="headingSurat" 
-        data-parent="#accordionSidebar"
-    >
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-            <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas'); ?>">Surat Tugas</a>
+        <a 
+            class="nav-link collapsed" 
+            href="#" 
+            data-toggle="collapse" 
+            data-target="#collapseSurat" 
+            aria-expanded="true" 
+            aria-controls="collapseSurat"
+        >
+            <i class="fas fa-file" style="color:black;"></i>
+            <span style="color:black;">Surat Tugas</span>
+        </a>
+        <div    
+            id="collapseSurat" 
+            class="collapse" 
+            aria-labelledby="headingSurat" 
+            data-parent="#accordionSidebar"
+        >
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
+                <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas'); ?>">Surat Tugas</a>
+            </div>
         </div>
-    </div>
     </li>
 
-      <!-- Mateiral Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-oil-can" style="color:black;"></i>
-          <span style="color:black;">Material</span>
+    <!-- Material Collapse Menu -->
+    <li class="nav-item">
+        <a 
+            class="nav-link collapsed" 
+            href="#"
+            data-toggle="collapse" 
+            data-target="#collapsePages" 
+            aria-expanded="true" 
+            aria-controls="collapsePages"
+        >
+            <i class="fas fa-oil-can" style="color:black;"></i>
+            <span style="color:black;">Material</span>
         </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-            <a class="collapse-item" href="#">BBM</a>
-            <!-- a class="collapse-item" href="<?php echo base_url('administrator/tire') ?>">Tire</a-->
-            <!--a class="collapse-item" href="<?php echo base_url('administrator/oil') ?>">Oil</a-->
-            <!--a class="collapse-item" href="<?php echo base_url('administrator/accu') ?>">Accu</a-->
-            <!--a class="collapse-item" href="<?php echo base_url('administrator/filter') ?>">Filter</a-->
-          </div>
+        <div 
+            id="collapsePages"
+            class="collapse" 
+            aria-labelledby="headingPages" 
+            data-parent="#accordionSidebar"
+        >
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
+                <a class="collapse-item" href="#">BBM</a>
+            </div>
         </div>
-      </li>
+    </li>
 
 
-      <li class="nav-item">
+    <li class="nav-item">
         <a class="nav-link" href="<?php echo base_url('administrator/auth/logout') ?>">
-          <i class="fas fa-sign-out-alt" style="color:black;"></i>
-          <span style="color:black;">Logout</span></a>
-      </li>
+            <i class="fas fa-sign-out-alt" style="color:black;"></i>
+            <span style="color:black;">Logout</span>
+        </a>
+    </li>
 
 
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
 
-      <!-- Sidebar Toggler (Sidebar) -->
-      <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-      </div>
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
 
     </ul>
     <!-- End of Sidebar -->
