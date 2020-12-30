@@ -25,6 +25,7 @@ class Surattugas extends CI_Controller {
             redirect('administrator/auth');
         }
     }
+
     public function index() {
         $this->is_loggedIn();
         $this->is_admin();
@@ -33,12 +34,33 @@ class Surattugas extends CI_Controller {
         $this->load->view('administrator/surat_tugas_form');
         $this->load->view('template_administrator/footer');
     }
-    public function subject() {
+
+    public function subject_operator() {
         $this->is_loggedIn();
         $this->is_admin();
-        $subject = $this->user_model->getUserOperator()->result();
+        $subject = $this->user_model->getOperatorOnly()->result();
         $data = [
-            "subject"=>$subject
+            "subject_operator"=>$subject
+        ];
+        $this->output->set_content_type('application/json')->set_output(json_encode($data));
+    }
+
+    public function subject_driver() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $subject = $this->user_model->getDriver()->result();
+        $data = [
+            "subject_driver"=>$subject
+        ];
+        $this->output->set_content_type('application/json')->set_output(json_encode($data));
+    }
+
+    public function subject_labour() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $subject = $this->user_model->getLabour()->result();
+        $data = [
+            "subject_labour"=>$subject
         ];
         $this->output->set_content_type('application/json')->set_output(json_encode($data));
     }
