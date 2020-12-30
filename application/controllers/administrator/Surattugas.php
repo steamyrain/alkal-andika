@@ -33,4 +33,13 @@ class Surattugas extends CI_Controller {
         $this->load->view('administrator/surat_tugas_form');
         $this->load->view('template_administrator/footer');
     }
+    public function subject() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $subject = $this->user_model->getUserOperator()->result();
+        $data = [
+            "subject"=>$subject
+        ];
+        $this->output->set_content_type('application/json')->set_output(json_encode($data));
+    }
 }
