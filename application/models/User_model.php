@@ -24,6 +24,14 @@ class user_model extends CI_Model{
         return $this->db->get();
     }
 
+    public function getDriver(){
+        $this->db->select("id,username");
+        $this->db->from("user");
+        $this->db->where("job_id = 2");
+        $this->db->order_by("username");
+        return $this->db->get();
+    }
+
 	public function getId($username)
 	{
         $this->db->select("id");
