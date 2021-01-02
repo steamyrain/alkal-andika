@@ -112,8 +112,23 @@
         ">
         <div id="vehicle-container">
             <div class="form-group">
-                <label>Alat Berat/Dump Truck :</label>
-                <input type="text" name="vehicle" id="vehicle" class="form-control" placeholder="Masukkan Alat Berat / Dump Truck" />
+                <label>Alat Berat / Dump Truck & BBM (Liter) :</label>
+                <div style="display: grid; grid-template-columns: 4fr 1fr; grid-gap: 0.2vw">
+                    <input 
+                        type="text" 
+                        name="vehicle" 
+                        id="vehicle" 
+                        class="form-control" 
+                        placeholder="Masukkan Alat Berat / Dump Truck" 
+                    />
+                    <input 
+                        type="number" 
+                        name="form-surat-tugas__fuel"
+                        class="form-control"
+                        placeholder = "Liter BBM"
+                    />
+                </div>
+                <?php echo form_error('fuel', '<div class="text-danger small" ml-3>','</div>'); ?>
                 <?php echo form_error('vehicle', '<div class="text-danger small" ml-3>','</div>'); ?>
             </div>
         </div>
@@ -182,7 +197,7 @@
             // populate select subject fields
             initSubject(subject_operator,subjectOperatorSelect,subject_operator,len_operator)
         }; 
-        xhttp_operator.open("GET","http://192.168.0.140/administrator/surattugas/subject_operator");
+        xhttp_operator.open("GET","<?php echo base_URL('administrator/surattugas/subject_operator')?>");
         xhttp_operator.send();
 
         xhttp_driver = new XMLHttpRequest();
@@ -194,7 +209,7 @@
             // populate select subject fields
             initSubject(subject_driver,subjectDriverSelect,subject_driver,len_driver)
         }; 
-        xhttp_driver.open("GET","http://192.168.0.140/administrator/surattugas/subject_driver");
+        xhttp_driver.open("GET","<?php echo base_URL('administrator/surattugas/subject_driver')?>");
         xhttp_driver.send();
 
         xhttp_labour = new XMLHttpRequest();
@@ -206,7 +221,7 @@
             // populate select subject fields
             initSubject(subject_labour,subjectLabourSelect,subject_labour,len_labour)
         }; 
-        xhttp_labour.open("GET","http://192.168.0.140/administrator/surattugas/subject_labour");
+        xhttp_labour.open("GET","<?php echo base_URL('administrator/surattugas/subject_labour')?>");
         xhttp_labour.send();
 
         // addSubject function add new form group for selecting surat tugas subject to a container
