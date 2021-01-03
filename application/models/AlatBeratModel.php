@@ -54,4 +54,13 @@ class AlatBeratModel extends CI_Model {
     public function deleteAlatBerat($vId){
         $this->db->delete($this->table,array('id'=>$vId));
     }
+
+    public function getVINCategoryAndType() {
+        $this->db->select('plate_number,serial_number,category,sub_category,type');
+        $this->db->from($this->table);
+        $this->db->join('alkal_category_alat_berat','alkal_category_alat_berat.id = '.$this->table.'.catId');
+        $this->db->order_by('catId','asc');
+        $this->db->order_by('sub_category','asc');
+        return $this->db->get();
+    }
 }
