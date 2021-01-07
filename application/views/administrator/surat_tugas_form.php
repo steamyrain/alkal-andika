@@ -142,11 +142,12 @@
                     </select>
                     <input 
                         type="number" 
-                        name="vehicle-heavy-fuel-0"
+                        id="fuel-vehicle-heavy-0"
+                        name="fuel-vehicle-heavy-0"
                         class="form-control"
-                        placeholder = "Liter BBM"
+                        placeholder = "Liter"
                     />
-                    <button class="btn btn-danger form-control" id="subject-container--delete-heavy-button" onclick="event.preventDefault();">hapus</button>
+                    <button class="btn btn-danger form-control" id="vehicle-container--delete-heavy-button" onclick="event.preventDefault();">hapus</button>
                 </div>
                 <?php echo form_error('fuel', '<div class="text-danger small" ml-3>','</div>'); ?>
                 <?php echo form_error('heavy', '<div class="text-danger small" ml-3>','</div>'); ?>
@@ -242,10 +243,12 @@
             var subjectDriver = Object.values(selected_driver);
             var subjectLabour = Object.values(selected_labour);
             var suratSubject = subjectOperator.concat(subjectDriver,subjectLabour);
+            var suratHeavy = Object.values(selected_heavy);
             var suratTugas = {
                 date: suratDate,
                 location: suratLocation,
-                subject: suratSubject
+                subject: suratSubject,
+                heavy: suratHeavy
             };
             var xhrSuratTugas = new XMLHttpRequest();
             xhrSuratTugas.open("POST","<?php echo base_URL('administrator/surattugas/input_aksi'); ?>");
@@ -344,17 +347,33 @@
                         vehicleHeavySelect.appendChild(option);
                     }
 
-                    total_heavy++;
+                    selected_heavy['div-vehicle-heavy-0'] = {
+                        "vehicle-heavy-0": vehicleHeavySelect.value, 
+                        "fuel-vehicle-heavy-0": 0
+                    }; 
+                    
+                    vehicleHeavySelect.addEventListener('change',(event)=>{
+                        selected_heavy['div-vehicle-heavy-0']["vehicle-heavy-0"]=vehicleHeavySelect.value;
+                    });
+
+                    document.getElementById('fuel-vehicle-heavy-0').addEventListener('change',(event)=>{
+                        selected_heavy['div-vehicle-heavy-0']['fuel-vehicle-heavy-0']=document.getElementById('fuel-vehicle-heavy-0').value;
+                    });
+
+                    deleteVehicleHeavyButton.addEventListener('click',(event)=>{
+                        event.preventDefault();
+                        var div = document.getElementById('div-vehicle-heavy-0');
+                        div.remove();
+                        delete selected_heavy['div-vehicle-heavy-0'];
+                    });
 
                     // logic for addVehicleButton
                     addVehicleHeavyButton.addEventListener('click',(event)=>{
                         event.preventDefault();
                         console.log(total_heavy);
                         var selectId = `vehicle-heavy-${total_heavy}`;
-                        var inputId = `vehicle-heavy-fuel-${total_heavy}`;
                         var div = document.createElement("div");
-                        //var select = document.createElement("select");
-                        var select = document.getElementById('vehicle-heavy-0').cloneNode(true);
+                        var select = document.createElement("select");
                         var input = document.createElement("input");
                         var deleteButton = document.createElement("button");
                         var divGrid = document.createElement("div");
@@ -363,9 +382,39 @@
                         select.className="form-control";
                         select.id=selectId;
                         input.type="number";
-                        input.id=inputId;
+                        input.id=`fuel-${selectId}`;
                         input.className="form-control";
+                        input.placeholder="Liter"
                         deleteButton.innerHTML="hapus";
+                        deleteButton.className="form-control btn btn-danger"
+
+                        var heavyCategory="";
+                        var heavySubcategory="";
+                        for(i=0;i<len_heavy;i++){
+                            option = document.createElement("option");
+                            optgroup = document.createElement("optgroup");
+                            if (heavyCategory != vehicle_heavy[i].category){
+                                heavyCategory = vehicle_heavy[i].category;
+                            }
+                            if (heavySubcategory != vehicle_heavy[i].sub_category){
+                                heavySubcategory = vehicle_heavy[i].sub_category;
+                                if (heavyCategory == heavySubcategory) {
+                                    optgroup.label =  heavyCategory;
+                                } else {
+                                    optgroup.label =  heavyCategory+" "+vehicle_heavy[i].sub_category;
+                                }
+                                select.appendChild(optgroup);
+                            }
+                            option.value=vehicle_heavy[i].id;
+                            if(vehicle_heavy[i].plate_number)
+                            {
+                                option.innerHTML=vehicle_heavy[i].plate_number+' / '+vehicle_heavy[i].type;
+                            } else {
+                                option.innerHTML=vehicle_heavy[i].serial_number+' / '+vehicle_heavy[i].type;
+                            }
+                            select.appendChild(option);
+                        } 
+
                         divGrid.style="display: grid; grid-template-columns: 3fr 1fr 1fr; grid-gap: 0.75vw;";
                         deleteButton.addEventListener('click',(event)=>{event.preventDefault();});
                         divGrid.appendChild(select);
@@ -373,6 +422,22 @@
                         divGrid.appendChild(deleteButton);
                         div.appendChild(divGrid);
                         vehicleHeavyContainer.appendChild(div);
+
+                        select.addEventListener('change',(event)=>{
+                            selected_heavy[div.id][select.id]=select.value;
+                        });
+                        input.addEventListener('change',(event)=>{
+                            selected_heavy[div.id][input.id]=input.value;
+                        });
+                        deleteButton.addEventListener('click',(event)=>{
+                            event.preventDefault();
+                            divGrid.remove();
+                            delete selected_heavy[div.id];
+                        });
+                        var dataHeavy = new Object();
+                        dataHeavy[selectId] = select.value;
+                        dataHeavy[input.id] = 0;
+                        selected_heavy[div.id]=dataHeavy;
                         total_heavy++;
                     });
             } 
@@ -397,8 +462,7 @@
     var addSubject = function (event,container,subject,len,select_id,select_init,selected){
         event.preventDefault();
         var div = document.createElement("div");
-        //var select = document.createElement("select");
-        var select = document.getElementById(select_init).cloneNode(true);
+        var select = document.createElement("select");
         var divGrid = document.createElement("div");
         var deleteButton = document.createElement("button");
         div.className = "form-group";

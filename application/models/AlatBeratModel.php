@@ -56,7 +56,7 @@ class AlatBeratModel extends CI_Model {
     }
 
     public function getVINCategoryAndType() {
-        $this->db->select('plate_number,serial_number,category,sub_category,type');
+        $this->db->select('alkal_alat_berat.id as id,plate_number,serial_number,category,sub_category,type');
         $this->db->from($this->table);
         $this->db->join('alkal_category_alat_berat','alkal_category_alat_berat.id = '.$this->table.'.catId');
         $this->db->order_by('catId','asc');
