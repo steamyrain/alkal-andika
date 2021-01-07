@@ -98,4 +98,14 @@ class Surattugas extends CI_Controller {
         $this->load->view('administrator/show');
         $this->load->view('template_administrator/footer');
     }
+
+    public function vehicle_dt() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $vehicle = $this->DumpTruckModel->getPNCategory()->result();
+        $data = [
+            "vehicle_dt"=>$vehicle
+        ];
+        $this->output->set_content_type('application/json')->set_output(json_encode($data));
+    }
 }
