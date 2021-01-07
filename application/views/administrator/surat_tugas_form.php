@@ -159,6 +159,47 @@
             </button>
         </div>
         </div>
+
+        <!-- dumptruck -->
+        <div style="
+            border: 2px solid rgba(211,211,211,.5); 
+            -webkit-background-clip: padding-box;
+            bakground-clip: padding-box;
+            border-radius: 0.5rem; 
+            padding: 0.5vw;
+            margin-top: 1rem;
+        ">
+        <div id="vehicle-dt-container">
+            <div class="form-group">
+                <label>Dumptruck & BBM (Liter) :</label>
+                <div id= "div-vehicle-dt-0" style="display: grid; grid-template-columns: 3fr 1fr 1fr; grid-gap: 0.75vw;">
+                    <select 
+                        name="vehicle-dt-0" 
+                        id="vehicle-dt-0" 
+                        class="form-control" 
+                        placeholder="Masukkan DT" 
+                    >
+                    </select>
+                    <input 
+                        type="number" 
+                        id="fuel-vehicle-dt-0"
+                        name="fuel-vehicle-dt-0"
+                        class="form-control"
+                        placeholder = "Liter"
+                    />
+                    <button class="btn btn-danger form-control" id="vehicle-container--delete-dt-button" onclick="event.preventDefault();">hapus</button>
+                </div>
+                <?php echo form_error('fuel-dt', '<div class="text-danger small" ml-3>','</div>'); ?>
+                <?php echo form_error('vehicle-dt', '<div class="text-danger small" ml-3>','</div>'); ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-secondary" id="vehicle-container--add-dt-button" onclick="event.preventDefault();">
+                tambah
+            </button>
+        </div>
+        </div>
+
         <!-- Submit -->
         <button 
             type="submit" 
