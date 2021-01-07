@@ -271,6 +271,7 @@
     var xhttp_driver;
     var xhttp_labour;
     var xhttp_heavy;
+    var xhttp_dt;
         
     // All operations will be done when Dom finally loaded
     window.addEventListener("DOMContentLoaded", ()=> { 
@@ -485,7 +486,10 @@
         }
         xhttp_heavy.open("GET","<?php echo base_URL('administrator/surattugas/vehicle_ab')?>");
         xhttp_heavy.send();
- 
+
+        xhttp_dt = new XMLHttpRequest();
+        xhttp_dt.open("GET","<?php echo base_URL('administrator/surattugas/vehicle_dt')?>"); 
+        xhttp_dt.send();
     });
 
     // populate select's option with subject 
