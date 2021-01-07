@@ -2,6 +2,8 @@
 
 class Surattugas extends CI_Controller {
 
+    private $suratTugas;
+
     private function is_loggedIn() {
         if (!isset($this->session->userdata['username'])){
             $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
@@ -63,5 +65,37 @@ class Surattugas extends CI_Controller {
             "subject_labour"=>$subject
         ];
         $this->output->set_content_type('application/json')->set_output(json_encode($data));
+    }
+
+    public function vehicle_ab() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $vehicle = $this->AlatBeratModel->getVINCategoryAndType()->result();
+        $data = [
+            "vehicle_heavy"=>$vehicle
+        ];
+        $this->output->set_content_type('application/json')->set_output(json_encode($data));
+    }
+
+    public function input_aksi() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $json = file_get_contents('php://input');
+        $data = json_decode($json);
+        $this->suratTugas = $data;
+        $result['status']='success';
+        $result['redirect_url']=base_URL('administrator/surattugas/show');
+        $result['suratTugas']= $this->suratTugas;
+        $this->output->set_content_type('application/json');
+        $this->output->set_output(json_encode($result));
+    }
+
+    public function show() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/show');
+        $this->load->view('template_administrator/footer');
     }
 }
