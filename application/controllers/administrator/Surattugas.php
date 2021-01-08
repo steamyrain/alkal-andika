@@ -82,10 +82,49 @@ class Surattugas extends CI_Controller {
         $this->is_admin();
         $json = file_get_contents('php://input');
         $data = json_decode($json);
+        $insertSurat;
         $this->suratTugas = $data;
+
+        $insertSurat['location'] = $data->location;
+        $insertSurat['date'] = $data->date;
+
+        // insert surat tugas to corresponding table & get the last id inserted
+        $last_id = $this->SuratTugasModel->insertSuratTugas($insertSurat);
+
+        // insert surat tugas subject to correspoding table with its data;
+        $insertSubject = Array();
+        foreach ($data->subject as $subject) {
+            array_push($insertSubject,Array("subject_id"=>$subject,"surat_id"=>$last_id));
+        }
+        $this->SuratTugasModel->insertSTSubject($insertSubject);
+                
+        // insert surat tugas heavy to correspoding table with its data;
+        $insertHeavy = Array();
+        $dataHeavy;
+        foreach ($data->heavy as $heavy) {
+            $dataHeavy = Array();
+            foreach ($heavy as $key => $value){
+                array_push($dataHeavy,$value);
+            }
+            array_push($insertHeavy,Array("heavy_id"=>$dataHeavy[0],"surat_id"=>$last_id,"heavy_fuel"=>$dataHeavy[1]));
+        }
+        $this->SuratTugasModel->insertSTHeavy($insertHeavy);
+        
+        // insert surat tugas dt to correspoding table with its data;
+        $insertDT = Array();
+        $dataDT;
+        foreach ($data->dt as $dt) {
+            $dataDT = Array();
+            foreach ($dt as $key => $value){
+                array_push($dataDT,$value);
+            }
+            array_push($insertDT,Array("dt_id"=>$dataDT[0],"surat_id"=>$last_id,"dt_fuel"=>$dataDT[1]));
+        }
+        $this->SuratTugasModel->insertSTDT($insertDT);
+        
+
         $result['status']='success';
         $result['redirect_url']=base_URL('administrator/surattugas/show');
-        $result['suratTugas']= $this->suratTugas;
         $this->output->set_content_type('application/json');
         $this->output->set_output(json_encode($result));
     }
