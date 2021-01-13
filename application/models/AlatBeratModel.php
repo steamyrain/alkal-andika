@@ -24,6 +24,9 @@ class AlatBeratModel extends CI_Model {
             'alkal_category_alat_berat.id='
             .$this->table.'.catId'
         );
+        $this->db->where(
+            $this->table.'.id=1'
+        );
         return $this->db->get();
     }
     public function getPlateAndSerial() {
