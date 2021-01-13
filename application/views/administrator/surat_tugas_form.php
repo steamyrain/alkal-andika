@@ -10,7 +10,7 @@
                 id="form-surat-tugas__date"
                 class="form-control"
             />
-            <?php echo form_error('date', '<div class="text-danger small" ml-3>','</div>'); ?>
+            <div style="display: none" class="text-danger small ml-3" id="date-error-message"></div>
         </div>
         <div class="form-group">
             <label>Lokasi :</label>
@@ -21,7 +21,7 @@
                 class="form-control"
                 placeholder="Masukkan Nama Lokasi"
             />
-            <?php echo form_error('location', '<div class="text-danger small" ml-3>','</div>'); ?>
+            <div style="display: none" class="text-danger small ml-3" id="location-error-message"></div>
         </div>
 
         <!-- operator -->
@@ -49,6 +49,7 @@
                 <?php echo form_error('subject-operator', '<div class="text-danger small" ml-3>','</div>'); ?>
             </div>
         </div>
+        <div style="display: none" class="text-danger small ml-3" id="operator-error-message"></div>
         <div class="form-group">
             <button class="btn btn-secondary" id="subject-container--add-operator-button" onclick="event.preventDefault();">
                 tambah
@@ -81,6 +82,7 @@
                 <?php echo form_error('subject-driver', '<div class="text-danger small" ml-3>','</div>'); ?>
             </div>
         </div>
+        <div style="display: none" class="text-danger small ml-3" id="driver-error-message"></div>
         <div class="form-group">
             <button class="btn btn-secondary" id="subject-container--add-driver-button" onclick="event.preventDefault();">
                 tambah
@@ -113,6 +115,7 @@
                 <?php echo form_error('subject-labour', '<div class="text-danger small" ml-3>','</div>'); ?>
             </div>
         </div>
+        <div style="display: none" class="text-danger small ml-3" id="labour-error-message"></div>
         <div class="form-group">
             <button class="btn btn-secondary" id="subject-container--add-labour-button" onclick="event.preventDefault();">
                 tambah
@@ -149,10 +152,9 @@
                     />
                     <button class="btn btn-danger form-control" id="vehicle-container--delete-heavy-button" onclick="event.preventDefault();">hapus</button>
                 </div>
-                <?php echo form_error('fuel', '<div class="text-danger small" ml-3>','</div>'); ?>
-                <?php echo form_error('heavy', '<div class="text-danger small" ml-3>','</div>'); ?>
             </div>
         </div>
+        <div style="display: none" class="text-danger small ml-3" id="heavy-error-message"></div>
         <div class="form-group">
             <button class="btn btn-secondary" id="vehicle-container--add-heavy-button" onclick="event.preventDefault();">
                 tambah
@@ -189,10 +191,9 @@
                     />
                     <button class="btn btn-danger form-control" id="vehicle-container--delete-dt-button" onclick="event.preventDefault();">hapus</button>
                 </div>
-                <?php echo form_error('fuel-dt', '<div class="text-danger small" ml-3>','</div>'); ?>
-                <?php echo form_error('vehicle-dt', '<div class="text-danger small" ml-3>','</div>'); ?>
             </div>
         </div>
+        <div style="display: none" class="text-danger small ml-3" id="dt-error-message"></div>
         <div class="form-group">
             <button class="btn btn-secondary" id="vehicle-container--add-dt-button" onclick="event.preventDefault();">
                 tambah
@@ -309,7 +310,52 @@
             xhrSuratTugas.onreadystatechange = function() {
                 if((this.readyState === XMLHttpRequest.DONE) && (this.status === 200)){
                     var jsonResponse = JSON.parse(xhrSuratTugas.responseText);
-                    //window.location.href = jsonResponse['redirect_url'];
+                    window.location.href = jsonResponse['redirect_url'];
+                }
+                if((this.readyState === XMLHttpRequest.DONE) && (this.status === 400)){
+                    // scroll to top just to have the same ux with other pages
+                    window.scrollTo(0,0);
+
+                    // initiate support variables
+                    var jsonResponse = JSON.parse(xhrSuratTugas.responseText);
+                    var message = jsonResponse['message'];
+
+                    // setup proper error messages
+                    if(message['date']){
+                        var divErrorDate = document.getElementById('date-error-message');
+                        divErrorDate.style.display = 'block';
+                        divErrorDate.innerHTML = message['date'];
+                    }
+
+                    if(message['location']){
+                        var divErrorLocation = document.getElementById('location-error-message');
+                        divErrorLocation.style.display = 'block';
+                        divErrorLocation.innerHTML = message['location'];
+                    }
+
+                    if(message['subject']){
+                        var divErrorOperator = document.getElementById('operator-error-message');
+                        var divErrorDriver = document.getElementById('driver-error-message');
+                        var divErrorLabour = document.getElementById('labour-error-message');
+                        divErrorOperator.style.display = 'block';
+                        divErrorDriver.style.display = 'block';
+                        divErrorLabour.style.display = 'block';
+                        divErrorOperator.innerHTML = message['subject'];
+                        divErrorDriver.innerHTML = message['subject'];
+                        divErrorLabour.innerHTML = message['subject'];
+                    }
+
+                    if(message['heavy']){
+                        var divErrorHeavy = document.getElementById('heavy-error-message');
+                        divErrorHeavy.style.display = 'block';
+                        divErrorHeavy.innerHTML = message['heavy'];
+                    }
+
+                    if(message['dt']){
+                        var divErrorDT = document.getElementById('dt-error-message');
+                        divErrorDT.style.display = 'block';
+                        divErrorDT.innerHTML = message['dt'];
+                    }
                 }
             }
         },false);
@@ -430,7 +476,6 @@
                 // logic for addVehicleButton
                 addVehicleHeavyButton.addEventListener('click',(event)=>{
                     event.preventDefault();
-                    console.log(total_heavy);
                     var selectId = `vehicle-heavy-${total_heavy}`;
                     var div = document.createElement("div");
                     var select = document.createElement("select");
@@ -558,7 +603,6 @@
                 // logic for addVehicleButton
                 addVehicleDTButton.addEventListener('click',(event)=>{
                     event.preventDefault();
-                    console.log(total_dt);
                     var selectId = `vehicle-dt-${total_dt}`;
                     var div = document.createElement("div");
                     var select = document.createElement("select");
