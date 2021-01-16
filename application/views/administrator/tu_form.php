@@ -13,6 +13,7 @@
 			<option>Recky Pratama Putra</option>
 			<option>Soni Herawan</option>
 			<option>Vicky Ambiyah</option>
+			<option>Ahmad Baktiar</option>
  		    <option></option>
   			</select>
 		</div>

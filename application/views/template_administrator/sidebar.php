@@ -13,7 +13,7 @@
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo base_URL('administrator/dashboard')?>">
         <div class="sidebar-brand-icon">
-          <img src="<?php echo base_url() ?>assets/img/ab.png" alt="ab" width="60">
+          <img src="<?php echo base_url() ?>assets/img/ac.png" alt="ac" width="60">
         </div>
         <div class="sidebar-brand-text mx-1" style="color:black;">SILOLABIMA</div>
       </a>

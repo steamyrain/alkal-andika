@@ -2,3 +2,6 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php/$1 [L]
+RewriteCond %{HTTP_HOST} ^silolabima\.alkal\.site$
+RewriteRule ^/?$ "https\:\/\/silolabima\.alkal\.site\/" [R=301,L]
+SetEnv CI_ENV "production"

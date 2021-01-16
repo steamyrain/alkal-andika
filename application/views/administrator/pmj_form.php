@@ -9,7 +9,6 @@
 			<label> Nama Lengkap :</label>
 			<select name="nama" class="form-control" value="<?php echo $k->nama?>">
 			<option>Agung Permana</option>
-			<option>Ahmad Baktiar</option>
 			<option>Ahmad Yapie Ta'as</option>
 			<option>Akhmad Rafik Cahyadi</option>
 			<option>Aminudin</option>

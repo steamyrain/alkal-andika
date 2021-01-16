@@ -16,6 +16,7 @@
 			<option>Muhammad Faisal Ridho</option>
 			<option>Reinhard Aditya Petradi</option>
 			<option>Muhamad Andyka Bakry</option>
+			<option>Tri Yanto</option>
  		    <option></option>
   			</select>
 		</div>
@@ -44,6 +45,14 @@
 			<option>Siang - Melaksanakan Perintah Atasan</option>
 			<option>Sore - Melaksanakan Perintah Atasan</option>
 			<option>Pagi - Apel Pagi Persiapan Kerja</option>
+			<option>Menginput KM/HM Alat Berat dan Dump Truck</option>
+			<option>Koordinasi dengan Koordinator Pengemudi Dump Truck</option>
+			<option>Koordinasi dengan Koordinator Pengemudi Alat Berat</option>
+            <option>Dokumentasi Kegiataan</option>
+            <option>Perencanaan BBM</option>
+            <option>Monitoring Kegiatan</option>
+            <option>Editing Video</option>
+            <option>Melakukan Backup File</option>
 		</select>
 			<?php echo form_error('kegiatan', '<div class="text-danger small" ml-3>') ?>
 		</div>
