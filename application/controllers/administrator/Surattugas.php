@@ -347,4 +347,19 @@ class Surattugas extends CI_Controller {
         $this->load->view('administrator/st_detail_heavy',$data);
         $this->load->view('template_administrator/footer');
     }
+
+    public function detail_dt() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $id = $this->input->post('id');
+        $dt = $this->SuratTugasModel->getAllSTDT($id)->result();
+        $data = [
+            'st_id'=>$id,
+            'st_dt_og'=>json_encode($dt)
+        ];
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/st_detail_dt',$data);
+        $this->load->view('template_administrator/footer');
+    }
 }

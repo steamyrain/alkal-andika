@@ -102,12 +102,24 @@ class SuratTugasModel extends CI_Model {
 
     public function getAllSTHeavy($id){
         $this->db->select(
-            $this->tableHeavy.'.id as stHeIdk,'
+            $this->tableHeavy.'.id as stHeId,'
             .$this->tableHeavy.'.heavy_id,'
             .$this->tableHeavy.'.heavy_fuel'
         );
         $this->db->from($this->table);
         $this->db->join($this->tableHeavy,$this->tableHeavy.'.surat_id='.$this->table.'.id');
+        $this->db->where($this->table.'.id='.$id);
+        return $this->db->get();
+    }
+
+    public function getAllSTDT($id){
+        $this->db->select(
+            $this->tableDT.'.id as stDTId,'
+            .$this->tableDT.'.dt_id,'
+            .$this->tableDT.'.dt_fuel'
+        );
+        $this->db->from($this->table);
+        $this->db->join($this->tableDT,$this->tableDT.'.surat_id='.$this->table.'.id');
         $this->db->where($this->table.'.id='.$id);
         return $this->db->get();
     }

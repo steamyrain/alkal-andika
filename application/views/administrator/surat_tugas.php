@@ -47,8 +47,38 @@
                     detail subjek
                 </a>
             </td>
-            <td><a href="#">detail alat berat</a></td>
-            <td><a href="#">detail dumptruck</a></td>
+            <td>
+                <form 
+                    id="<?php echo 'form-heavy-'.$i; ?>" 
+                    style="display: none;" 
+                    method="post" 
+                    action="<?php echo base_URL('administrator/surattugas/detail_heavy')?>"
+                > 
+                    <input type="text" name="id" value="<?php echo $st->id; ?>">
+                </form>
+                <a 
+                    href="#"
+                    onclick="event.preventDefault();document.getElementById('form-heavy-<?php echo $i; ?>').submit()"
+                >
+                    detail alat berat
+                </a>
+            </td>
+            <td>
+                <form 
+                    id="<?php echo 'form-dt-'.$i; ?>" 
+                    style="display: none;" 
+                    method="post" 
+                    action="<?php echo base_URL('administrator/surattugas/detail_dt')?>"
+                > 
+                    <input type="text" name="id" value="<?php echo $st->id; ?>">
+                </form>
+                <a 
+                    href="#"
+                    onclick="event.preventDefault();document.getElementById('form-dt-<?php echo $i; ?>').submit()"
+                >
+                    detail dumptruck
+                </a>
+            </td>
             <td>
                 <form 
                     id="<?php echo 'form-document-'.$i; ?>" 

@@ -123,6 +123,7 @@
                     <div 
                         id="div-subject-labour-<?php echo $i; ?>" 
                         style="display: grid; grid-template-columns: 3fr 1fr; grid-gap: 0.75vw;"
+                        class="form-group"
                     >
                         <select 
                             name="subject-labour-<?php echo $i; ?>" 
