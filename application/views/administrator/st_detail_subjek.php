@@ -115,17 +115,34 @@
         <div id="subject-labour-container">
             <div class="form-group">
                 <label>Tenaga Kerja :</label>
-                <div id="div-subject-labour-0" style="display: grid; grid-template-columns: 3fr 1fr; grid-gap: 0.75vw;">
-                    <select 
-                        name="subject-labour-0" 
-                        id="subject-labour-0" 
-                        class="form-control" 
-                        placeholder="Masukkan Nama Tenaga Kerja"
-                    > 
-                    </select>
-                    <button class="btn btn-danger form-control" id="subject-container--delete-labour-button" onclick="event.preventDefault();">hapus</button>
-                </div>
-                <?php echo form_error('subject-labour', '<div class="text-danger small" ml-3>','</div>'); ?>
+                <?php 
+                    $laBuff=json_decode($st_labour_og); 
+                    $i = 0;
+                    foreach($laBuff as $la) {
+                ?>
+                    <div 
+                        id="div-subject-labour-<?php echo $i; ?>" 
+                        style="display: grid; grid-template-columns: 3fr 1fr; grid-gap: 0.75vw;"
+                    >
+                        <select 
+                            name="subject-labour-<?php echo $i; ?>" 
+                            id="subject-labour-<?php echo $i; ?>" 
+                            class="form-control" 
+                            placeholder="Masukkan Nama Tenaga Kerja"
+                        > 
+                        </select>
+                        <button 
+                            class="btn btn-danger form-control" 
+                            id="subject-container--delete-labour-button-<?php echo $i; ?>" 
+                            onclick="event.preventDefault();"
+                        >
+                            hapus
+                        </button>
+                    </div>
+                <?php 
+                        $i++;
+                    } 
+                ?>
             </div>
         </div>
         <div style="display: none" class="text-danger small ml-3" id="labour-error-message"></div>
@@ -195,6 +212,13 @@
 
     // initialize object, we use this cause we need the random access through object's keys/properties
     // could use the linked list cause insertion and deletion cost O(1)
+    var selected_og_operator=new Object();
+    var selected_og_driver=new Object();
+    var selected_og_labour=new Object();
+    var deleted_og=new Array();
+
+    // initialize object, we use this cause we need the random access through object's keys/properties
+    // could use the linked list cause insertion and deletion cost O(1)
     var selected_operator;
     var selected_driver;
     var selected_labour;
@@ -210,12 +234,27 @@
     // All operations will be done when Dom finally loaded
     window.addEventListener("DOMContentLoaded", ()=> { 
 
-        // populateOGOperator populates original operator form fields
+        // populateOGOperators populates original operator form fields
         populateOGOperators();
+        
+        // populateOGDrivers populates original driver form fields
+        populateOGDrivers();
+        
+        // populateOGLabours populates original labour form fields
+        populateOGLabours();
 
         // override submit for debug purposes
         document.getElementById("submit").addEventListener('click',(event)=>{
             event.preventDefault();
+            const og_subject_keys = Object.keys(selected_og_operator).concat(Object.keys(selected_og_driver),Object.keys(selected_og_labour));
+            const og_subject_id = Object.values(selected_og_operator).concat(Object.keys(selected_og_driver),Object.keys(selected_og_labour));
+            const data = {
+                og_keys: og_subject_keys,
+                og_uId: og_subject_id,
+                og_dKeys: deleted_og 
+            };
+            console.log(JSON.stringify(data));
+
         },false);
 
         /*
@@ -239,14 +278,7 @@
         deleteSubjectOperatorButton = document.getElementById("subject-container--delete-operator-button")
         deleteSubjectDriverButton = document.getElementById("subject-container--delete-driver-button")
     */
-
-        // select element
-        subjectDriverSelect = document.getElementById("subject-driver-0");
-        subjectOperatorSelect = document.getElementById("subject-operator-0");
-        subjectLabourSelect = document.getElementById("subject-labour-0");
-
         
-
         // total variable (don't use this variable as total counter!
         // use it for select element's unique id)
         total_operator = len_st_operator;
@@ -323,6 +355,24 @@
         container.appendChild(div);
     };*/
 
+    function listenOG(selectId,selectedOG,subject_id) {
+        document.getElementById(selectId).addEventListener('change',(event)=>{
+            selectedOG[subject_id]=document.getElementById(selectId).value;
+        });
+    }
+
+    function deleteOG(selectId,buttonId,selectedOG,deletedOG,subject_id) {
+        document.getElementById(buttonId).addEventListener('click',(event)=>{
+            event.preventDefault();
+            document.getElementById('div-'+selectId).style="display:none";
+            deletedOG.push(subject_id);
+            console.log(selectedOG.hasOwnProperty(subject_id));
+            if (selectedOG.hasOwnProperty(subject_id)){
+                delete selectedOG[subject_id];
+            }
+        });
+    }
+
     function populateOGOperators() {
         xhttp_operator = new XMLHttpRequest();
         xhttp_operator.onload = function() {
@@ -331,22 +381,71 @@
             len_operator = Object.keys(obj.subject_operator).length;
 
             // populate og select subject fields
-            var i = 0
+            var i = 0;
+            var operatorBuffer;
+            var buttonId;
             for (;i<len_st_operator;i++) {
-                subjectOperatorSelect = document.getElementById(`subject-operator-${i}`);
+                operatorBuffer = `subject-operator-${i}`;
+                subjectOperatorSelect = document.getElementById(operatorBuffer);
                 initOGSubject(subjectOperatorSelect,subject_operator,len_operator,st_operator[i].id);
+                listenOG(operatorBuffer,selected_og_operator,st_operator[i].stOpId);
+                buttonId=`subject-container--delete-operator-button-${i}`;
+                deleteOG(operatorBuffer,buttonId,selected_og_operator,deleted_og,st_operator[i].stOpId);
             }
-
-            /* change with loop over og data 
-            selected_operator['subject-operator-0'] = subjectOperatorSelect.value;
-            subjectOperatorSelect.addEventListener('change',(event) => {
-                selected_operator['subject-operator-0']=subjectOperatorSelect.value;
-            })
-             */
 
         }; 
         xhttp_operator.open("GET","<?php echo base_URL('administrator/surattugas/subject_operator')?>");
         xhttp_operator.send();
+    }
+
+    function populateOGDrivers() {
+        xhttp_driver = new XMLHttpRequest();
+        xhttp_driver.onload = function() {
+            var obj = JSON.parse(this.responseText);
+            subject_driver = obj.subject_driver;
+            len_driver = Object.keys(obj.subject_driver).length;
+
+            // populate og select subject fields
+            var i = 0;
+            var driverBuffer;
+            var buttonId;
+            for (;i<len_st_driver;i++) {
+                driverBuffer = `subject-driver-${i}`;
+                subjectDriverSelect = document.getElementById(driverBuffer);
+                initOGSubject(subjectDriverSelect,subject_driver,len_driver,st_driver[i].id);
+                listenOG(driverBuffer,selected_og_driver,st_driver[i].stDrId);
+                buttonId=`subject-container--delete-driver-button-${i}`;
+                deleteOG(driverBuffer,buttonId,selected_og_driver,deleted_og,st_driver[i].stDrId);
+            }
+
+        }; 
+        xhttp_driver.open("GET","<?php echo base_URL('administrator/surattugas/subject_driver')?>");
+        xhttp_driver.send();
+    }
+
+    function populateOGLabours() {
+        xhttp_labour = new XMLHttpRequest();
+        xhttp_labour.onload = function() {
+            var obj = JSON.parse(this.responseText);
+            subject_labour = obj.subject_labour;
+            len_labour = Object.keys(obj.subject_labour).length;
+
+            // populate og select subject fields
+            var i = 0;
+            var labourBuffer;
+            var buttonId;
+            for (;i<len_st_driver;i++) {
+                labourBuffer = `subject-labour-${i}`;
+                subjectLabourSelect = document.getElementById(labourBuffer);
+                initOGSubject(subjectLabourSelect,subject_labour,len_labour,st_labour[i].id);
+                listenOG(labourBuffer,selected_og_labour,st_labour[i].stLaId);
+                buttonId=`subject-container--delete-labour-button-${i}`;
+                deleteOG(labourBuffer,buttonId,selected_og_labour,deleted_og,st_labour[i].stLaId);
+            }
+
+        }; 
+        xhttp_labour.open("GET","<?php echo base_URL('administrator/surattugas/subject_labour')?>");
+        xhttp_labour.send();
     }
 
     /*
