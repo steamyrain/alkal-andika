@@ -42,4 +42,13 @@ class DumpTruckModel extends CI_Model {
     public function editDt($data,$id){
         $this->db->update($this->table,$data,'id='.$id);
     }
+
+    public function getPNCategory(){
+        $this->db->select($this->table.'.id, plate_number, category');
+        $this->db->from($this->table);
+        $this->db->join('alkal_category_dt','alkal_category_dt.id='.$this->table.'.catId');
+        $this->db->order_by('catId','asc');
+        $this->db->order_by('plate_number','asc');
+        return $this->db->get();
+    }
 }

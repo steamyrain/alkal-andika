@@ -53,11 +53,11 @@
             foreach ($vin as $v):
                 if($v->plate_number != NULL) {
                     array_push($plate_number,$v->plate_number);
-                    array_push($type_p,$v->plate_number);
+                    array_push($type_p,$v->type);
                 }
                 if($v->serial_number != NULL) {
                     array_push($serial_number,$v->serial_number);
-                    array_push($type_s,$v->serial_number);
+                    array_push($type_s,$v->type);
                 }
             endforeach;
             $data = [
