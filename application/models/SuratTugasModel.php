@@ -75,8 +75,9 @@ class SuratTugasModel extends CI_Model {
     public function getAllSTDriver($id){
         $this->db->select(
             ' 
-                user.username,
+                user.id,
             '
+            .$this->tableSubject.'.id as stDrId'
         );
         $this->db->from($this->table);
         $this->db->join($this->tableSubject,$this->tableSubject.'.surat_id='.$this->table.'.id');
@@ -87,14 +88,39 @@ class SuratTugasModel extends CI_Model {
 
     public function getAllSTLabour($id){
         $this->db->select(
+            ' 
+                user.id,
             '
-                user.username,
-            '
+            .$this->tableSubject.'.id as stLaId'
         );
         $this->db->from($this->table);
         $this->db->join($this->tableSubject,$this->tableSubject.'.surat_id='.$this->table.'.id');
         $this->db->join('user','user.id='.$this->tableSubject.'.subject_id');
         $this->db->where($this->table.'.id='.$id.' AND user.job_id=4');
+        return $this->db->get();
+    }
+
+    public function getAllSTHeavy($id){
+        $this->db->select(
+            $this->tableHeavy.'.id as stHeId,'
+            .$this->tableHeavy.'.heavy_id,'
+            .$this->tableHeavy.'.heavy_fuel'
+        );
+        $this->db->from($this->table);
+        $this->db->join($this->tableHeavy,$this->tableHeavy.'.surat_id='.$this->table.'.id');
+        $this->db->where($this->table.'.id='.$id);
+        return $this->db->get();
+    }
+
+    public function getAllSTDT($id){
+        $this->db->select(
+            $this->tableDT.'.id as stDTId,'
+            .$this->tableDT.'.dt_id,'
+            .$this->tableDT.'.dt_fuel'
+        );
+        $this->db->from($this->table);
+        $this->db->join($this->tableDT,$this->tableDT.'.surat_id='.$this->table.'.id');
+        $this->db->where($this->table.'.id='.$id);
         return $this->db->get();
     }
 

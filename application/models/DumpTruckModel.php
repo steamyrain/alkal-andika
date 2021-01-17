@@ -44,7 +44,7 @@ class DumpTruckModel extends CI_Model {
     }
 
     public function getPNCategory(){
-        $this->db->select($this->table.'.id, plate_number, category');
+        $this->db->select($this->table.'.id, plate_number, category,type');
         $this->db->from($this->table);
         $this->db->join('alkal_category_dt','alkal_category_dt.id='.$this->table.'.catId');
         $this->db->order_by('catId','asc');

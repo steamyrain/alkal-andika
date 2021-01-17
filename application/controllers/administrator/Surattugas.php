@@ -311,7 +311,7 @@ class Surattugas extends CI_Controller {
         $pdf->ln(5);
     }
 
-    private function detail_subjek() {
+    public function detail_subjek() {
         $this->is_loggedIn();
         $this->is_admin();
         $id = $this->input->post('id');
@@ -327,6 +327,39 @@ class Surattugas extends CI_Controller {
         $this->load->view('template_administrator/header');
         $this->load->view('template_administrator/sidebar');
         $this->load->view('administrator/st_detail_subjek',$data);
+        $this->load->view('template_administrator/footer');
+    }
+
+    public function edit_subject(){
+    }
+
+    public function detail_heavy() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $id = $this->input->post('id');
+        $heavy = $this->SuratTugasModel->getAllSTHeavy($id)->result();
+        $data = [
+            'st_id'=>$id,
+            'st_heavy_og'=>json_encode($heavy)
+        ];
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/st_detail_heavy',$data);
+        $this->load->view('template_administrator/footer');
+    }
+
+    public function detail_dt() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $id = $this->input->post('id');
+        $dt = $this->SuratTugasModel->getAllSTDT($id)->result();
+        $data = [
+            'st_id'=>$id,
+            'st_dt_og'=>json_encode($dt)
+        ];
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/st_detail_dt',$data);
         $this->load->view('template_administrator/footer');
     }
 }
