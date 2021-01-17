@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <h5 style="text-align: center;">DETAIL HEAVY SURAT TUGAS</h5>
+    <h5 style="text-align: center;">DETAIL ALAT BERAT SURAT TUGAS</h5>
     <br>
     <form id="form-surat-tugas" action="<?php echo base_URL('administrator/surattugas/input_aksi')?>">
 
