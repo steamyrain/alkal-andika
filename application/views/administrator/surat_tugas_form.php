@@ -312,6 +312,11 @@
                     var jsonResponse = JSON.parse(xhrSuratTugas.responseText);
                     window.location.href = jsonResponse['redirect_url'];
                 }
+                if((this.readyState === XMLHttpRequest.DONE) && (this.status === 307)){
+                    console.log('redirect');
+                    var jsonResponse = JSON.parse(xhrSuratTugas.responseText);
+                    window.location.href = jsonResponse['Location'];
+                }
                 if((this.readyState === XMLHttpRequest.DONE) && (this.status === 400)){
                     // scroll to top just to have the same ux with other pages
                     window.scrollTo(0,0);
@@ -418,6 +423,10 @@
 
         xhttp_heavy = new XMLHttpRequest();
         xhttp_heavy.onreadystatechange = function() {
+            if((this.readyState === XMLHttpRequest.DONE) && (this.status === 307)){
+                var jsonResponse = JSON.parse(this.responseText);
+                window.location.href = jsonResponse['Location'];
+            }
             if ((this.readyState === XMLHttpRequest.DONE) && (this.status === 200)) {
                 var obj = JSON.parse(this.responseText);
                 vehicle_heavy = obj.vehicle_heavy;
@@ -558,6 +567,10 @@
         xhttp_dt.send();
         // use function instead of arrow function for assigning callback outside parameter 
         xhttp_dt.onreadystatechange = function() {
+            if((this.readyState === XMLHttpRequest.DONE) && (this.status === 307)){
+                var jsonResponse = JSON.parse(this.responseText);
+                window.location.href = jsonResponse['Location'];
+            }
             if ((this.readyState === XMLHttpRequest.DONE) && (this.status === 200)){
                 var obj = JSON.parse(this.responseText);
                 vehicle_dt = obj.vehicle_dt;
@@ -718,6 +731,10 @@
     function populateOperators() {
         xhttp_operator = new XMLHttpRequest();
         xhttp_operator.onreadystatechange = function() {
+            if((this.readyState === XMLHttpRequest.DONE) && (this.status === 307)){
+                var jsonResponse = JSON.parse(this.responseText);
+                window.location.href = jsonResponse['Location'];
+            }
             if ((this.readyState === XMLHttpRequest.DONE)&&(this.status===200)) {
                 var obj = JSON.parse(this.responseText);
                 subject_operator = obj.subject_operator;
@@ -757,6 +774,10 @@
     function populateDrivers(){
         xhttp_driver = new XMLHttpRequest();
         xhttp_driver.onreadystatechange = function() {
+            if((this.readyState === XMLHttpRequest.DONE) && (this.status === 307)){
+                var jsonResponse = JSON.parse(this.responseText);
+                window.location.href = jsonResponse['Location'];
+            }
             if ((this.readyState === XMLHttpRequest.DONE)&&(this.status===200)) {
                 var obj = JSON.parse(this.responseText);
                 subject_driver = obj.subject_driver;
@@ -796,6 +817,10 @@
     function populateLabours(){
         xhttp_labour = new XMLHttpRequest();
         xhttp_labour.onreadystatechange = function() {
+            if((this.readyState === XMLHttpRequest.DONE) && (this.status === 307)){
+                var jsonResponse = JSON.parse(this.responseText);
+                window.location.href = jsonResponse['Location'];
+            }
             if ((this.readyState === XMLHttpRequest.DONE)&&(this.status===200)) {
                 var obj = JSON.parse(this.responseText);
                 subject_labour = obj.subject_labour;

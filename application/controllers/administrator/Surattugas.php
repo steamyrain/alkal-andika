@@ -100,7 +100,6 @@ class Surattugas extends CI_Controller {
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
-            $result['redirect_url']=base_URL('administrator/surattugas/input');
             $result['message']= [
                'date'=>form_error('date'),
                'location'=>form_error('location'),
@@ -310,5 +309,24 @@ class Surattugas extends CI_Controller {
         $pdf->Cell(0,0,'',0,1);
         $pdf->Cell(0,0,'',1,1,'C');
         $pdf->ln(5);
+    }
+
+    private function detail_subjek() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $id = $this->input->post('id');
+        $operator = $this->SuratTugasModel->getAllSTOperator($id)->result();
+        $driver = $this->SuratTugasModel->getAllSTDriver($id)->result();
+        $labour = $this->SuratTugasModel->getAllSTLabour($id)->result();
+        $data = [
+            'st_id'=>$id,
+            'st_operator_og'=>json_encode($operator),
+            'st_driver_og'=>json_encode($driver),
+            'st_labour_og'=>json_encode($labour)
+        ];
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/st_detail_subjek',$data);
+        $this->load->view('template_administrator/footer');
     }
 }

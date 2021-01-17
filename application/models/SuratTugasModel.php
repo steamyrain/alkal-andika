@@ -58,4 +58,44 @@ class SuratTugasModel extends CI_Model {
         return $this->db->get();
     }
 
+    public function getAllSTOperator($id){
+        $this->db->select(
+            '
+                user.id,
+            '
+            .$this->tableSubject.'.id as stOpId'
+        );
+        $this->db->from($this->table);
+        $this->db->join($this->tableSubject,$this->tableSubject.'.surat_id='.$this->table.'.id');
+        $this->db->join('user','user.id='.$this->tableSubject.'.subject_id');
+        $this->db->where($this->table.'.id='.$id.' AND user.job_id=1');
+        return $this->db->get();
+    }
+    
+    public function getAllSTDriver($id){
+        $this->db->select(
+            ' 
+                user.username,
+            '
+        );
+        $this->db->from($this->table);
+        $this->db->join($this->tableSubject,$this->tableSubject.'.surat_id='.$this->table.'.id');
+        $this->db->join('user','user.id='.$this->tableSubject.'.subject_id');
+        $this->db->where($this->table.'.id='.$id.' AND user.job_id=2');
+        return $this->db->get();
+    }
+
+    public function getAllSTLabour($id){
+        $this->db->select(
+            '
+                user.username,
+            '
+        );
+        $this->db->from($this->table);
+        $this->db->join($this->tableSubject,$this->tableSubject.'.surat_id='.$this->table.'.id');
+        $this->db->join('user','user.id='.$this->tableSubject.'.subject_id');
+        $this->db->where($this->table.'.id='.$id.' AND user.job_id=4');
+        return $this->db->get();
+    }
+
 }

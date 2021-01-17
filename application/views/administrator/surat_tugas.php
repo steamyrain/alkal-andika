@@ -31,16 +31,31 @@
   		<tr>
             <td><?php echo $st->date?></td>
   			<td><?php echo $st->location?></td>
-            <td><a href="#">detail subjek</a></td>
+            <td>
+                <form 
+                    id="<?php echo 'form-subject-'.$i; ?>" 
+                    style="display: none;" 
+                    method="post" 
+                    action="<?php echo base_URL('administrator/surattugas/detail_subjek')?>"
+                > 
+                    <input type="text" name="id" value="<?php echo $st->id; ?>">
+                </form>
+                <a 
+                    href="#"
+                    onclick="event.preventDefault();document.getElementById('form-subject-<?php echo $i; ?>').submit()"
+                >
+                    detail subjek
+                </a>
+            </td>
             <td><a href="#">detail alat berat</a></td>
             <td><a href="#">detail dumptruck</a></td>
             <td>
-            <form 
-                id="<?php echo 'form-document-'.$i; ?>" 
-                style="display: none;" 
-                method="post" 
-                action="<?php echo base_URL('administrator/surattugas/print_surat')?>"
-            > 
+                <form 
+                    id="<?php echo 'form-document-'.$i; ?>" 
+                    style="display: none;" 
+                    method="post" 
+                    action="<?php echo base_URL('administrator/surattugas/print_surat')?>"
+                > 
                     <input type="text" name="id" value="<?php echo $st->id; ?>">
                 </form>
                 <a 
