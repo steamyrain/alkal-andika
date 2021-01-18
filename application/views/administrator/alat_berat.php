@@ -14,6 +14,7 @@
         </button>'
     ) 
     ?>
+<div style="overflow-x: auto;">
   <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
     <thead>
   	<tr>
@@ -62,6 +63,7 @@
   	<?php endforeach; ?>
     </tbody>
   </table>
+</div>
 </div>
 <script type="text/JavaScript">
 $(document).ready(function() 
