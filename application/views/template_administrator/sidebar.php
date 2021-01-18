@@ -63,8 +63,8 @@
             aria-expanded="true" 
             aria-controls="collapsePeralatan"
         >
-          <i style="color:black;" class="fas fa-fw fa-wrench"></i>
-          <span style="color:black;">Peralatan</span>
+          <i style="color:black;" class="fas fa-file"></i>
+          <span style="color:black;">Daily Task</span>
         </a>
         <div 
             id="collapsePeralatan" 
@@ -74,6 +74,7 @@
             <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
             <a class="collapse-item" href="<?php echo base_url('administrator/laporan') ?>">Laporan Kerja Alat Berat</a>
             <a class="collapse-item" href="<?php echo base_url('administrator/laporandt') ?>">Laporan Kerja Dump Truck</a>
+            <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas'); ?>">Surat Tugas</a>
           </div>
         </div>
       </li>
@@ -90,7 +91,7 @@
             style="color:black;"
         >
             <i class="fas fa-truck" style="color:black;"></i>
-            <span>Alat Berat</span>
+            <span>Peralatan</span>
         </a>
         <div 
             id="collapseAlatBerat"
@@ -106,32 +107,6 @@
         </div>
     </li>
 
-    <!-- Nav Item - Surat Kerja Collapse Menu -->
-    <li class="nav-item">
-        <a 
-            class="nav-link collapsed" 
-            href="#" 
-            data-toggle="collapse" 
-            data-target="#collapseSurat" 
-            aria-expanded="true" 
-            aria-controls="collapseSurat"
-        >
-            <i class="fas fa-file" style="color:black;"></i>
-            <span style="color:black;">Surat Tugas</span>
-        </a>
-        <div    
-            id="collapseSurat" 
-            class="collapse" 
-            aria-labelledby="headingSurat" 
-            data-parent="#accordionSidebar"
-        >
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-                <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas'); ?>">Surat Tugas</a>
-            </div>
-        </div>
-    </li>
-
     <!-- Material Collapse Menu -->
     <li class="nav-item">
         <a 
@@ -143,7 +118,7 @@
             aria-controls="collapsePages"
         >
             <i class="fas fa-oil-can" style="color:black;"></i>
-            <span style="color:black;">Material</span>
+            <span style="color:black;">Perbekalan</span>
         </a>
         <div 
             id="collapsePages"
