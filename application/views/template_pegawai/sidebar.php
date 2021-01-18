@@ -48,7 +48,7 @@
     <?php if (($_SESSION['job_id'] === '1') or ($_SESSION['job_id']=== '2')) { ?>
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-fw fa-wrench" style="color:black;"></i>
+          <i class="fas fa-file" style="color:black;"></i>
           <span style="color:black;">Daily Task</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
