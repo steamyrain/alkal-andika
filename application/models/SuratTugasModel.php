@@ -124,4 +124,14 @@ class SuratTugasModel extends CI_Model {
         return $this->db->get();
     }
 
+    public function updateSTSubject($id,$data){
+        $this->db->set('subject_id',$data);
+        $this->db->where('id',$id);
+        $this->db->update($this->tableSubject);
+    }
+
+    public function deleteSTSubject($id){
+        $this->db->where('id',$id);
+        $this->db->delete($this->tableSubject);
+    }
 }
