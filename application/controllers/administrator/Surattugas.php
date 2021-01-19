@@ -331,6 +331,28 @@ class Surattugas extends CI_Controller {
     }
 
     public function edit_subject(){
+        $this->is_loggedIn();
+        $this->is_admin();
+
+        // initialized support variables
+        $json = file_get_contents('php://input');
+        $data = json_decode($json);
+        $_POST = json_decode($json,true);
+        if (isset($data->og_keys) && !empty($data->og_keys)){
+            for($i=0;$i<sizeof($data->og_keys);$i++){
+                $this->SuratTugasModel->updateSTSubject($data->og_keys[$i],$data->og_uId[$i]);
+            }
+        } if (isset($data->og_dKeys) && !empty($data->og_dKeys)){
+            for($i=0;$i<sizeof($data->og_dKeys);$i++) {
+                $this->SuratTugasModel->deleteSTSubject($data->og_dKeys[$i]);
+            }
+        } else {
+            $result = [
+                "message"=>"no changes"
+            ]; 
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode($result));
+        }
     }
 
     public function detail_heavy() {
