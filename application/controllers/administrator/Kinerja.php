@@ -30,8 +30,10 @@ function __construct(){
 	{
 		$data = array(
             'tanggal'  => set_value('tanggal'),
+            'tgl'  => set_value('tgl'),
 			'no'  => set_value('no'),
             'waktu'  => set_value('waktu'),
+            'pulang'  => set_value('pulang'),
 			'nama'   => set_value('nama'),
 			'bidang'   => set_value('bidang'),
 			'kegiatan'   => set_value('kegiatan'),
@@ -60,8 +62,10 @@ function __construct(){
             echo "form valid\n";
             // assign form input values to variables
 			$nama 			= $this->input->post('nama');
+			$tgl 			= $this->input->post('tgl');
             $lokasi         = $this->input->post('lokasi');
             $waktu          = $this->input->post('waktu');
+            $pulang         = $this->input->post('pulang');
 			$bidang 		= $this->input->post('bidang');
 			$kegiatan 		= $this->input->post('kegiatan');
 
@@ -82,6 +86,8 @@ function __construct(){
                 $dokumentasi = $this->upload->data('file_name');
                 $data = array(
                     'waktu' => $waktu,
+                    'tgl' => $tgl,
+                    'pulang' => $pulang,
                     'nama' => $nama,
                     'bidang' => $bidang,
                     'kegiatan' => $kegiatan,
@@ -260,7 +266,9 @@ function __construct(){
     public function update_aksi()
     {
         $no = $this->input->post('no');
+        $tgl = $this->input->post('tgl');
         $waktu = $this->input->post('waktu');
+        $pulang = $this->input->post('pulang');
         $nama = $this->input->post('nama');
         $bidang = $this->input->post('bidang');
         $kegiatan = $this->input->post('kegiatan');
@@ -269,7 +277,9 @@ function __construct(){
         
         $data = array(
         'nama' => $nama,
+        'tgl' => $tgl,
         'waktu' => $waktu,
+        'pulang' => $pulang,
         'bidang' => $bidang,
         'kegiatan' => $kegiatan,
         'lokasi'    => $lokasi,

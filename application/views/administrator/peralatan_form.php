@@ -53,6 +53,11 @@
             <option>Monitoring Kegiatan</option>
             <option>Editing Video</option>
             <option>Melakukan Backup File</option>
+            <option>Mengembangkan Aplikasi</option>
+            <option>Perencanaan Kegiatan</option>
+            <option>Monitoring tim IT</option>
+            <option>Mencatat Rekapitulasi Pelaksanaan Kegiatan Harian</option>
+            <option>Membantu Melakukan Perencanaan Kegiatan</option>
 		</select>
 			<?php echo form_error('kegiatan', '<div class="text-danger small" ml-3>') ?>
 		</div>

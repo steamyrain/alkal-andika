@@ -57,13 +57,52 @@
   			</select>
 		</div>
 		<div class="form-group">
-			 <p>Pilih Waktu :</p>
- 		<input type="radio" id="Pagi" name="waktu" value="Pagi">
- 		<label for="Pagi">Pagi</label><br>
- 		<input type="radio" id="Siang" name="waktu" value="Siang">
- 		<label for="Siang">Siang</label><br>
- 		<input type="radio" id="Sore" name="waktu" value="Sore">
- 		<label for="Sore">Sore</label><br>
+		<label>Pilih Tanggal :</label>
+		<select name="tgl" class="form-control" value="<?php echo $k->tgl?>">
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+		<option>8</option>
+		<option>9</option>
+		<option>10</option>
+		<option>11</option>
+		<option>12</option>
+		<option>13</option>
+		<option>14</option>
+		<option>15</option>
+		<option>16</option>
+		<option>17</option>
+		<option>18</option>
+		<option>19</option>
+		<option>20</option>
+		<option>21</option>
+		<option>22</option>
+		<option>23</option>
+		<option>24</option>
+		<option>25</option>
+		<option>26</option>
+		<option>27</option>
+		<option>28</option>
+		<option>29</option>
+		<option>30</option>
+		<option>31</option>
+		<option></option>
+		</select>
+	    </div>
+		<div class="form-group">
+			 <p>Pilih Datang :</p>
+ 		<input type="radio" id="07:30" name="waktu" value="07:30">
+ 		<label for="07:30">07:30</label><br>
+			<?php echo form_error('waktu', '<div class="text-danger small" ml-3>') ?>
+		</div>
+		<div class="form-group">
+			 <p>Pilih Pulang :</p>
+ 		<input type="radio" id="16:00" name="pulang" value="16:00">
+ 		<label for="16:00">16:00</label><br>
 			<?php echo form_error('waktu', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
@@ -72,52 +111,26 @@
  		<label for="Pengemudi Alat Berat">Operator Alat Berat</label><br>
 			<?php echo form_error('bidang', '<div class="text-danger small" ml-3>') ?>
 		</div>
-		<div class="form-group">
+	<div class="form-group">
 			<label>Kegiatan</label>
 			<label> Pilih Kegiatan :</label>
 			<select name="kegiatan" class="form-control" value="<?php echo $k->kegiatan?>">
-			<option>Pagi - Apel Pagi dan Pengarahan dari Pimpinan</option>
-			<option>Pagi - Melakukan Persiapan Alat Berat</option>
-			<option>Pagi - Melakukan Pemanasan Alat Berat</option>
-			<option>Pagi - Melakukan Pengisian Bahan Bakar Minyak Pada Alat Berat</option>
-			<option>Pagi - Melakukan Pembersihan Trotoar Pejalan Kaki</option>
-			<option>Pagi - Membantu Pekerjaan Bersih-Bersih di Lokasi</option>
-			<option>Pagi - Melakukan Pembersihan Fasilitas dan Sarana Kantor</option>
-			<option>Pagi - Melakukan Perapihan Bongkaran</option>
-			<option>Pagi - Melakukan Perapihan dan Pemasangan MCB</option>
-			<option>Pagi - Melakukan Perapihan dan Angkut Material Kantor</option>
-			<option>Pagi - Melakukan Perapihan dan Membantu Angkut Material</option>
-			<option>Pagi - Melakukan Mobilisasi Alat</option>
-			<option>Pagi - Melakukan Pematangan Lahan</option>
-			<option>Pagi - Melakukan Perapihan Lahan</option>
-			<option>Pagi - Menggali Lubang di Lokasi</option>
-			<option>Pagi - Membantu Meratakan Tanah</option>
-			<option>Siang - Membantu Mekanik dalam Perbaikan Alat Berat</option>
-			<option>Siang - Melakukan Pembersihan Trotoar Pejalan Kaki</option>
-			<option>Siang - Membantu Pekerjaan Bersih-Bersih di Lokasi</option>
-			<option>Siang - Melakukan Pembersihan Fasilitas dan Sarana Kantor</option>
-			<option>Siang - Melakukan Peraphian Bongkaran</option>
-			<option>Siang - Melakukan Perapihan dan Pemasangan MCB</option>
-			<option>Siang - Melakukan Perapihan dan Angkut Material Kantor</option>
-			<option>Siang - Melakukan Perapihan dan Membantu Angkut Material</option>
-			<option>Siang - Melakukan Mobilisasi Alat</option>
-			<option>Siang - Melakukan Pematangan Lahan</option>
-			<option>Siang - Melakukan Perapihan Lahan</option>
-			<option>Siang - Menggali Lubang di Lokasi</option>
-			<option>Siang - Membantu Meratakan Tanah</option>
-			<option>Sore - Melakukan Penertiban Reklame</option>
-			<option>Sore - Melakukan Pembersihan Trotoar Pejalan Kaki</option>
-			<option>Sore - Membantu Pekerjaan Bersih-Bersih di Lokasi</option>
-			<option>Sore - Melakukan Pembersihan Fasilitas dan Sarana Kantor</option>
-			<option>Sore - Melakukan Peraphian Bongkaran</option>
-			<option>Sore - Melakukan Perapihan dan Pemasangan MCB</option>
-			<option>Sore - Melakukan Perapihan dan Angkut Material Kantor</option>
-			<option>Sore - Melakukan Perapihan dan Membantu Angkut Material</option>
-			<option>Sore - Melakukan Mobilisasi Alat</option>
-			<option>Sore - Melakukan Pematangan Lahan</option>
-			<option>Sore - Melakukan Perapihan Lahan</option>
-			<option>Sore - Menggali Lubang di Lokasi</option>
-			<option>Sore - Membantu Meratakan Tanah</option>
+			<option>Apel dan Pengarahan dari Pimpinan</option>
+			<option>Melakukan Persiapan Alat Berat</option>
+			<option>Melakukan Pemanasan Alat Berat</option>
+			<option>Melakukan Pengisian Bahan Bakar Minyak Pada Alat Berat</option>
+			<option>Melakukan Pembersihan Trotoar Pejalan Kaki</option>
+			<option>Membantu Pekerjaan Bersih-Bersih di Lokasi</option>
+			<option>Melakukan Pembersihan Fasilitas dan Sarana Kantor</option>
+			<option>Melakukan Perapihan Bongkaran</option>
+			<option>Melakukan Perapihan dan Pemasangan MCB</option>
+			<option>Melakukan Perapihan dan Angkut Material Kantor</option>
+			<option>Melakukan Perapihan dan Membantu Angkut Material</option>
+			<option>Melakukan Mobilisasi Alat</option>
+			<option>Melakukan Pematangan Lahan</option>
+			<option>Melakukan Perapihan Lahan</option>
+			<option>Menggali Lubang di Lokasi</option>
+			<option>Membantu Meratakan Tanah</option>
 		</select>
 			<?php echo form_error('kegiatan', '<div class="text-danger small" ml-3>') ?>
 		</div>
