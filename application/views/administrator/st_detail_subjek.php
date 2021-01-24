@@ -220,9 +220,9 @@
 
     // initialize object, we use this cause we need the random access through object's keys/properties
     // could use the linked list cause insertion and deletion cost O(1)
-    var selected_operator;
-    var selected_driver;
-    var selected_labour;
+    var selected_operator=new Object();
+    var selected_driver=new Object();
+    var selected_labour=new Object();
 
     // populate select's option with vehicle
     //function initVehicle(vehicle,vehicleSelect,)
@@ -231,9 +231,32 @@
     var xhttp_operator;
     var xhttp_driver;
     var xhttp_labour;
+    var xhttp_surat;
         
     // All operations will be done when Dom finally loaded
     window.addEventListener("DOMContentLoaded", ()=> { 
+
+        // initialize add button
+        addSubjectOperatorButton = document.getElementById('subject-container--add-operator-button');
+        addSubjectDriverButton = document.getElementById('subject-container--add-driver-button');
+        addSubjectLabourButton = document.getElementById('subject-container--add-labour-button');
+
+        // initialize the container to place new element
+        subjectOperatorContainer = document.getElementById("subject-operator-container");
+        subjectDriverContainer = document.getElementById("subject-driver-container");
+        subjectLabourContainer = document.getElementById("subject-labour-container");
+
+        // total variable (don't use this variable as total counter!
+        // use it for select element's unique id)
+        total_operator = len_st_operator;
+        total_driver = len_st_driver;
+        total_labour = len_st_labour;
+
+        // initialize object, we use this cause we need the random access through object's keys/properties
+        // could use the linked list cause insertion and deletion cost O(1)
+        selected_operator = new Object();
+        selected_driver = new Object();
+        selected_labour = new Object();
 
         // populateOGOperators populates original operator form fields
         populateOGOperators();
@@ -244,65 +267,28 @@
         // populateOGLabours populates original labour form fields
         populateOGLabours();
 
-        // override submit for debug purposes
+        // override submit 
         document.getElementById("submit").addEventListener('click',(event)=>{
             event.preventDefault();
             const og_subject_keys = Object.keys(selected_og_operator).concat(Object.keys(selected_og_driver),Object.keys(selected_og_labour));
-            const og_subject_id = Object.values(selected_og_operator).concat(Object.keys(selected_og_driver),Object.keys(selected_og_labour));
+            const og_subject_id = Object.values(selected_og_operator).concat(Object.values(selected_og_driver),Object.values(selected_og_labour));
+            const new_subject_uId = Object.values(selected_operator).concat(Object.values(selected_driver),Object.values(selected_labour));
             const data = {
+                og_sId: stId,
                 og_keys: og_subject_keys,
                 og_uId: og_subject_id,
-                og_dKeys: deleted_og 
+                og_dKeys: deleted_og,
+                new_uId: new_subject_uId 
             };
-            console.log(JSON.stringify(data));
-
+            xhttp_surat = new XMLHttpRequest();
+            xhttp_surat.onload = function() {
+                const jsonResponse = JSON.parse(this.responseText);
+                window.location.assign(jsonResponse.redirect_url);
+            };
+            xhttp_surat.open("POST","<?php echo base_URL('administrator/surattugas/edit_subject'); ?>");
+            xhttp_surat.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhttp_surat.send(JSON.stringify(data));
         },false);
-
-        /*
-        // override submit for debug purposes
-        document.getElementById("submit").addEventListener('click',(event)=>{
-            event.preventDefault();
-        },false);
-
-        // Get Elements from dom
-        subjectDriverContainer = document.getElementById("subject-driver-container");
-        subjectOperatorContainer = document.getElementById("subject-operator-container");
-        subjectLabourContainer = document.getElementById("subject-labour-container");
-
-        // add button
-        addSubjectDriverButton = document.getElementById("subject-container--add-driver-button")
-        addSubjectOperatorButton = document.getElementById("subject-container--add-operator-button")
-        addSubjectLabourButton = document.getElementById("subject-container--add-labour-button")
-
-        // delete button
-        deleteSubjectLabourButton = document.getElementById("subject-container--delete-labour-button")
-        deleteSubjectOperatorButton = document.getElementById("subject-container--delete-operator-button")
-        deleteSubjectDriverButton = document.getElementById("subject-container--delete-driver-button")
-    */
-        
-        // total variable (don't use this variable as total counter!
-        // use it for select element's unique id)
-        total_operator = len_st_operator;
-        total_driver = len_st_driver;
-        total_labour = len_st_labour;
-
-        /*
-        // initialize object, we use this cause we need the random access through object's keys/properties
-        // could use the linked list cause insertion and deletion cost O(1)
-        selected_operator = new Object();
-        selected_driver = new Object();
-        selected_labour = new Object();
-
-        // populateOperator populates operator form field
-        populateOperators();
-
-        // populateDrivers populates driver form field
-        populateDrivers();
-
-        // populateLabours populates labour form field
-        populateLabours();
-     */
-
     });
 
     // populate select's option with subject 
@@ -319,14 +305,17 @@
         }
     }
 
-    /*
     // addSubject function add new form group for selecting surat tugas subject to a container
-    var addSubject = function (event,container,subject,len,select_id,select_init,selected){
+    var addSubject = function (event,container,subject,len,select_id,selected){
+
         event.preventDefault();
+
         var div = document.createElement("div");
         var select = document.createElement("select");
         var divGrid = document.createElement("div");
         var deleteButton = document.createElement("button");
+        var option;
+                
         div.className = "form-group";
         div.id = `div-${select_id}`
         select.className="form-control";
@@ -334,27 +323,32 @@
         divGrid.style="display: grid; grid-template-columns: 3fr 1fr; grid-gap: 0.75vw";
         deleteButton.innerHTML="hapus";
         deleteButton.className="btn btn-danger form-control"
-        var option;
+
         for (i=0;i<len;i++){
            option = document.createElement("option");
            option.value=subject[i].id;
            option.innerHTML=subject[i].username;
            select.appendChild(option);
         }
+
         select.addEventListener('change',(event)=>{
             selected[select_id] = select.value; 
         });
+
         deleteButton.addEventListener('click',(event)=>{
             event.preventDefault();
             var divSelect = document.getElementById(`div-${select_id}`);
             divSelect.remove();
             delete selected[select_id];
         })
+
         divGrid.appendChild(select);
         divGrid.appendChild(deleteButton);
         div.appendChild(divGrid);
         container.appendChild(div);
-    };*/
+
+        selected[select_id] = select.value;
+    };
 
     function listenOG(selectId,selectedOG,subject_id) {
         document.getElementById(selectId).addEventListener('change',(event)=>{
@@ -394,6 +388,13 @@
                 deleteOG(operatorBuffer,buttonId,selected_og_operator,deleted_og,st_operator[i].stOpId);
             }
 
+            // add event listener for add button click
+            addSubjectOperatorButton.addEventListener('click',(event)=>{
+                event.preventDefault();
+                var select_id = `subject-operator-${total_operator}`;
+                addSubject(event,subjectOperatorContainer,subject_operator,len_operator,select_id,selected_operator);
+            });
+
         }; 
         xhttp_operator.open("GET","<?php echo base_URL('administrator/surattugas/subject_operator')?>");
         xhttp_operator.send();
@@ -419,6 +420,13 @@
                 deleteOG(driverBuffer,buttonId,selected_og_driver,deleted_og,st_driver[i].stDrId);
             }
 
+            // add event listener for add button click
+            addSubjectDriverButton.addEventListener('click',(event)=>{
+                event.preventDefault();
+                var select_id = `subject-driver-${total_driver}`;
+                addSubject(event,subjectDriverContainer,subject_driver,len_driver,select_id,selected_driver);
+            });
+
         }; 
         xhttp_driver.open("GET","<?php echo base_URL('administrator/surattugas/subject_driver')?>");
         xhttp_driver.send();
@@ -435,7 +443,7 @@
             var i = 0;
             var labourBuffer;
             var buttonId;
-            for (;i<len_st_driver;i++) {
+            for (;i<len_st_labour;i++) {
                 labourBuffer = `subject-labour-${i}`;
                 subjectLabourSelect = document.getElementById(labourBuffer);
                 initOGSubject(subjectLabourSelect,subject_labour,len_labour,st_labour[i].id);
@@ -444,88 +452,17 @@
                 deleteOG(labourBuffer,buttonId,selected_og_labour,deleted_og,st_labour[i].stLaId);
             }
 
+            // add event listener for add button click
+            addSubjectLabourButton.addEventListener('click',(event)=>{
+                event.preventDefault();
+                var select_id = `subject-labour-${total_labour}`;
+                addSubject(event,subjectLabourContainer,subject_labour,len_labour,select_id,selected_labour);
+            });
+
+
         }; 
         xhttp_labour.open("GET","<?php echo base_URL('administrator/surattugas/subject_labour')?>");
         xhttp_labour.send();
     }
 
-    /*
-    function populateDrivers(){
-        xhttp_driver = new XMLHttpRequest();
-        xhttp_driver.onreadystatechange = function() {
-            if ((this.readyState === XMLHttpRequest.DONE)&&(this.status===200)) {
-                var obj = JSON.parse(this.responseText);
-                subject_driver = obj.subject_driver;
-                len_driver = Object.keys(obj.subject_driver).length;
-
-                // populate select subject fields
-                initSubject(subjectDriverSelect,subject_driver,len_driver)
-                selected_driver['subject-driver-0'] = subjectDriverSelect.value;
-                subjectDriverSelect.addEventListener('change',(event) => {
-                    selected_driver['subject-driver-0']=subjectDriverSelect.value;
-                }) 
-
-                // logic for delete button
-                deleteSubjectDriverButton.addEventListener('click',(event) => {
-                    var select_id = "subject-driver-0";
-                    event.preventDefault();
-                    var divSelect = document.getElementById(`div-${select_id}`);
-                    divSelect.remove();
-                    delete selected_driver[select_id];
-                });
-                 
-                // logic for addSubjectButton
-                addSubjectDriverButton.addEventListener('click',(event) => {
-                    var id = `subject-driver-${total_driver}`
-                    var init_id = 'subject-driver-0';
-                    addSubject(event,subjectDriverContainer,subject_driver,len_driver,id,init_id,selected_driver);
-                    var otherDriverSelect = document.getElementById(id);
-                    selected_driver[id] = otherDriverSelect.value;
-                    total_driver += 1;
-                },false);
-            }
-        };
-        xhttp_driver.open("GET","<?php echo base_URL('administrator/surattugas/subject_driver')?>");
-        xhttp_driver.send();
-    } 
-
-    function populateLabours(){
-        xhttp_labour = new XMLHttpRequest();
-        xhttp_labour.onreadystatechange = function() {
-            if ((this.readyState === XMLHttpRequest.DONE)&&(this.status===200)) {
-                var obj = JSON.parse(this.responseText);
-                subject_labour = obj.subject_labour;
-                len_labour = Object.keys(obj.subject_labour).length;
-
-                // populate select subject fields
-                initSubject(subjectLabourSelect,subject_labour,len_labour)
-                selected_labour['subject-labour-0'] = subjectLabourSelect.value;
-                subjectLabourSelect.addEventListener('change',(event) => {
-                    selected_labour['subject-labour-0']=subjectLabourSelect.value;
-                }) 
-
-                // logic for delete button
-                deleteSubjectLabourButton.addEventListener('click',(event) => {
-                    var select_id = "subject-labour-0";
-                    event.preventDefault();
-                    var divSelect = document.getElementById(`div-${select_id}`);
-                    divSelect.remove();
-                    delete selected_labour[select_id];
-                });
-
-                // logic for addLabourButton
-                addSubjectLabourButton.addEventListener('click',(event) => {
-                    var id = `subject-labour-${total_labour}`
-                    var init_id = 'subject-labour-0';
-                    addSubject(event,subjectLabourContainer,subject_labour,len_labour,id,init_id,selected_labour);
-                    var otherLabourSelect = document.getElementById(id);
-                    selected_labour[id] = otherLabourSelect.value;
-                    total_labour += 1;
-                },false);
-            }
-        };  
-        xhttp_labour.open("GET","<?php echo base_URL('administrator/surattugas/subject_labour')?>");
-        xhttp_labour.send();
-    }
-     */
 </script>
