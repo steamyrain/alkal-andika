@@ -338,21 +338,40 @@ class Surattugas extends CI_Controller {
         $json = file_get_contents('php://input');
         $data = json_decode($json);
         $_POST = json_decode($json,true);
+        $result = [];
+
         if (isset($data->og_keys) && !empty($data->og_keys)){
             for($i=0;$i<sizeof($data->og_keys);$i++){
                 $this->SuratTugasModel->updateSTSubject($data->og_keys[$i],$data->og_uId[$i]);
             }
-        } if (isset($data->og_dKeys) && !empty($data->og_dKeys)){
+            $result = [
+                "message"=>"Sukses, Data Berhasil Diubah!",
+                "redirect_url"=> base_URL('administrator/surattugas')
+            ]; 
+        } 
+        if (isset($data->og_dKeys) && !empty($data->og_dKeys)){
             for($i=0;$i<sizeof($data->og_dKeys);$i++) {
                 $this->SuratTugasModel->deleteSTSubject($data->og_dKeys[$i]);
             }
-        } else {
             $result = [
-                "message"=>"no changes"
+                "message"=>"Sukses, Data Berhasil Dihapus!",
+                "redirect_url"=> base_URL('administrator/surattugas')
             ]; 
-            $this->output->set_content_type('application/json');
-            $this->output->set_output(json_encode($result));
+        } 
+        if (isset($data->new_uId) && !empty($data->new_uId)){
+                // insert surat tugas subject to correspoding table with its data;
+                $insertSubject = Array();
+                foreach ($data->new_uId as $subject) {
+                    array_push($insertSubject,Array("subject_id"=>$subject,"surat_id"=>$data->og_sId));
+                }
+                $this->SuratTugasModel->insertSTSubject($insertSubject);
+                $result = [
+                    "message"=>"Sukses, Data Berhasil Ditambah!",
+                    "redirect_url"=> base_URL('administrator/surattugas')
+                ]; 
         }
+        $this->output->set_content_type('application/json');
+        $this->output->set_output(json_encode($result)); 
     }
 
     public function detail_heavy() {
