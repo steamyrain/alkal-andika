@@ -52,14 +52,12 @@ function __construct(){
 
         // check if form not valid / return FALSE
 		if($this->form_validation->run() == FALSE) {
-            echo validation_errors();
-			$this->input();
+		$this->input();
         }
 
         // form is valid
         else 
         {
-            echo "form valid\n";
             // assign form input values to variables
 			$nama 			= $this->input->post('nama');
 			$tgl 			= $this->input->post('tgl');
