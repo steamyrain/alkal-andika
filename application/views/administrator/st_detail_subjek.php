@@ -269,21 +269,89 @@
 
         // override submit 
         document.getElementById("submit").addEventListener('click',(event)=>{
+
             event.preventDefault();
-            const og_subject_keys = Object.keys(selected_og_operator).concat(Object.keys(selected_og_driver),Object.keys(selected_og_labour));
-            const og_subject_id = Object.values(selected_og_operator).concat(Object.values(selected_og_driver),Object.values(selected_og_labour));
-            const new_subject_uId = Object.values(selected_operator).concat(Object.values(selected_driver),Object.values(selected_labour));
+
+            const og_stOp_id = Object.keys(selected_og_operator);
+            const og_stDr_id = Object.keys(selected_og_driver);
+            const og_stLa_id = Object.keys(selected_og_labour);
+            const og_op_uId = Object.values(selected_og_operator);
+            const og_dr_uId = Object.values(selected_og_driver);
+            const og_la_uId = Object.values(selected_og_labour);
+            const new_op_uId = Object.values(selected_operator);
+            const new_dr_uId = Object.values(selected_driver);
+            const new_la_uId = Object.values(selected_labour);
+            
+            // Send this buffer arrays along with the other data to server,
+            // so we can check the uniqueness of these arrays serverside
+            // instead of client side, because javascript compatibility
+            var stOperatorBuffer = new Array();
+            var stDriverBuffer = new Array();
+            var stLabourBuffer = new Array();
+
+            // Only concat the og one that hasn't change
+            for(var i=0;i<len_st_operator;i++){
+                if(!og_stOp_id.includes(st_operator[i].stOpId)){
+                    stOperatorBuffer = stOperatorBuffer.concat(st_operator[i].id);
+                }
+            }
+
+            for(var i=0;i<len_st_driver;i++){
+                if(!og_stDr_id.includes(st_driver[i].stDrId)){
+                    stDriverBuffer = stDriverBuffer.concat(st_driver[i].id);
+                }
+            }
+
+            for(var i=0;i<len_st_labour;i++){
+                if(!og_stLa_id.includes(st_labour[i].stLaId)){
+                    stLabourBuffer = stLabourBuffer.concat(st_labour[i].id);
+                }
+            }
+
+            // concat with new and changed og, so we can check the uniqueness
+            stOperatorBuffer = stOperatorBuffer.concat(og_op_uId,new_op_uId);
+            stDriverBuffer = stDriverBuffer.concat(og_dr_uId,new_dr_uId);
+            stLabourBuffer = stLabourBuffer.concat(og_la_uId,new_la_uId);
+
             const data = {
-                og_sId: stId,
-                og_keys: og_subject_keys,
-                og_uId: og_subject_id,
-                og_dKeys: deleted_og,
-                new_uId: new_subject_uId 
-            };
+                "og_sId": stId,
+                "og_keys":og_stOp_id.concat(og_stDr_id,og_stLa_id),
+                "og_uId":og_op_uId.concat(og_dr_uId,og_la_uId),
+                "new_uId":new_op_uId.concat(new_dr_uId,new_la_uId),
+                "og_dKeys":deleted_og,
+                "st_op_buffer":stOperatorBuffer,
+                "st_dr_buffer":stDriverBuffer,
+                "st_la_buffer":stLabourBuffer
+            }
+
             xhttp_surat = new XMLHttpRequest();
             xhttp_surat.onload = function() {
                 const jsonResponse = JSON.parse(this.responseText);
-                window.location.assign(jsonResponse.redirect_url);
+                if (this.status == 200) {
+                    window.location.assign(jsonResponse.redirect_url);
+                }
+                if (this.status == 400) {
+                    var message = jsonResponse['message'];
+
+                    // if error message for operator fields exist
+                    if(message['operator']){
+                        var divErrorOperator = document.getElementById('operator-error-message');
+                        divErrorOperator.style.display = 'block';
+                        divErrorOperator.innerHTML = message['operator'];
+                    }
+
+                    if(message['driver']){
+                        var divErrorDriver = document.getElementById('driver-error-message');
+                        divErrorDriver.style.display = 'block';
+                        divErrorDriver.innerHTML = message['driver'];
+                    }
+
+                    if(message['labour']){
+                        var divErrorLabour = document.getElementById('labour-error-message');
+                        divErrorLabour.style.display = 'block';
+                        divErrorLabour.innerHTML = message['labour'];
+                    }
+                }
             };
             xhttp_surat.open("POST","<?php echo base_URL('administrator/surattugas/edit_subject'); ?>");
             xhttp_surat.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
