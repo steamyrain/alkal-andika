@@ -340,38 +340,52 @@ class Surattugas extends CI_Controller {
         $_POST = json_decode($json,true);
         $result = [];
 
-        if (isset($data->og_keys) && !empty($data->og_keys)){
-            for($i=0;$i<sizeof($data->og_keys);$i++){
-                $this->SuratTugasModel->updateSTSubject($data->og_keys[$i],$data->og_uId[$i]);
-            }
-            $result = [
-                "message"=>"Sukses, Data Berhasil Diubah!",
-                "redirect_url"=> base_URL('administrator/surattugas')
-            ]; 
-        } 
-        if (isset($data->og_dKeys) && !empty($data->og_dKeys)){
-            for($i=0;$i<sizeof($data->og_dKeys);$i++) {
-                $this->SuratTugasModel->deleteSTSubject($data->og_dKeys[$i]);
-            }
-            $result = [
-                "message"=>"Sukses, Data Berhasil Dihapus!",
-                "redirect_url"=> base_URL('administrator/surattugas')
-            ]; 
-        } 
-        if (isset($data->new_uId) && !empty($data->new_uId)){
-                // insert surat tugas subject to correspoding table with its data;
-                $insertSubject = Array();
-                foreach ($data->new_uId as $subject) {
-                    array_push($insertSubject,Array("subject_id"=>$subject,"surat_id"=>$data->og_sId));
+        $this->_rules_edit();
+
+        if ($this->form_validation->run() == FALSE) {
+            $result['message']= [
+               'operator'=>form_error('operator'),
+               'driver'=>form_error('driver'),
+               'labour'=>form_error('labour')
+            ];
+            $this->output->set_header('HTTP/1.1 400 Bad Request');
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode($result));
+        } else {
+
+            if (isset($data->og_keys) && !empty($data->og_keys)){
+                for($i=0;$i<sizeof($data->og_keys);$i++){
+                    $this->SuratTugasModel->updateSTSubject($data->og_keys[$i],$data->og_uId[$i]);
                 }
-                $this->SuratTugasModel->insertSTSubject($insertSubject);
                 $result = [
-                    "message"=>"Sukses, Data Berhasil Ditambah!",
+                    "message"=>"Sukses, Data Berhasil Diubah!",
                     "redirect_url"=> base_URL('administrator/surattugas')
                 ]; 
+            } 
+            if (isset($data->og_dKeys) && !empty($data->og_dKeys)){
+                for($i=0;$i<sizeof($data->og_dKeys);$i++) {
+                    $this->SuratTugasModel->deleteSTSubject($data->og_dKeys[$i]);
+                }
+                $result = [
+                    "message"=>"Sukses, Data Berhasil Dihapus!",
+                    "redirect_url"=> base_URL('administrator/surattugas')
+                ]; 
+            } 
+            if (isset($data->new_uId) && !empty($data->new_uId)){
+                    // insert surat tugas subject to correspoding table with its data;
+                    $insertSubject = Array();
+                    foreach ($data->new_uId as $subject) {
+                        array_push($insertSubject,Array("subject_id"=>$subject,"surat_id"=>$data->og_sId));
+                    }
+                    $this->SuratTugasModel->insertSTSubject($insertSubject);
+                    $result = [
+                        "message"=>"Sukses, Data Berhasil Ditambah!",
+                        "redirect_url"=> base_URL('administrator/surattugas')
+                    ]; 
+            }
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode($result)); 
         }
-        $this->output->set_content_type('application/json');
-        $this->output->set_output(json_encode($result)); 
     }
 
     public function detail_heavy() {
@@ -402,5 +416,38 @@ class Surattugas extends CI_Controller {
         $this->load->view('template_administrator/sidebar');
         $this->load->view('administrator/st_detail_dt',$data);
         $this->load->view('template_administrator/footer');
+    }
+
+    public function _rules_edit() {
+        $this->form_validation->set_rules('operator','operator','callback_post_edit_operator_check');
+        $this->form_validation->set_rules('driver','driver','callback_post_edit_driver_check');
+        $this->form_validation->set_rules('labour','labour','callback_post_edit_labour_check');
+    }
+
+    public function post_edit_operator_check() {
+        $opBuffer = array_unique($this->input->post('st_op_buffer'));
+        if(sizeof($this->input->post('st_op_buffer')) != sizeof($opBuffer)){
+            $this->form_validation->set_message('post_edit_operator_check',"Operator Tidak Boleh Sama");
+            return false;
+        }
+            return true;
+    }
+    
+    public function post_edit_driver_check() {
+        $drBuffer = array_unique($this->input->post('st_dr_buffer'));
+        if(sizeof($this->input->post('st_dr_buffer')) != sizeof($drBuffer)){
+            $this->form_validation->set_message('post_edit_driver_check',"Driver Tidak Boleh Sama");
+            return false;
+        }
+            return true;
+    }
+
+    public function post_edit_labour_check() {
+        $laBuffer = array_unique($this->input->post('st_la_buffer'));
+        if(sizeof($this->input->post('st_la_buffer')) != sizeof($laBuffer)){
+            $this->form_validation->set_message('post_edit_labour_check',"TK Tidak Boleh Sama");
+            return false;
+        }
+            return true;
     }
 }
