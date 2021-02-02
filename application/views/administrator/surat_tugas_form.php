@@ -12,7 +12,6 @@
             />
             <div style="display: none" class="text-danger small ml-3" id="date-error-message"></div>
         </div>
-        </div>
         <div class="form-group">
             <label>Lokasi :</label>
             <input 
