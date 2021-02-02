@@ -23,6 +23,15 @@
             />
             <div style="display: none" class="text-danger small ml-3" id="location-error-message"></div>
         </div>
+        <div class="form-group">
+            <label>Deskripsi Pekerjaan :</label>
+            <textarea 
+                name="form-surat-tugas__job"
+                id="form-surat-tugas__job"
+                class="form-control"
+            ></textarea>
+            <div style="display: none" class="text-danger small ml-3" id="job-error-message"></div>
+        </div>
 
         <!-- operator -->
         <div style="
@@ -36,7 +45,7 @@
         <div id="subject-operator-container">
             <div class="form-group">
                 <label>Operator :</label>
-                <div id="div-subject-operator-0" style="display: grid; grid-template-columns: 3fr 1fr; grid-gap: 0.75vw;">
+                <div id="div-subject-operator-0" style="display: grid; grid-template-columns: 3fr 0.2fr; grid-gap: 0.75vw;">
                     <select 
                         name="subject-operator-0" 
                         id="subject-operator-0" 
@@ -44,7 +53,9 @@
                         placeholder="Masukkan Nama Operator"
                     > 
                     </select>
-                    <button class="btn btn-danger form-control" id="subject-container--delete-operator-button">hapus</button>
+                    <button class="btn btn-danger form-control" id="subject-container--delete-operator-button" onclick="event.preventDefault();">
+                            <i class="fa fa-trash"></i>
+                    </button>
                 </div>
                 <?php echo form_error('subject-operator', '<div class="text-danger small" ml-3>','</div>'); ?>
             </div>
@@ -69,7 +80,7 @@
         <div id="subject-driver-container">
             <div class="form-group">
                 <label>Pengemudi :</label>
-                <div id="div-subject-driver-0" style="display: grid; grid-template-columns: 3fr 1fr; grid-gap: 0.75vw;">
+                <div id="div-subject-driver-0" style="display: grid; grid-template-columns: 3fr 0.2fr; grid-gap: 0.75vw;">
                     <select 
                         name="subject-driver-0" 
                         id="subject-driver-0" 
@@ -77,7 +88,9 @@
                         placeholder="Masukkan Nama Pengemudi"
                     > 
                     </select>
-                    <button class="btn btn-danger form-control" id="subject-container--delete-driver-button">hapus</button>
+                    <button class="btn btn-danger form-control" id="subject-container--delete-driver-button" onclick="event.preventDefault();">
+                            <i class="fa fa-trash"></i>
+                    </button>
                 </div>
                 <?php echo form_error('subject-driver', '<div class="text-danger small" ml-3>','</div>'); ?>
             </div>
@@ -102,7 +115,7 @@
         <div id="subject-labour-container">
             <div class="form-group">
                 <label>Tenaga Kerja :</label>
-                <div id="div-subject-labour-0" style="display: grid; grid-template-columns: 3fr 1fr; grid-gap: 0.75vw;">
+                <div id="div-subject-labour-0" style="display: grid; grid-template-columns: 3fr 0.2fr; grid-gap: 0.75vw;">
                     <select 
                         name="subject-labour-0" 
                         id="subject-labour-0" 
@@ -110,7 +123,9 @@
                         placeholder="Masukkan Nama Tenaga Kerja"
                     > 
                     </select>
-                    <button class="btn btn-danger form-control" id="subject-container--delete-labour-button" onclick="event.preventDefault();">hapus</button>
+                    <button class="btn btn-danger form-control" id="subject-container--delete-labour-button" onclick="event.preventDefault();">
+                            <i class="fa fa-trash"></i>
+                    </button>
                 </div>
                 <?php echo form_error('subject-labour', '<div class="text-danger small" ml-3>','</div>'); ?>
             </div>
@@ -135,7 +150,7 @@
         <div id="vehicle-heavy-container">
             <div class="form-group">
                 <label>Alat Berat & BBM (Liter) :</label>
-                <div id= "div-vehicle-heavy-0" style="display: grid; grid-template-columns: 3fr 1fr 1fr; grid-gap: 0.75vw;">
+                <div id= "div-vehicle-heavy-0" style="display: grid; grid-template-columns: 3fr 1fr 0.2fr; grid-gap: 0.75vw;">
                     <select 
                         name="vehicle-heavy-0" 
                         id="vehicle-heavy-0" 
@@ -150,7 +165,9 @@
                         class="form-control"
                         placeholder = "Liter"
                     />
-                    <button class="btn btn-danger form-control" id="vehicle-container--delete-heavy-button" onclick="event.preventDefault();">hapus</button>
+                    <button class="btn btn-danger form-control" id="vehicle-container--delete-heavy-button" onclick="event.preventDefault();">
+                            <i class="fa fa-trash"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -174,7 +191,7 @@
         <div id="vehicle-dt-container">
             <div class="form-group">
                 <label>Dumptruck & BBM (Liter) :</label>
-                <div id= "div-vehicle-dt-0" style="display: grid; grid-template-columns: 3fr 1fr 1fr; grid-gap: 0.75vw;">
+                <div id= "div-vehicle-dt-0" style="display: grid; grid-template-columns: 3fr 1fr 0.2fr; grid-gap: 0.75vw;">
                     <select 
                         name="vehicle-dt-0" 
                         id="vehicle-dt-0" 
@@ -189,7 +206,9 @@
                         class="form-control"
                         placeholder = "Liter"
                     />
-                    <button class="btn btn-danger form-control" id="vehicle-container--delete-dt-button" onclick="event.preventDefault();">hapus</button>
+                    <button class="btn btn-danger form-control" id="vehicle-container--delete-dt-button" onclick="event.preventDefault();">
+                            <i class="fa fa-trash"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -290,6 +309,7 @@
             event.preventDefault();
             var suratDate = document.getElementById("form-surat-tugas__date").value;
             var suratLocation = document.getElementById("form-surat-tugas__location").value;
+            var suratJobDesc = document.getElementById("form-surat-tugas__job").value;
             var subjectOperator = Object.values(selected_operator);
             var subjectDriver = Object.values(selected_driver);
             var subjectLabour = Object.values(selected_labour);
@@ -299,6 +319,7 @@
             var suratTugas = {
                 date: suratDate,
                 location: suratLocation,
+                job_desc: suratJobDesc,
                 subject: suratSubject,
                 heavy: suratHeavy,
                 dt: suratDT
@@ -330,6 +351,12 @@
                         var divErrorDate = document.getElementById('date-error-message');
                         divErrorDate.style.display = 'block';
                         divErrorDate.innerHTML = message['date'];
+                    }
+
+                    if(message['job']){
+                        var divErrorJob = document.getElementById('job-error-message');
+                        divErrorJob.style.display = 'block';
+                        divErrorJob.innerHTML = message['job'];
                     }
 
                     if(message['location']){
@@ -499,7 +526,7 @@
                     input.id=`fuel-${selectId}`;
                     input.className="form-control";
                     input.placeholder="Liter"
-                    deleteButton.innerHTML="hapus";
+                    deleteButton.innerHTML='<i class="fa fa-trash"></i>'; 
                     deleteButton.className="form-control btn btn-danger"
 
                     var heavyCategory="";
@@ -531,7 +558,7 @@
                         select.appendChild(option);
                     } 
 
-                    divGrid.style="display: grid; grid-template-columns: 3fr 1fr 1fr; grid-gap: 0.75vw;";
+                    divGrid.style="display: grid; grid-template-columns: 3fr 1fr 0.2fr; grid-gap: 0.75vw;";
                     deleteButton.addEventListener('click',(event)=>{event.preventDefault();});
                     divGrid.appendChild(select);
                     divGrid.appendChild(input);
@@ -630,7 +657,7 @@
                     input.id=`fuel-${selectId}`;
                     input.className="form-control";
                     input.placeholder="Liter"
-                    deleteButton.innerHTML="hapus";
+                    deleteButton.innerHTML='<i class="fa fa-trash"></i>'; 
                     deleteButton.className="form-control btn btn-danger"
 
                     var option;
@@ -669,7 +696,7 @@
                         delete selected_heavy[div.id];
                     });
 
-                    divGrid.style="display: grid; grid-template-columns: 3fr 1fr 1fr; grid-gap: 0.75vw;";
+                    divGrid.style="display: grid; grid-template-columns: 3fr 1fr 0.2fr; grid-gap: 0.75vw;";
                     deleteButton.addEventListener('click',(event)=>{event.preventDefault();});
                     divGrid.appendChild(select);
                     divGrid.appendChild(input);
@@ -703,8 +730,8 @@
         div.id = `div-${select_id}`
         select.className="form-control";
         select.id=select_id;
-        divGrid.style="display: grid; grid-template-columns: 3fr 1fr; grid-gap: 0.75vw";
-        deleteButton.innerHTML="hapus";
+        divGrid.style="display: grid; grid-template-columns: 3fr 0.2fr; grid-gap: 0.75vw";
+        deleteButton.innerHTML="<i class='fa fa-trash'></i>";
         deleteButton.className="btn btn-danger form-control"
         var option;
         for (i=0;i<len;i++){

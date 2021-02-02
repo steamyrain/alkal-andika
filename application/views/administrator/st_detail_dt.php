@@ -98,14 +98,17 @@
 
     // total variable (don't use this variable as total counter!
     // use it for select element's unique id)
-    var total_dt;
+    var total_dt=len_st_dt;
 
     // initialize object, we use this cause we need the random access through object's keys/properties
     // could use the linked list cause insertion and deletion cost O(1)
-    var selected_dt;
+    var selected_dt = new Object();
+
+    // initialize object for og list
+    var selected_og_dt = new Object();
+    var deleted_og = new Array();
 
     // populate select's option with vehicle
-    //function initVehicle(vehicle,vehicleSelect,)
     function initOGDT(dtSelect,fuelInput,dt,len,ogDTId,ogDTFuel){
         var dtCategory="";
         var option;
@@ -130,10 +133,86 @@
 
     // send xhttp request (could use fetch but not supported by older browser)
     var xhttp_dt;
+    var xhttp_surat;
         
     // All operations will be done when Dom finally loaded
-    window.addEventListener("DOMContentLoaded", ()=> { 
+    window.addEventListener("DOMContentLoaded", ()=> {
+
+        vehicleDTContainer = document.getElementById("vehicle-dt-container");
+        addVehicleDTButton = document.getElementById("vehicle-container--add-dt-button");
+
+        // populate the already initiated form fields from the server 
+        // by sending ajax to api noun 
+        populateOGDT(); 
+
+
+        document.getElementById('submit').addEventListener('click',(event)=>{
+            event.preventDefault();
+
+            var og_stDt_id = Object.keys(selected_og_dt);
+            var og_dt_dat = Object.values(selected_og_dt);        
+            var og_dKeys = deleted_og;
+            var new_dt_dat = Object.values(selected_dt);
+            var st_dt_buffer = new Array();
+            var og_dt_id = new Array();
+
+            for (var i=0;i<og_dt_dat.length;i++){
+                if (og_dt_dat[i].hasOwnProperty('dt_id')){
+                    st_dt_buffer = st_dt_buffer.concat(og_dt_dat[i].dt_id);
+                }
+            }
+
+            for (var i=0;i<new_dt_dat.length;i++){
+                if (new_dt_dat[i].hasOwnProperty('dt_id')){
+                    st_dt_buffer = st_dt_buffer.concat(new_dt_dat[i].dt_id);
+                }
+            }
+            
+            for (var i=0;i<len_st_dt;i++){
+                if (!og_stDt_id.includes(st_dt[i].stDTId) && !deleted_og.includes(st_dt[i].stDTId)){
+                    st_dt_buffer = st_dt_buffer.concat(st_dt[i].dt_id);
+                }
+            }
+
+            var data = {
+                "og_sId": stId,
+                "og_keys": og_stDt_id,
+                "og_dat": og_dt_dat,
+                "og_dKeys":deleted_og,
+                "new_dat":new_dt_dat,
+                "st_dt_buffer": st_dt_buffer
+            }
+
+            xhttp_surat = new XMLHttpRequest();
+            xhttp_surat.onload = function() {
+                var jsonResponse = JSON.parse(this.responseText);
+                if (this.status == 200) {
+                    window.location.assign(jsonResponse.redirect_url);
+                }
+                if (this.status == 400) {
+                    var message = jsonResponse['message'];
+                    
+                    // scroll to top just to have the same ux with other pages
+                    window.scrollTo(0,0);
+
+                    // if error message for operator fields exist
+                    if(message['dt']){
+                        var divErrorDT = document.getElementById('dt-error-message');
+                        divErrorDT.style.display = 'block';
+                        divErrorDT.innerHTML = message['dt'];
+                    }
+                }
+            }
+            xhttp_surat.open("POST","<?php echo base_URL('administrator/surattugas/edit_dt')?>")
+            xhttp_surat.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhttp_surat.send(JSON.stringify(data));
+        });
+
+    });
+
+    function populateOGDT(){
         xhttp_dt = new XMLHttpRequest();
+
         xhttp_dt.onload = function() {
             var obj = JSON.parse(this.responseText);
             vehicle_dt = obj.vehicle_dt;
@@ -144,379 +223,139 @@
                 id = `vehicle-dt-${i}`;
                 vehicleDTSelect = document.getElementById(id);
                 vehicleFuelInput = document.getElementById('fuel-'+id);
-                initOGDT(vehicleDTSelect,vehicleFuelInput,vehicle_dt,len_dt,st_dt[i].dt_id,st_dt[i].dt_fuel);
+                initOGDT(vehicleDTSelect,vehicleFuelInput,vehicle_dt,len_dt,st_dt[i].dt_id,st_dt[i].dt_fuel); 
+                listenOGDT(id,'fuel-'+id,selected_og_dt,st_dt[i].stDTId);
+                buttonId=`vehicle-container--delete-dt-button-${i}`;
+                deleteOG(id,buttonId,selected_og_dt,deleted_og,st_dt[i].stDTId);
             }
+            
+            addVehicleDTButton.addEventListener('click',(event)=>{ 
+                event.preventDefault();
+                var select_id = `vehicle-dt-${total_dt}`;
+                addVehicle(event,vehicleDTContainer,vehicle_dt,len_dt,select_id,selected_dt);
+                total_dt++;
+            });
         }
+
         xhttp_dt.open("GET","<?php echo base_URL('administrator/surattugas/vehicle_dt')?>");
         xhttp_dt.send();
-        /*
-        // override submit for debug purposes
-        document.getElementById("submit").addEventListener('click',(event)=>{
+    }
+    
+    // event listener for og fields
+    function listenOGDT(selectId,fuelId,selectedOG,st_dt_id) {
+
+        document.getElementById(selectId).addEventListener('change',(event)=>{
+            var idValue = document.getElementById(selectId).value;
+            var fuelValue = document.getElementById(fuelId).value;
+            if (selectedOG.hasOwnProperty(st_dt_id)){
+                selectedOG[st_dt_id].dt_id = idValue;
+            } else {
+                selectedOG[st_dt_id] = {'dt_id':idValue,'dt_fuel':fuelValue}
+            }
+        });
+
+        document.getElementById(fuelId).addEventListener('change',(event)=>{
+            var idValue = document.getElementById(selectId).value;
+            var fuelValue = document.getElementById(fuelId).value;
+            if (selectedOG.hasOwnProperty(st_dt_id)){
+                selectedOG[st_dt_id].dt_fuel = fuelValue;
+            } else {
+                selectedOG[st_dt_id]={'dt_fuel':fuelValue,'dt_id':idValue};
+            }
+        });
+
+    }
+
+    function deleteOG(selectId,buttonId,selectedOG,deletedOG,st_dt_id) {
+        document.getElementById(buttonId).addEventListener('click',(event)=>{
             event.preventDefault();
-            var suratDate = document.getElementById("form-surat-tugas__date").value;
-            var suratLocation = document.getElementById("form-surat-tugas__location").value;
-            var subjectOperator = Object.values(selected_operator);
-            var subjectDriver = Object.values(selected_driver);
-            var subjectLabour = Object.values(selected_labour);
-            var suratSubject = subjectOperator.concat(subjectDriver,subjectLabour);
-            var suratHeavy = Object.values(selected_heavy);
-            var suratDT = Object.values(selected_dt);
-            var suratTugas = {
-                date: suratDate,
-                location: suratLocation,
-                subject: suratSubject,
-                heavy: suratHeavy,
-                dt: suratDT
-            };
-            var xhrSuratTugas = new XMLHttpRequest();
-            xhrSuratTugas.open("POST","<?php echo base_URL('administrator/surattugas/input_aksi'); ?>");
-            xhrSuratTugas.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhrSuratTugas.send(JSON.stringify(suratTugas));
-            xhrSuratTugas.onreadystatechange = function() {
-                if((this.readyState === XMLHttpRequest.DONE) && (this.status === 200)){
-                    var jsonResponse = JSON.parse(xhrSuratTugas.responseText);
-                    window.location.href = jsonResponse['redirect_url'];
-                }
-                if((this.readyState === XMLHttpRequest.DONE) && (this.status === 307)){
-                    console.log('redirect');
-                    var jsonResponse = JSON.parse(xhrSuratTugas.responseText);
-                    window.location.href = jsonResponse['Location'];
-                }
-                if((this.readyState === XMLHttpRequest.DONE) && (this.status === 400)){
-                    // scroll to top just to have the same ux with other pages
-                    window.scrollTo(0,0);
-
-                    // initiate support variables
-                    var jsonResponse = JSON.parse(xhrSuratTugas.responseText);
-                    var message = jsonResponse['message'];
-
-                    // setup proper error messages
-                    if(message['date']){
-                        var divErrorDate = document.getElementById('date-error-message');
-                        divErrorDate.style.display = 'block';
-                        divErrorDate.innerHTML = message['date'];
-                    }
-
-                    if(message['location']){
-                        var divErrorLocation = document.getElementById('location-error-message');
-                        divErrorLocation.style.display = 'block';
-                        divErrorLocation.innerHTML = message['location'];
-                    }
-
-                    if(message['subject']){
-                        var divErrorOperator = document.getElementById('operator-error-message');
-                        var divErrorDriver = document.getElementById('driver-error-message');
-                        var divErrorLabour = document.getElementById('labour-error-message');
-                        divErrorOperator.style.display = 'block';
-                        divErrorDriver.style.display = 'block';
-                        divErrorLabour.style.display = 'block';
-                        divErrorOperator.innerHTML = message['subject'];
-                        divErrorDriver.innerHTML = message['subject'];
-                        divErrorLabour.innerHTML = message['subject'];
-                    }
-
-                    if(message['heavy']){
-                        var divErrorHeavy = document.getElementById('heavy-error-message');
-                        divErrorHeavy.style.display = 'block';
-                        divErrorHeavy.innerHTML = message['heavy'];
-                    }
-
-                    if(message['dt']){
-                        var divErrorDT = document.getElementById('dt-error-message');
-                        divErrorDT.style.display = 'block';
-                        divErrorDT.innerHTML = message['dt'];
-                    }
-                }
+            document.getElementById('div-'+selectId).style="display:none";
+            deletedOG.push(st_dt_id);
+            if (selectedOG.hasOwnProperty(st_dt_id)){
+                delete selectedOG[st_dt_id];
             }
-        },false);
+        });
+    }
 
-        /*
+    var addVehicle = function (event,container,dt,len,select_id,selected) {
 
-        // add button
-        addVehicleHeavyButton = document.getElementById("vehicle-container--add-heavy-button")
+        event.preventDefault();
 
-        // total variable (don't use this variable as total counter!
-        // use it for select element's unique id)
-        total_heavy = 1;
+        var div = document.createElement("div");
+        var select = document.createElement("select");
+        var input = document.createElement("input");
+        var deleteButton = document.createElement("button");
+        var divGrid = document.createElement("div");
 
-        // initialize object, we use this cause we need the random access through object's keys/properties
-        // could use the linked list cause insertion and deletion cost O(1)
-        selected_operator = new Object();
-        selected_driver = new Object();
-        selected_labour = new Object();
-        selected_heavy = new Object();
-        selected_dt = new Object();
+        div.className = "form-group";
+        div.id = `div-${select_id}`;
+        select.className="form-control";
+        select.id=select_id;
+        input.type="number";
+        input.id=`fuel-${select_id}`;
+        input.className="form-control";
+        input.placeholder="Liter"
+        deleteButton.innerHTML="hapus";
+        deleteButton.className="form-control btn btn-danger"
 
-        // populate select's option with vehicle
-        //function initVehicle(vehicle,vehicleSelect,)
+        var dtCategory="";
+        var dtSubcategory="";
+        var option;
+        var optgroup;
 
-        // populateOperator populates operator form field
-        populateOperators();
-
-        // populateDrivers populates driver form field
-        populateDrivers();
-
-        // populateLabours populates labour form field
-        populateLabours();
-
-        xhttp_heavy = new XMLHttpRequest();
-        xhttp_heavy.onreadystatechange = function() {
-            if((this.readyState === XMLHttpRequest.DONE) && (this.status === 307)){
-                var jsonResponse = JSON.parse(this.responseText);
-                window.location.href = jsonResponse['Location'];
+        for(i=0;i<len;i++){
+            option = document.createElement("option");
+            optgroup = document.createElement("optgroup");
+            if (dtCategory != dt[i].category){
+                dtCategory = dt[i].category;
             }
-            if ((this.readyState === XMLHttpRequest.DONE) && (this.status === 200)) {
-                var obj = JSON.parse(this.responseText);
-                vehicle_heavy = obj.vehicle_heavy;
-                len_heavy = Object.keys(vehicle_heavy).length;
-
-                // populate vehicleHeavySelect fields
-                var heavyCategory="";
-                var heavySubcategory="";
-                var option;
-                var optgroup;
-                for(i=0;i<len_heavy;i++){
-                    option = document.createElement("option");
-                    optgroup = document.createElement("optgroup");
-                    if (heavyCategory != vehicle_heavy[i].category){
-                        heavyCategory = vehicle_heavy[i].category;
-                    }
-                    if (heavySubcategory != vehicle_heavy[i].sub_category){
-                        heavySubcategory = vehicle_heavy[i].sub_category;
-                        if (heavyCategory == heavySubcategory) {
-                            optgroup.label =  heavyCategory;
-                        } else {
-                            optgroup.label =  heavyCategory+" "+vehicle_heavy[i].sub_category;
-                        }
-                        vehicleHeavySelect.appendChild(optgroup);
-                    }
-                    option.value=vehicle_heavy[i].id;
-                    if(vehicle_heavy[i].plate_number)
-                    {
-                        option.innerHTML=vehicle_heavy[i].plate_number+' / '+vehicle_heavy[i].type;
-                    } else {
-                        option.innerHTML=vehicle_heavy[i].serial_number+' / '+vehicle_heavy[i].type;
-                    }
-                    vehicleHeavySelect.appendChild(option);
+            if (dtSubcategory != dt[i].sub_category){
+                dtSubcategory = dt[i].sub_category;
+                if (dtCategory == dtSubcategory) {
+                    optgroup.label =  dtCategory;
+                } else {
+                    optgroup.label =  dtCategory+" "+dt[i].sub_category;
                 }
-
-                selected_heavy['div-vehicle-heavy-0'] = {
-                    "vehicle-heavy-0": vehicleHeavySelect.value, 
-                    "fuel-vehicle-heavy-0": 0
-                }; 
-                
-                vehicleHeavySelect.addEventListener('change',(event)=>{
-                    selected_heavy['div-vehicle-heavy-0']["vehicle-heavy-0"]=vehicleHeavySelect.value;
-                });
-
-                document.getElementById('fuel-vehicle-heavy-0').addEventListener('change',(event)=>{
-                    selected_heavy['div-vehicle-heavy-0']['fuel-vehicle-heavy-0']=document.getElementById('fuel-vehicle-heavy-0').value;
-                });
-
-                deleteVehicleHeavyButton.addEventListener('click',(event)=>{
-                    event.preventDefault();
-                    var div = document.getElementById('div-vehicle-heavy-0');
-                    div.remove();
-                    delete selected_heavy['div-vehicle-heavy-0'];
-                });
-
-                // logic for addVehicleButton
-                addVehicleHeavyButton.addEventListener('click',(event)=>{
-                    event.preventDefault();
-                    var selectId = `vehicle-heavy-${total_heavy}`;
-                    var div = document.createElement("div");
-                    var select = document.createElement("select");
-                    var input = document.createElement("input");
-                    var deleteButton = document.createElement("button");
-                    var divGrid = document.createElement("div");
-                    div.className = "form-group";
-                    div.id = `div-${selectId}`;
-                    select.className="form-control";
-                    select.id=selectId;
-                    input.type="number";
-                    input.id=`fuel-${selectId}`;
-                    input.className="form-control";
-                    input.placeholder="Liter"
-                    deleteButton.innerHTML="hapus";
-                    deleteButton.className="form-control btn btn-danger"
-
-                    var heavyCategory="";
-                    var heavySubcategory="";
-                    var option;
-                    var optgroup;
-                    for(i=0;i<len_heavy;i++){
-                        option = document.createElement("option");
-                        optgroup = document.createElement("optgroup");
-                        if (heavyCategory != vehicle_heavy[i].category){
-                            heavyCategory = vehicle_heavy[i].category;
-                        }
-                        if (heavySubcategory != vehicle_heavy[i].sub_category){
-                            heavySubcategory = vehicle_heavy[i].sub_category;
-                            if (heavyCategory == heavySubcategory) {
-                                optgroup.label =  heavyCategory;
-                            } else {
-                                optgroup.label =  heavyCategory+" "+vehicle_heavy[i].sub_category;
-                            }
-                            select.appendChild(optgroup);
-                        }
-                        option.value=vehicle_heavy[i].id;
-                        if(vehicle_heavy[i].plate_number)
-                        {
-                            option.innerHTML=vehicle_heavy[i].plate_number+' / '+vehicle_heavy[i].type;
-                        } else {
-                            option.innerHTML=vehicle_heavy[i].serial_number+' / '+vehicle_heavy[i].type;
-                        }
-                        select.appendChild(option);
-                    } 
-
-                    divGrid.style="display: grid; grid-template-columns: 3fr 1fr 1fr; grid-gap: 0.75vw;";
-                    deleteButton.addEventListener('click',(event)=>{event.preventDefault();});
-                    divGrid.appendChild(select);
-                    divGrid.appendChild(input);
-                    divGrid.appendChild(deleteButton);
-                    div.appendChild(divGrid);
-                    vehicleHeavyContainer.appendChild(div);
-
-                    select.addEventListener('change',(event)=>{
-                        selected_heavy[div.id][select.id]=select.value;
-                    });
-                    input.addEventListener('change',(event)=>{
-                        selected_heavy[div.id][input.id]=input.value;
-                    });
-                    deleteButton.addEventListener('click',(event)=>{
-                        event.preventDefault();
-                        divGrid.remove();
-                        delete selected_heavy[div.id];
-                    });
-                    var dataHeavy = new Object();
-                    dataHeavy[selectId] = select.value;
-                    dataHeavy[input.id] = 0;
-                    selected_heavy[div.id]=dataHeavy;
-                    total_heavy++;
-                });
-            } 
-        }
-
-        xhttp_heavy.open("GET","<?php echo base_URL('administrator/surattugas/vehicle_ab')?>");
-        xhttp_heavy.send();
-
-        xhttp_dt = new XMLHttpRequest();
-        xhttp_dt.open("GET","<?php echo base_URL('administrator/surattugas/vehicle_dt')?>"); 
-        xhttp_dt.send();
-        // use function instead of arrow function for assigning callback outside parameter 
-        xhttp_dt.onreadystatechange = function() {
-            if((this.readyState === XMLHttpRequest.DONE) && (this.status === 307)){
-                var jsonResponse = JSON.parse(this.responseText);
-                window.location.href = jsonResponse['Location'];
+                select.appendChild(optgroup);
             }
-            if ((this.readyState === XMLHttpRequest.DONE) && (this.status === 200)){
-                var obj = JSON.parse(this.responseText);
-                vehicle_dt = obj.vehicle_dt;
-                len_dt = Object.keys(vehicle_dt).length; 
-
-                // populate options for select dt
-                var option;
-                var optgroup;
-                var category = "";
-                for (i=0;i<len_dt;i++) {
-                    optgroup = document.createElement("optgroup");
-                    option = document.createElement("option"); 
-                    option.value = vehicle_dt[i].id;
-                    option.innerHTML = vehicle_dt[i].plate_number;
-                    if (category != vehicle_dt[i].category){
-                        optgroup.label = vehicle_dt[i].category;
-                        category = vehicle_dt[i].category;
-                        vehicleDTSelect.appendChild(optgroup);
-                    }
-                    vehicleDTSelect.appendChild(option);
-                }
-
-                selected_dt['div-vehicle-dt-0']={
-                    'vehicle-dt-0': vehicleDTSelect.value,
-                    'fuel-vehicle-dt-0': 0
-                };
-
-                vehicleDTSelect.addEventListener('change',(event)=>{
-                    selected_dt['div-vehicle-dt-0']["vehicle-dt-0"]=vehicleDTSelect.value;
-                });
-
-                document.getElementById('fuel-vehicle-dt-0').addEventListener('change',(event)=>{
-                    selected_dt['div-vehicle-dt-0']['fuel-vehicle-dt-0']=document.getElementById('fuel-vehicle-dt-0').value;
-                });
-
-                deleteVehicleDTButton.addEventListener('click',(event)=>{
-                    event.preventDefault();
-                    var div = document.getElementById('div-vehicle-dt-0');
-                    div.remove();
-                    delete selected_heavy['div-vehicle-dt-0'];
-                });
-
-                // logic for addVehicleButton
-                addVehicleDTButton.addEventListener('click',(event)=>{
-                    event.preventDefault();
-                    var selectId = `vehicle-dt-${total_dt}`;
-                    var div = document.createElement("div");
-                    var select = document.createElement("select");
-                    var input = document.createElement("input");
-                    var deleteButton = document.createElement("button");
-                    var divGrid = document.createElement("div");
-                    div.className = "form-group";
-                    div.id = `div-${selectId}`;
-                    select.className="form-control";
-                    select.id=selectId;
-                    input.type="number";
-                    input.id=`fuel-${selectId}`;
-                    input.className="form-control";
-                    input.placeholder="Liter"
-                    deleteButton.innerHTML="hapus";
-                    deleteButton.className="form-control btn btn-danger"
-
-                    var option;
-                    var optgroup;
-                    var category="";
-                    for (i=0;i<len_dt;i++){
-                        option= document.createElement("option");
-                        optgroup = document.createElement("optgroup");
-                        option.value = vehicle_dt[i].id;
-                        option.innerHTML = vehicle_dt[i].plate_number;
-                        if (category != vehicle_dt[i].category) {
-                            optgroup.label = vehicle_dt[i].category;
-                            select.appendChild(optgroup);
-                            category = vehicle_dt[i].category;
-                        } 
-                        select.appendChild(option);
-                    }
-                    var dataDT = new Object();
-                    dataDT[select.id] = select.value;
-                    dataDT[input.id]=0;
-                    selected_dt[div.id] = dataDT;
-
-                    total_dt++;
-
-                    select.addEventListener('change',(event)=>{
-                        selected_dt[div.id][select.id]=select.value;
-                    });
-
-                    input.addEventListener('change',(event)=>{
-                        selected_dt[div.id][input.id]=input.value;
-                    });
-
-                    deleteButton.addEventListener('click',(event)=>{
-                        event.preventDefault();
-                        div.remove();
-                        delete selected_heavy[div.id];
-                    });
-
-                    divGrid.style="display: grid; grid-template-columns: 3fr 1fr 1fr; grid-gap: 0.75vw;";
-                    deleteButton.addEventListener('click',(event)=>{event.preventDefault();});
-                    divGrid.appendChild(select);
-                    divGrid.appendChild(input);
-                    divGrid.appendChild(deleteButton);
-                    div.appendChild(divGrid);
-                    vehicleDTContainer.appendChild(div);
-                }); 
+            option.value=dt[i].id;
+            if(dt[i].plate_number)
+            {
+                option.innerHTML=dt[i].plate_number+' / '+dt[i].type;
+            } else {
+                option.innerHTML=dt[i].serial_number+' / '+dt[i].type;
             }
+            select.appendChild(option);
+        } 
+
+
+        divGrid.style="display: grid; grid-template-columns: 3fr 1fr 1fr; grid-gap: 0.75vw;";
+        deleteButton.addEventListener('click',(event)=>{event.preventDefault();});
+        divGrid.appendChild(select);
+        divGrid.appendChild(input);
+        divGrid.appendChild(deleteButton);
+        div.appendChild(divGrid);
+        container.appendChild(div);
+
+        selected[div.id]={
+            'dt_id': select.value,
+            'dt_fuel': 0,
+            'surat_id': stId
         };
-     */
-    });
+
+        select.addEventListener('change',(event)=>{
+            selected[div.id].dt_id=select.value;
+        });
+
+        input.addEventListener('change',(event)=>{
+            selected[div.id].dt_fuel=input.value;
+        });
+
+        deleteButton.addEventListener('click',(event)=>{
+            event.preventDefault();
+            divGrid.remove();
+            delete selected[div.id];
+        });
+    }
+    
 </script>

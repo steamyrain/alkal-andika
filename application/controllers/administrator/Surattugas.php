@@ -103,6 +103,7 @@ class Surattugas extends CI_Controller {
             $result['message']= [
                'date'=>form_error('date'),
                'location'=>form_error('location'),
+               'job'=>form_error('job'),
                'subject'=>form_error('subject'),
                'heavy'=>form_error('heavy'),
                'dt'=>form_error('dt')
@@ -114,6 +115,7 @@ class Surattugas extends CI_Controller {
             $insertSurat;
             $insertSurat['location'] = $data->location;
             $insertSurat['date'] = $data->date;
+            $insertSurat['job_desc']=$data->job_desc;
 
             // insert surat tugas to corresponding table & get the last id inserted
             $last_id = $this->SuratTugasModel->insertSuratTugas($insertSurat);
@@ -123,7 +125,9 @@ class Surattugas extends CI_Controller {
             foreach ($data->subject as $subject) {
                 array_push($insertSubject,Array("subject_id"=>$subject,"surat_id"=>$last_id));
             }
-            $this->SuratTugasModel->insertSTSubject($insertSubject);
+            if (sizeof($insertSubject) != 0){
+                $this->SuratTugasModel->insertSTSubject($insertSubject);
+            }
                     
             // insert surat tugas heavy to correspoding table with its data;
             $insertHeavy = Array();
@@ -135,7 +139,9 @@ class Surattugas extends CI_Controller {
                 }
                 array_push($insertHeavy,Array("heavy_id"=>$dataHeavy[0],"surat_id"=>$last_id,"heavy_fuel"=>$dataHeavy[1]));
             }
-            $this->SuratTugasModel->insertSTHeavy($insertHeavy);
+            if (sizeof($insertHeavy) != 0){
+                $this->SuratTugasModel->insertSTHeavy($insertHeavy);
+            }
             
             // insert surat tugas dt to correspoding table with its data;
             $insertDT = Array();
@@ -147,7 +153,9 @@ class Surattugas extends CI_Controller {
                 }
                 array_push($insertDT,Array("dt_id"=>$dataDT[0],"surat_id"=>$last_id,"dt_fuel"=>$dataDT[1]));
             }
-            $this->SuratTugasModel->insertSTDT($insertDT);
+            if (sizeof($insertDT) != 0){
+                $this->SuratTugasModel->insertSTDT($insertDT);
+            }
             
 
             $result['status']='success';
@@ -169,10 +177,19 @@ class Surattugas extends CI_Controller {
 
     public function _rules() {
         $this->form_validation->set_rules('date','date','callback_post_date_check');
+        $this->form_validation->set_rules('job','job','callback_post_job_check');
         $this->form_validation->set_rules('location','location','callback_post_location_check');
         $this->form_validation->set_rules('subject','subject','callback_post_subject_check');
         $this->form_validation->set_rules('heavy','heavy','callback_post_heavy_check');
         $this->form_validation->set_rules('dt','dt','callback_post_dt_check');
+    }
+
+    public function post_job_check() {
+        if($this->input->post('job_desc')=='') {
+            $this->form_validation->set_message('post_job_check',"Deskripsi Pekerjaan Wajib Diisi");
+            return false;
+        }
+            return true;
     }
 
     public function post_location_check() {
@@ -209,14 +226,14 @@ class Surattugas extends CI_Controller {
                 if ($i == 0){
                     array_push($heavyId,$value);
                 } else {
-                    (($value == "") or ($value == "0"))?$emptyFuel=true:$emptyFuel=$emptyFuel;
+                    ((int)$value<0)?$emptyFuel=true:$emptyFuel=$emptyFuel;
                 }
                 $i++;
             }
         }
         $heavyIdBuffer = array_unique($heavyId);
         if((sizeof($heavyId) != sizeof($heavyIdBuffer)) or ($emptyFuel)){
-            $this->form_validation->set_message('post_heavy_check',"Alat Berat Tidak Boleh Sama / BBM Tidak Boleh Kosong");
+            $this->form_validation->set_message('post_heavy_check',"Alat Berat Tidak Boleh Sama / BBM Tidak Boleh Minus");
             return false;
         }
             return true;
@@ -231,14 +248,14 @@ class Surattugas extends CI_Controller {
                 if ($i == 0){
                     array_push($dtId,$value);
                 } else {
-                    (($value == "") or ($value == "0"))?$emptyFuel=true:$emptyFuel=$emptyFuel;
+                    ((int)$value<0)?$emptyFuel=true:$emptyFuel=$emptyFuel;
                 }
                 $i++;
             }
         }
         $dtIdBuffer = array_unique($dtId);
         if((sizeof($dtId) != sizeof($dtIdBuffer)) or ($emptyFuel)){
-            $this->form_validation->set_message('post_dt_check',"DumpTruck Tidak Boleh Sama / BBM Tidak Boleh Kosong");
+            $this->form_validation->set_message('post_dt_check',"DumpTruck Tidak Boleh Sama / BBM Tidak Boleh Minus");
             return false;
         }
             return true;
@@ -247,49 +264,125 @@ class Surattugas extends CI_Controller {
     public function print_surat() {
         $this->is_loggedIn();
         $this->is_admin();
-        $id = $this->input->post('id');
-        $st = $this->SuratTugasModel->getSpecificSuratTugasSubject($id)->result();
-        $pdf = new Fpdf();
-        $pdf->AddPage();
-        $this->set_header($pdf);
-        $pdf->SetFont('Times','BU',14);
-        $pdf->Cell(0,0,'SURAT TUGAS',0,1,'C');
-        $pdf->ln(5);
-        $pdf->SetFont('Times','',12);
-        $pdf->Cell(40,10,'Lokasi Kerja',0);
-        $pdf->Cell(10,10,': '.$st[0]->location,0);
-        $pdf->ln(10);
-        $pdf->Cell(40,10,'Tanggal',0);
-        $pdf->Cell(10,10,': '.$st[0]->date,0);
-        $pdf->ln(10);
-        $pdf->Cell(40,10,'Subjek',0);
-        $i=0;
-        foreach($st as $surat){
-            if($i == 0){
-                $pdf->Cell(10,10,': '.$surat->username,0);
-                $pdf->ln(10);
-            } else {
-                $pdf->Cell(40,10,'',0);
-                $pdf->Cell(10,10,': '.$surat->username,0);
-                $pdf->ln(10);
+        if (($this->input->post('id')!==null) && !empty($this->input->post('id'))){
+            $id = $this->input->post('id');
+            $st = $this->SuratTugasModel->getSpecificSuratTugas($id)->result();
+            $pdf = new Fpdf();
+            $pdf->AddPage();
+            $this->set_header($pdf);
+            $pdf->SetFont('Times','BU',14);
+            $pdf->Cell(0,0,'SURAT TUGAS',0,1,'C');
+            $pdf->ln(5);
+            $pdf->SetFont('Times','',12);
+            $pdf->Cell(40,10,'Lokasi Kerja',0);
+            $pdf->Cell(10,10,': '.$st[0]->location,0);
+            $pdf->ln(10);
+            $pdf->Cell(40,10,'Tanggal',0);
+            $pdf->Cell(10,10,': '.$st[0]->date,0);
+            $pdf->ln(10);
+            $pdf->Cell(40,10,'Deskripsi Pekerjaan',0);
+            $pdf->Cell(10,10,': '.$st[0]->job_desc,0);
+            $pdf->ln(10);
+
+            $pdf->Cell(40,10,'Operator',0);
+            $i=0;
+            $st = $this->SuratTugasModel->getSpecificSuratTugasOperator($id)->result();
+            foreach($st as $surat){
+                if($i == 0){
+                    $pdf->Cell(10,10,': '.$surat->username,0);
+                    $pdf->ln(10);
+                } else {
+                    $pdf->Cell(40,10,'',0);
+                    $pdf->Cell(10,10,': '.$surat->username,0);
+                    $pdf->ln(10);
+                }
+                $i++;
             }
-            $i++;
-        }
-        $pdf->Cell(40,10,'Alat Berat',0);
-        $st = $this->SuratTugasModel->getSpecificSuratTugasHeavy($id)->result();
-        $i=0;
-        foreach($st as $surat){
-            if($i == 0){
-                $pdf->Cell(10,10,': '.$this->vinChecker($surat->plate_number,$surat->serial_number),0);
-                $pdf->ln(10);
-            } else {
-                $pdf->Cell(40,10,'',0);
-                $pdf->Cell(10,10,': '.$this->vinChecker($surat->plate_number,$surat->serial_number),0);
-                $pdf->ln(10);
+            if($st == null){
+                    $pdf->Cell(10,10,': -',0);
+                    $pdf->ln(10);
             }
-            $i++;
+
+            $pdf->Cell(40,10,'Pengemudi',0);
+            $i=0;
+            $st = $this->SuratTugasModel->getSpecificSuratTugasDriver($id)->result();
+            foreach($st as $surat){
+                if($i == 0){
+                    $pdf->Cell(10,10,': '.$surat->username,0);
+                    $pdf->ln(10);
+                } else {
+                    $pdf->Cell(40,10,'',0);
+                    $pdf->Cell(10,10,': '.$surat->username,0);
+                    $pdf->ln(10);
+                }
+                $i++;
+            }
+            if($st == null){
+                    $pdf->Cell(10,10,': -',0);
+                    $pdf->ln(10);
+            }
+
+            $pdf->Cell(40,10,'Tenaga Kerja',0);
+            $i=0;
+            $st = $this->SuratTugasModel->getSpecificSuratTugasLabour($id)->result();
+            foreach($st as $surat){
+                if($i == 0){
+                    $pdf->Cell(10,10,': '.$surat->username,0);
+                    $pdf->ln(10);
+                } else {
+                    $pdf->Cell(40,10,'',0);
+                    $pdf->Cell(10,10,': '.$surat->username,0);
+                    $pdf->ln(10);
+                }
+                $i++;
+            }
+            if($st == null){
+                    $pdf->Cell(10,10,': -',0);
+                    $pdf->ln(10);
+            }
+
+            $pdf->Cell(40,10,'Alat Berat & BBM',0);
+            $st = $this->SuratTugasModel->getSpecificSuratTugasHeavy($id)->result();
+            $i=0;
+            foreach($st as $surat){
+                if($i == 0){
+                    $pdf->Cell(10,10,': '.$this->vinChecker($surat->plate_number,$surat->serial_number).'/'.$surat->category.'/'.$surat->sub_category.' ('.$surat->heavy_fuel.' liter)',0);
+                    $pdf->ln(10);
+                } else {
+                    $pdf->Cell(40,10,'',0);
+                    $pdf->Cell(10,10,': '.$this->vinChecker($surat->plate_number,$surat->serial_number).'/'.$surat->category.'/'.$surat->sub_category.' ('.$surat->heavy_fuel.' liter)',0);
+                    $pdf->ln(10);
+                }
+                $i++;
+            }
+            if($st == null){
+                    $pdf->Cell(10,10,': -',0);
+                    $pdf->ln(10);
+            }
+
+            $pdf->Cell(40,10,'Dump Truck & BBM',0);
+            $st = $this->SuratTugasModel->getSpecificSuratTugasDT($id)->result();
+            $i=0;
+            foreach($st as $surat){
+                if($i == 0){
+                    $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->dt_fuel.' liter)',0);
+                    $pdf->ln(10);
+                } else {
+                    $pdf->Cell(40,10,'',0);
+                    $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->dt_fuel.' liter)',0);
+                    $pdf->ln(10);
+                }
+                $i++;
+            }
+            if($st == null){
+                    $pdf->Cell(10,10,': -',0);
+                    $pdf->ln(10);
+            }
+
+            $pdf->Output();
+        } else {
+            redirect(base_URL('administrator/surattugas'));
         }
-        $pdf->Output();
     }
 
     private function vinChecker($sn,$pn){
@@ -340,7 +433,7 @@ class Surattugas extends CI_Controller {
         $_POST = json_decode($json,true);
         $result = [];
 
-        $this->_rules_edit();
+        $this->_rules_edit_subject();
 
         if ($this->form_validation->run() == FALSE) {
             $result['message']= [
@@ -403,6 +496,72 @@ class Surattugas extends CI_Controller {
         $this->load->view('template_administrator/footer');
     }
 
+    public function edit_heavy() {
+        $this->is_loggedIn();
+        $this->is_admin();
+
+        // initialized support variables
+        $json = file_get_contents('php://input');
+        $data = json_decode($json);
+        $_POST = json_decode($json,true);
+        $result = [];
+
+        $this->_rules_edit_heavy();
+
+        if ($this->form_validation->run() == false){
+            $result['message']= [
+               'heavy'=>form_error('heavy')
+            ];
+            $this->output->set_header('HTTP/1.1 400 Bad Request');
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode($result));
+        } else {
+            if (isset($data->og_keys) && !empty($data->og_keys)) {
+                $i = 0;
+                foreach($data->og_keys as $key) {
+                    $this->SuratTugasModel->updateSTHeavy($key,$data->og_dat[$i]);
+                    $i++;
+                }
+                $result['redirect_url'] = base_URL('administrator/surattugas');
+            }
+            if (isset($data->og_dKeys) && !empty($data->og_dKeys)){
+                foreach($data->og_dKeys as $key) {
+                    $this->SuratTugasModel->deleteSTHeavy($key);
+                }
+                $result['redirect_url'] = base_URL('administrator/surattugas');
+            }
+            if (isset($data->new_dat) && !empty($data->new_dat)){
+                $this->SuratTugasModel->insertSTHeavy($data->new_dat);
+                $result = [
+                    "redirect_url"=> base_URL('administrator/surattugas')
+                ]; 
+            }
+            $this->session->set_flashdata('pesan',
+                '<div 
+                    class=" alert 
+                            alert-success 
+                            dismissible 
+                            fade 
+                            show
+                            " 
+                    role="alert">
+                Data Berhasil Diubah!
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="alert" 
+                    aria-label="Close">
+                <span 
+                    aria-hidden="true">
+                &times;
+                </span>
+                </button>
+                </div>');
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode($result)); 
+        }
+    }
+
     public function detail_dt() {
         $this->is_loggedIn();
         $this->is_admin();
@@ -417,8 +576,163 @@ class Surattugas extends CI_Controller {
         $this->load->view('administrator/st_detail_dt',$data);
         $this->load->view('template_administrator/footer');
     }
+    public function edit_dt() {
+        $this->is_loggedIn();
+        $this->is_admin();
 
-    public function _rules_edit() {
+        // initialized support variables
+        $json = file_get_contents('php://input');
+        $data = json_decode($json);
+        $_POST = json_decode($json,true);
+        $result = [];
+
+        $this->_rules_edit_dt();
+
+        if ($this->form_validation->run() == false){
+            $result['message']= [
+               'dt'=>form_error('dt')
+            ];
+            $this->output->set_header('HTTP/1.1 400 Bad Request');
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode($result));
+        } else {
+            if (isset($data->og_keys) && !empty($data->og_keys)) {
+                $i = 0;
+                foreach($data->og_keys as $key) {
+                    $this->SuratTugasModel->updateSTDT($key,$data->og_dat[$i]);
+                    $i++;
+                }
+                $result['redirect_url'] = base_URL('administrator/surattugas');
+            }
+            if (isset($data->og_dKeys) && !empty($data->og_dKeys)){
+                foreach($data->og_dKeys as $key) {
+                    $this->SuratTugasModel->deleteSTDT($key);
+                }
+                $result['redirect_url'] = base_URL('administrator/surattugas');
+            }
+            if (isset($data->new_dat) && !empty($data->new_dat)){
+                $this->SuratTugasModel->insertSTDT($data->new_dat);
+                $result = [
+                    "redirect_url"=> base_URL('administrator/surattugas')
+                ]; 
+            }
+            $this->session->set_flashdata('pesan',
+                '<div 
+                    class=" alert 
+                            alert-success 
+                            dismissible 
+                            fade 
+                            show
+                            " 
+                    role="alert">
+                Data Berhasil Diubah!
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="alert" 
+                    aria-label="Close">
+                <span 
+                    aria-hidden="true">
+                &times;
+                </span>
+                </button>
+                </div>');
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode($result)); 
+        }
+    }
+
+    public function detail_surat($id) {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $surat = $this->SuratTugasModel->getSpecificSTDetail($id)->row();
+        $data = [
+            'st_id'=>$id,
+            'st_surat_og'=>$surat
+        ];
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/st_detail_surat',$data);
+        $this->load->view('template_administrator/footer');
+    }
+
+    public function edit_surat() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->_rules_edit_surat();
+        if($this->form_validation->run() === FALSE) {
+            $id = $this->input->post('id');
+            $this->detail_surat($id);
+        } else {
+            $id = $this->input->post('id');
+            $data = [
+                "location"=>$this->input->post('location'),
+                "job_desc"=>$this->input->post('job_desc'),
+                "date"=>$this->input->post('date')
+            ];
+            $this->SuratTugasModel->updateST($id,$data);
+            $this->session->set_flashdata('pesan',
+                '<div 
+                    class=" alert 
+                            alert-success 
+                            dismissible 
+                            fade 
+                            show
+                            " 
+                    role="alert">
+                Data Berhasil Diubah!
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="alert" 
+                    aria-label="Close">
+                <span 
+                    aria-hidden="true">
+                &times;
+                </span>
+                </button>
+                </div>');
+            redirect(base_URL('administrator/surattugas'));
+        }
+        
+    }
+
+    public function hapus_surat(){
+        $this->is_loggedIn();
+        $this->is_admin();
+        $id = $this->input->post('id');
+        $this->SuratTugasModel->deleteST($id);
+        $this->session->set_flashdata('pesan',
+            '<div 
+                class=" alert 
+                        alert-success 
+                        dismissible 
+                        fade 
+                        show
+                        " 
+                role="alert">
+            Data Berhasil Dihapus!
+            <button 
+                type="button" 
+                class="close" 
+                data-dismiss="alert" 
+                aria-label="Close">
+            <span 
+                aria-hidden="true">
+            &times;
+            </span>
+            </button>
+            </div>');
+        redirect(base_URL('administrator/surattugas'),'refresh');
+    }
+
+    public function _rules_edit_surat(){
+		$this->form_validation->set_rules('location','location','required',['required' => 'Lokasi Wajib Diisi']);
+		$this->form_validation->set_rules('date','date','required',['required' => 'Tanggal Wajib Diisi']);
+		$this->form_validation->set_rules('job_desc','job','required',['required' => 'Deskripsi Pekerjaan Wajib Diisi']);
+    }
+
+    public function _rules_edit_subject() {
         $this->form_validation->set_rules('operator','operator','callback_post_edit_operator_check');
         $this->form_validation->set_rules('driver','driver','callback_post_edit_driver_check');
         $this->form_validation->set_rules('labour','labour','callback_post_edit_labour_check');
@@ -446,6 +760,32 @@ class Surattugas extends CI_Controller {
         $laBuffer = array_unique($this->input->post('st_la_buffer'));
         if(sizeof($this->input->post('st_la_buffer')) != sizeof($laBuffer)){
             $this->form_validation->set_message('post_edit_labour_check',"TK Tidak Boleh Sama");
+            return false;
+        }
+            return true;
+    }
+
+    public function _rules_edit_heavy() {
+        $this->form_validation->set_rules('heavy','heavy','callback_post_edit_heavy_check');
+    }
+
+    public function post_edit_heavy_check() {
+        $heBuffer = array_unique($this->input->post('st_he_buffer'));
+        if(sizeof($this->input->post('st_he_buffer')) != sizeof($heBuffer)) {
+            $this->form_validation->set_message('post_edit_heavy_check',"Alat Berat Tidak Boleh Sama");
+            return false;
+        }
+            return true;
+    }
+
+    public function _rules_edit_dt() {
+        $this->form_validation->set_rules('dt','dt','callback_post_edit_dt_check');
+    }
+
+    public function post_edit_dt_check() {
+        $dtBuffer = array_unique($this->input->post('st_dt_buffer'));
+        if(sizeof($this->input->post('st_dt_buffer')) != sizeof($dtBuffer)) {
+            $this->form_validation->set_message('post_edit_dt_check',"Alat Berat Tidak Boleh Sama");
             return false;
         }
             return true;
