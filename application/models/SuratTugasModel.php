@@ -27,16 +27,55 @@ class SuratTugasModel extends CI_Model {
         return $this->db->get($this->table);
     }
 
-    public function getSpecificSuratTugasSubject($id){
+    public function getSpecificSuratTugasOperator($id){
         $this->db->select(
-            $this->table.'
-                .*, 
+            '
                 user.username,
             '
         );
-        $this->db->from($this->table);
-        $this->db->join($this->tableSubject,$this->tableSubject.'.surat_id='.$this->table.'.id');
+        $this->db->from($this->tableSubject);
         $this->db->join('user','user.id='.$this->tableSubject.'.subject_id');
+        $this->db->where($this->tableSubject.'.surat_id='.$id);
+        $this->db->where('user.job_id=1');
+        $this->db->order_by('user.username');
+        return $this->db->get();
+    }
+
+    public function getSpecificSuratTugasDriver($id){
+        $this->db->select(
+            '
+                user.username,
+            '
+        );
+        $this->db->from($this->tableSubject);
+        $this->db->join('user','user.id='.$this->tableSubject.'.subject_id');
+        $this->db->where($this->tableSubject.'.surat_id='.$id);
+        $this->db->where('user.job_id=2');
+        $this->db->order_by('user.username');
+        return $this->db->get();
+    }
+
+    public function getSpecificSuratTugasLabour($id){
+        $this->db->select(
+            '
+                user.username,
+            '
+        );
+        $this->db->from($this->tableSubject);
+        $this->db->join('user','user.id='.$this->tableSubject.'.subject_id');
+        $this->db->where($this->tableSubject.'.surat_id='.$id);
+        $this->db->where('user.job_id=4');
+        $this->db->order_by('user.username');
+        return $this->db->get();
+    }
+
+    public function getSpecificSuratTugas($id){
+        $this->db->select(
+            $this->table.'
+                .* 
+            '
+        );
+        $this->db->from($this->table);
         $this->db->where($this->table.'.id='.$id);
         return $this->db->get();
     }
@@ -47,13 +86,30 @@ class SuratTugasModel extends CI_Model {
                 alkal_alat_berat.sub_category,
                 alkal_alat_berat.type,
                 alkal_alat_berat.plate_number,
-                alkal_alat_berat.serial_number
+                alkal_alat_berat.serial_number,
+                alkal_st_heavy.heavy_fuel
             '
         );
         $this->db->from($this->table);
         $this->db->join($this->tableHeavy,$this->tableHeavy.'.surat_id='.$this->table.'.id');
         $this->db->join('alkal_alat_berat','alkal_alat_berat.id='.$this->tableHeavy.'.heavy_id');
         $this->db->join('alkal_category_alat_berat','alkal_alat_berat.catId=alkal_category_alat_berat.id');
+        $this->db->where($this->table.'.id='.$id);
+        return $this->db->get();
+    }
+
+    public function getSpecificSuratTugasDT($id){
+        $this->db->select('
+                alkal_category_dt.category,
+                alkal_dump_truck.type,
+                alkal_dump_truck.plate_number,
+                alkal_st_dt.dt_fuel
+            '
+        );
+        $this->db->from($this->table);
+        $this->db->join($this->tableDT,$this->tableDT.'.surat_id='.$this->table.'.id');
+        $this->db->join('alkal_dump_truck','alkal_dump_truck.id='.$this->tableDT.'.dt_id');
+        $this->db->join('alkal_category_dt','alkal_dump_truck.catId=alkal_category_dt.id');
         $this->db->where($this->table.'.id='.$id);
         return $this->db->get();
     }
@@ -133,5 +189,41 @@ class SuratTugasModel extends CI_Model {
     public function deleteSTSubject($id){
         $this->db->where('id',$id);
         $this->db->delete($this->tableSubject);
+    }
+
+    public function updateSTHeavy($id,$data){
+        $this->db->where('id',$id);
+        $this->db->update($this->tableHeavy,$data);
+    }
+
+    public function deleteSTHeavy($id){
+        $this->db->where('id',$id);
+        $this->db->delete($this->tableHeavy);
+    }
+
+    public function updateSTDT($id,$data){
+        $this->db->where('id',$id);
+        $this->db->update($this->tableDT,$data);
+    }
+
+    public function deleteSTDT($id){
+        $this->db->where('id',$id);
+        $this->db->delete($this->tableDT);
+    }
+
+    public function getSpecificSTDetail($id){
+        $this->db->select('location,date,job_desc');
+        $this->db->limit(1);
+        return $this->db->get_where($this->table,array('id'=>$id));
+    }
+
+    public function updateST($id,$data){
+        $this->db->where('id',$id);
+        $this->db->update($this->table,$data);
+    }
+
+    public function deleteST($id){
+        $this->db->where('id',$id);
+        $this->db->delete($this->table);
     }
 }

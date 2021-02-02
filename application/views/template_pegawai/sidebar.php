@@ -44,48 +44,6 @@
         </div>
       </li>
 
-      <!-- Nav Item - Utilities Collapse Menu -->
-    <?php if (($_SESSION['job_id'] === '1') or ($_SESSION['job_id']=== '2')) { ?>
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-file" style="color:black;"></i>
-          <span style="color:black;">Daily Task</span>
-        </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-            <!--a class="collapse-item" href="<?php echo base_url('pegawai/atpm') ?>">ATPM</a-->
-            <!--a class="collapse-item" href="<?php echo base_url('pegawai/swakelola') ?>">Swakelola</a-->
-            <?php if ($_SESSION['job_id'] === '1') { ?>
-                <a class="collapse-item" href="<?php echo base_url('pegawai/laporan') ?>">Laporan Kerja Alat Berat</a>
-            <?php } ?>
-            <?php if(($_SESSION['job_id']==='2') or ($_SESSION['job_id']==='1')) { ?>
-                <a class="collapse-item" href="<?php echo base_url('pegawai/laporandt') ?>">Laporan Kerja Dump Truck</a>
-            <?php } ?>
-          </div>
-        </div>
-      </li>
-    <?php } ?>
-
-
-      <!-- Nav Item - Pages Collapse Menu 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-truck" style="color:black;"></i>
-          <span style="color:black;">Material</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-            <a class="collapse-item" href="<?php echo base_url('pegawai/bbm') ?>">BBM</a>
-            <a class="collapse-item" href="<?php echo base_url('pegawai/tire') ?>">Tire</a>
-            <a class="collapse-item" href="<?php echo base_url('pegawai/oil') ?>">Oil</a>
-            <a class="collapse-item" href="<?php echo base_url('pegawai/accu') ?>">Accu</a>
-            <a class="collapse-item" href="<?php echo base_url('pegawai/filter') ?>">Filter</a>
-          </div>
-        </div>
-      </li>-->
-
       <li class="nav-item">
         <a class="nav-link" href="<?php echo base_url('pegawai/auth/logout') ?>">
           <i class="fas fa-sign-out-alt" style="color:black;"></i>

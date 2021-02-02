@@ -272,15 +272,15 @@
 
             event.preventDefault();
 
-            const og_stOp_id = Object.keys(selected_og_operator);
-            const og_stDr_id = Object.keys(selected_og_driver);
-            const og_stLa_id = Object.keys(selected_og_labour);
-            const og_op_uId = Object.values(selected_og_operator);
-            const og_dr_uId = Object.values(selected_og_driver);
-            const og_la_uId = Object.values(selected_og_labour);
-            const new_op_uId = Object.values(selected_operator);
-            const new_dr_uId = Object.values(selected_driver);
-            const new_la_uId = Object.values(selected_labour);
+            var og_stOp_id = Object.keys(selected_og_operator);
+            var og_stDr_id = Object.keys(selected_og_driver);
+            var og_stLa_id = Object.keys(selected_og_labour);
+            var og_op_uId = Object.values(selected_og_operator);
+            var og_dr_uId = Object.values(selected_og_driver);
+            var og_la_uId = Object.values(selected_og_labour);
+            var new_op_uId = Object.values(selected_operator);
+            var new_dr_uId = Object.values(selected_driver);
+            var new_la_uId = Object.values(selected_labour);
             
             // Send this buffer arrays along with the other data to server,
             // so we can check the uniqueness of these arrays serverside
@@ -289,21 +289,21 @@
             var stDriverBuffer = new Array();
             var stLabourBuffer = new Array();
 
-            // Only concat the og one that hasn't change
+            // Only concat the og one that hasn't change nor deleted
             for(var i=0;i<len_st_operator;i++){
-                if(!og_stOp_id.includes(st_operator[i].stOpId)){
+                if((!og_stOp_id.includes(st_operator[i].stOpId)) && (!deleted_og.includes(st_operator[i].stOpId))){
                     stOperatorBuffer = stOperatorBuffer.concat(st_operator[i].id);
                 }
             }
 
             for(var i=0;i<len_st_driver;i++){
-                if(!og_stDr_id.includes(st_driver[i].stDrId)){
+                if((!og_stDr_id.includes(st_driver[i].stDrId)) && (!deleted_og.includes(st_driver[i].stDrId))){
                     stDriverBuffer = stDriverBuffer.concat(st_driver[i].id);
                 }
             }
 
             for(var i=0;i<len_st_labour;i++){
-                if(!og_stLa_id.includes(st_labour[i].stLaId)){
+                if((!og_stLa_id.includes(st_labour[i].stLaId)) && (!deleted_og.includes(st_labour[i].stLaId))){
                     stLabourBuffer = stLabourBuffer.concat(st_labour[i].id);
                 }
             }
@@ -313,7 +313,7 @@
             stDriverBuffer = stDriverBuffer.concat(og_dr_uId,new_dr_uId);
             stLabourBuffer = stLabourBuffer.concat(og_la_uId,new_la_uId);
 
-            const data = {
+            var data = {
                 "og_sId": stId,
                 "og_keys":og_stOp_id.concat(og_stDr_id,og_stLa_id),
                 "og_uId":og_op_uId.concat(og_dr_uId,og_la_uId),
@@ -326,12 +326,15 @@
 
             xhttp_surat = new XMLHttpRequest();
             xhttp_surat.onload = function() {
-                const jsonResponse = JSON.parse(this.responseText);
+                var jsonResponse = JSON.parse(this.responseText);
                 if (this.status == 200) {
                     window.location.assign(jsonResponse.redirect_url);
                 }
                 if (this.status == 400) {
                     var message = jsonResponse['message'];
+                    
+                    // scroll to top just to have the same ux with other pages
+                    window.scrollTo(0,0);
 
                     // if error message for operator fields exist
                     if(message['operator']){
@@ -429,7 +432,6 @@
             event.preventDefault();
             document.getElementById('div-'+selectId).style="display:none";
             deletedOG.push(subject_id);
-            console.log(selectedOG.hasOwnProperty(subject_id));
             if (selectedOG.hasOwnProperty(subject_id)){
                 delete selectedOG[subject_id];
             }
@@ -461,6 +463,7 @@
                 event.preventDefault();
                 var select_id = `subject-operator-${total_operator}`;
                 addSubject(event,subjectOperatorContainer,subject_operator,len_operator,select_id,selected_operator);
+                total_operator++;
             });
 
         }; 
@@ -493,6 +496,7 @@
                 event.preventDefault();
                 var select_id = `subject-driver-${total_driver}`;
                 addSubject(event,subjectDriverContainer,subject_driver,len_driver,select_id,selected_driver);
+                total_operator++;
             });
 
         }; 
@@ -525,6 +529,7 @@
                 event.preventDefault();
                 var select_id = `subject-labour-${total_labour}`;
                 addSubject(event,subjectLabourContainer,subject_labour,len_labour,select_id,selected_labour);
+                total_operator++;
             });
 
 
