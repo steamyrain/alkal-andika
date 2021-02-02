@@ -4,7 +4,7 @@
   	<i class="fas fa-clipboard"></i> Form Input Kinerja
   	</div>
 
-	<?php echo form_open_multipart('pegawai/pmj/input_aksi'); ?>
+	<?php echo form_open_multipart('administrator/pmj/input_aksi'); ?>
 		<div class="form-group">
 			<label> Nama Lengkap :</label>
 			<select name="nama" class="form-control" value="<?php echo $k->nama?>">
@@ -12,34 +12,42 @@
 			<option>Anindya Indriasari</option>
 			<option>Husni</option>
 			<option>Sri Muliati</option>
+			<option>Ahmad Baktiar</option>
  		    <option></option>
   			</select>
 		</div>
-	<div class="form-group">
-			 <p>Pilih Waktu :</p>
- 		<input type="radio" id="Pagi" name="waktu" value="Pagi">
- 		<label for="Pagi">Pagi</label><br>
- 		<input type="radio" id="Siang" name="waktu" value="Siang">
- 		<label for="Siang">Siang</label><br>
- 		<input type="radio" id="Sore" name="waktu" value="Sore">
- 		<label for="Sore">Sore</label><br>
+		<div class="form-group">
+            <label>Tanggal :</label>
+            <input 
+                type="date" 
+                name="tgl"
+                id="tgl"
+                class="form-control"
+            />
+            <div style="display: none" class="text-danger small ml-3" id="tgl"></div>
+        </div>
+		<div class="form-group">
+			 <p>Pilih Datang :</p>
+ 		<input type="time" id="waktu" name="waktu">
 			<?php echo form_error('waktu', '<div class="text-danger small" ml-3>') ?>
+		</div>
+		<div class="form-group">
+			 <p>Pilih Pulang :</p>
+ 		<input type="time" name="pulang">
+			<?php echo form_error('pulang', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
 			 <p>Pilih Bidang :</p>
  		<input type="radio" id="Petugas Pemeliharaan Jalan dan Jembatan" name="bidang" value="Petugas Pemeliharaan Jalan dan Jembatan">
- 		<label for="Petugas Pemeliharaan Jalan dan Jembatan">Admin Perbekalan</label><br>
+ 		<label for="Petugas Pemeliharaan Jalan dan Jembatan">Petugas Pemeliharaan Jalan dan Jembatan</label><br>
 			<?php echo form_error('bidang', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
 			<label>Kegiatan</label>
 			<label> Pilih Kegiatan :</label>
 			<select name="kegiatan" class="form-control" value="<?php echo $k->kegiatan?>">
-		<option>Pagi - Apel Pagi Persiapan Kerja</option>
-			<option>Pagi - Melaksanakan Perintah Atasan</option>
-			<option>Siang - Melaksanakan Perintah Atasan</option>
-			<option>Sore - Melaksanakan Perintah Atasan</option>
-			<option>Pagi - Apel Pagi Persiapan Kerja</option>
+			<option>Apel Pagi Persiapan Kerja</option>
+			<option>Melaksanakan Perintah Atasan</option>
 			<option>Rekapitulasi Struk BBM</option>
 			<option>Pengumpulan Struk BBM</option>
 			<option>Pembuatan Berkas Deposit</option>

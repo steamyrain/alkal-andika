@@ -60,8 +60,8 @@
   			<td><?php echo $k->kegiatan ?></td>
         <td><?php echo $k->lokasi ?></td>
             <td>
-            <a href="<?php echo base_url('assets/upload/').$k->dokumentasi ?>">dokumentasi</a>
-            </td>
+                    <img width="60px" src="<?php echo base_url().'assets/upload/'.$k->dokumentasi ?>">    
+                  </td>
         <td onclick="javascript: return confirm('Yakin Hapus?')"><?php echo anchor('administrator/kinerja/hapus/'.$k->no, '<div class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></div>') ?></td>
   		</tr>
   	<?php endforeach; ?>
@@ -98,7 +98,7 @@ $(document).ready(function()
               {
                 extend: "excelHtml5",
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4, 5, 6]
+                  columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 }
               },
               {

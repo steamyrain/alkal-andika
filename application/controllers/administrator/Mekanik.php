@@ -30,13 +30,15 @@ function __construct(){
     {
         $data = array(
             'tanggal'  => set_value('tanggal'),
-            'no'  => set_value('no'),
+            'tgl'  => set_value('tgl'),
+			'no'  => set_value('no'),
             'waktu'  => set_value('waktu'),
-            'nama'   => set_value('nama'),
-            'bidang'   => set_value('bidang'),
-            'kegiatan'   => set_value('kegiatan'),
+            'pulang'  => set_value('pulang'),
+			'nama'   => set_value('nama'),
+			'bidang'   => set_value('bidang'),
+			'kegiatan'   => set_value('kegiatan'),
             'lokasi'   => set_value('lokasi'),
-            'dokumentasi'   => set_value('dokumentasi'),
+			'dokumentasi'   => set_value('dokumentasi'),
         );
         $this->load->view('template_administrator/header');
         $this->load->view('template_administrator/sidebar');
@@ -59,11 +61,14 @@ function __construct(){
         {
             echo "form valid\n";
             // assign form input values to variables
-            $nama           = $this->input->post('nama');
-            $waktu          = $this->input->post('waktu');
-            $bidang         = $this->input->post('bidang');
-            $kegiatan       = $this->input->post('kegiatan');
+            $nama 			= $this->input->post('nama');
+			$tgl 			= $this->input->post('tgl');
             $lokasi         = $this->input->post('lokasi');
+            $waktu          = $this->input->post('waktu');
+            $pulang         = $this->input->post('pulang');
+			$bidang 		= $this->input->post('bidang');
+			$kegiatan 		= $this->input->post('kegiatan');
+
 
             // codeigniter's upload config
             $config['upload_path'] = './assets/upload/';
@@ -82,6 +87,8 @@ function __construct(){
                 $dokumentasi = $this->upload->data('file_name');
                 $data = array(
                     'waktu' => $waktu,
+                    'tgl' => $tgl,
+                    'pulang' => $pulang,
                     'nama' => $nama,
                     'bidang' => $bidang,
                     'kegiatan' => $kegiatan,
@@ -200,29 +207,68 @@ function __construct(){
         $object->getProperties()->setCreator("kitsui");
         $object->getProperties()->setLastModifiedBy("kitsui");
         $object->getProperties()->setTitle("Data Mekanik");
-
+        
+        // Buat sebuah variabel untuk menampung pengaturan style dari header tabel
+    $style_col = array(
+      'font' => array('bold' => true), // Set font nya jadi bold
+      'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+      ),
+      'borders' => array(
+        'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
+        'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
+        'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
+        'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
+      )
+    );
+    // Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
+    $style_row = array(
+      'alignment' => array(
+        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+      ),
+      'borders' => array(
+        'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
+        'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
+        'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
+        'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
+      )
+    );
+    $object->setActiveSheetIndex(0)->setCellValue('F1', "DAFTAR KEGIATAN HARIAN PJLP "); // Set kolom A1 dengan tulisan "DATA SISWA"
+    $object->getActiveSheet()->getStyle('F1')->getFont()->setBold(TRUE); // Set bold kolom A1
+    $object->getActiveSheet()->getStyle('F1')->getFont()->setSize(15); // Set font size 15 untuk kolom A1
+    $object->getActiveSheet()->getStyle('F1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
+     $object->setActiveSheetIndex(0)->setCellValue('F2', "UNIT ALKAL DINAS BINA MARGA PROVINSI DKI JAKARTA "); // Set kolom A1 dengan tulisan "DATA SISWA"
+    $object->getActiveSheet()->getStyle('F2')->getFont()->setBold(TRUE); // Set bold kolom A1
+    $object->getActiveSheet()->getStyle('F2')->getFont()->setSize(15); // Set font size 15 untuk kolom A1
+    $object->getActiveSheet()->getStyle('F2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
+     $object->setActiveSheetIndex(0)->setCellValue('F3', "2021"); // Set kolom A1 dengan tulisan "DATA SISWA"
+    $object->getActiveSheet()->getStyle('F3')->getFont()->setBold(TRUE); // Set bold kolom A1
+    $object->getActiveSheet()->getStyle('F3')->getFont()->setSize(15); // Set font size 15 untuk kolom A1
+    $object->getActiveSheet()->getStyle('F3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
+    $object->getActiveSheet()->setAutoFilter('A4:G4');
         $object->setActiveSheetIndex(0);
-        $object->getActiveSheet()->setCellValue('A1', 'Tanggal');
-        $object->getActiveSheet()->setCellValue('B1', 'No');
-        $object->getActiveSheet()->setCellValue('C1', 'Nama');
-        $object->getActiveSheet()->setCellValue('D1', 'Waktu');
-        $object->getActiveSheet()->setCellValue('E1', 'Bidang');
-        $object->getActiveSheet()->setCellValue('F1', 'Kegiatan');
-        $object->getActiveSheet()->setCellValue('G1', 'Lokasi');
-        $object->getActiveSheet()->setCellValue('H1', 'Dokumentasi');
+        $object->getActiveSheet()->setCellValue('A4', 'Tgl/Hari');
+        $object->getActiveSheet()->setCellValue('B4', 'No');
+        $object->getActiveSheet()->setCellValue('C4', 'Nama');
+        $object->getActiveSheet()->setCellValue('D4', 'Waktu');
+        $object->getActiveSheet()->setCellValue('E4', 'Bidang');
+        $object->getActiveSheet()->setCellValue('F4', 'Kegiatan');
+        $object->getActiveSheet()->setCellValue('G4', 'Lokasi');
+	   $object->getActiveSheet()->setCellValue('H4', 'Keterangan');
 
-        $baris = 2;
+        $baris = 5;
         $no = 1;
 
         foreach ($data['mekanik'] as $k) {
             $object->getActiveSheet()->setCellValue('B'.$baris, $no++);
-            $object->getActiveSheet()->setCellValue('A'.$baris, $k->tanggal);
+            $object->getActiveSheet()->setCellValue('A'.$baris, $k->tgl);
             $object->getActiveSheet()->setCellValue('C'.$baris, $k->nama);
             $object->getActiveSheet()->setCellValue('D'.$baris, $k->waktu);
             $object->getActiveSheet()->setCellValue('E'.$baris, $k->bidang);
             $object->getActiveSheet()->setCellValue('F'.$baris, $k->kegiatan);
             $object->getActiveSheet()->setCellValue('G'.$baris, $k->lokasi);
-            $object->getActiveSheet()->setCellValue('H'.$baris, $k->dokumentasi);
+            
 
             $baris++;
         }

@@ -16,18 +16,34 @@
 			<option>Markoni</option>
 			<option>Muhammad Hafiz</option>
 			<option>Muhammad Syafi'I</option>
+			<option>Achmad Rizky</option>
+			<option>Ade Adam Hanifianto</option>
+			<option>Agung Permana</option>
+			<option>Agung Pramono</option>
+			<option>Ahmad Baktiar</option>
+			<option>Ahmad Yapie Ta'as</option>
  		    <option></option>
   			</select>
 		</div>
-			<div class="form-group">
-			 <p>Pilih Waktu :</p>
- 		<input type="radio" id="Pagi" name="waktu" value="Pagi">
- 		<label for="Pagi">Pagi</label><br>
- 		<input type="radio" id="Siang" name="waktu" value="Siang">
- 		<label for="Siang">Siang</label><br>
- 		<input type="radio" id="Sore" name="waktu" value="Sore">
- 		<label for="Sore">Sore</label><br>
+		<div class="form-group">
+            <label>Tanggal :</label>
+            <input 
+                type="date" 
+                name="tgl"
+                id="tgl"
+                class="form-control"
+            />
+            <div style="display: none" class="text-danger small ml-3" id="tgl"></div>
+        </div>
+		<div class="form-group">
+			 <p>Pilih Jam Mulai :</p>
+ 		<input type="time" id="waktu" name="waktu">
 			<?php echo form_error('waktu', '<div class="text-danger small" ml-3>') ?>
+		</div>
+		<div class="form-group">
+			 <p>Pilih Jam Selesai :</p>
+ 		<input type="time" name="pulang">
+			<?php echo form_error('pulang', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
 			 <p>Pilih Bidang :</p>
@@ -39,7 +55,7 @@
 			<label>Kegiatan</label>
 			<label> Pilih Kegiatan :</label>
 			<select name="kegiatan" class="form-control" value="<?php echo $k->kegiatan?>">
-			<option>Pagi - Apel Pagi Persiapan Kerja</option>
+			<option>Apel Pagi Persiapan Kerja</option>
 			<option>Melakukan Pengecekan Kendaraan dan Alat</option>
 			<option>Melakukan Penggantian Sparepart Kendaraan dan Alat</option>
 			<option>Melakukan Perbaikan Kendaraan dan Alat</option>

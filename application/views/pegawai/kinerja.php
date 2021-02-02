@@ -41,8 +41,8 @@
         <td><?php echo $k->kegiatan ?></td>
         <td><?php echo $k->lokasi ?></td>
             <td>
-            <a href="<?php echo base_url('assets/upload/').$k->dokumentasi ?>">dokumentasi</a>
-            </td>
+                    <img width="60px" src="<?php echo base_url().'assets/upload/'.$k->dokumentasi ?>">    
+                  </td>
       </tr>
     <?php endforeach; ?>
   </table>

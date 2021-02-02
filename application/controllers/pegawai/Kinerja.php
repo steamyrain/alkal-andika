@@ -70,7 +70,7 @@ function __construct(){
             // codeigniter's upload config
             $config['upload_path'] = './assets/upload/';
             $config['allowed_types'] = 'gif|jpg|png';
-            $config['max_size'] = 2000; 
+            $config['max_size'] = 10000; 
 
             // initialize upload with predefined config
             $this->upload->initialize($config);
