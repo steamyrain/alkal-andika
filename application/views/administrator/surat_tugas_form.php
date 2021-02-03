@@ -693,7 +693,7 @@
                     deleteButton.addEventListener('click',(event)=>{
                         event.preventDefault();
                         div.remove();
-                        delete selected_heavy[div.id];
+                        delete selected_dt[div.id];
                     });
 
                     divGrid.style="display: grid; grid-template-columns: 3fr 1fr 0.2fr; grid-gap: 0.75vw;";
