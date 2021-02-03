@@ -637,7 +637,7 @@
                     event.preventDefault();
                     var div = document.getElementById('div-vehicle-dt-0');
                     div.remove();
-                    delete selected_heavy['div-vehicle-dt-0'];
+                    delete selected_dt['div-vehicle-dt-0'];
                 });
 
                 // logic for addVehicleButton
