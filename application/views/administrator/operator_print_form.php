@@ -8,7 +8,7 @@
         <!-- select nama operator -->
 		<div class="form-group">
 			<label> Nama Yang Akan Diprint :</label>
-			<select name="nama" class="form-control">
+			<select name="username" class="form-control">
                 <?php foreach($operator as $o): ?>
                     <option value="<?php echo $o->username; ?>">
                         <?php echo $o->username; ?>
@@ -25,10 +25,10 @@
                 name="starting_date" 
                 class="form-control"
             />
-			<label>Tanggal Akhir Kinerja :</label>
 			<?php echo form_error('starting_date', '<div class="text-danger small">') ?>
         </div>
 		<div class="form-group">
+			<label>Tanggal Akhir Kinerja :</label>
             <input 
                 type="date" 
                 name="end_date" 
@@ -38,6 +38,6 @@
 		</div>
 	
         <!-- form submit -->
-		<button type="submit" class="btn btn-primary mb-5 mt-3">Simpan</button>
+		<button type="submit" class="btn btn-primary mb-5 mt-3"><span><i class="fas fa-print"></i>  Print</span></button>
     </form>
 </div>
