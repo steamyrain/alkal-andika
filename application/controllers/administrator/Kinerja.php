@@ -184,6 +184,14 @@ function __construct(){
         $this->form_validation->set_rules('lokasi','lokasi','required',['required' => 'Lokasi Wajib Diisi']);
 	}
 
+    public function print_form(){
+        $data['operator']= $this->user_model->getOperatorOnly()->result();
+        $this->load->view('template_administrator/header.php');
+        $this->load->view('template_administrator/sidebar.php');
+        $this->load->view('administrator/operator_print_form',$data);
+        $this->load->view('template_administrator/footer.php');
+    }
+
     public function print(){
         $data['kinerja']   = $this->kinerja_model->tampil_data("kinerja")->result();
         $this->load->view('administrator/print_kinerja',$data);
