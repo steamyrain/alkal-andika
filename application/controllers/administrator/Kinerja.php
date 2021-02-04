@@ -2,10 +2,20 @@
 
 class Kinerja extends CI_Controller{
 
-function __construct(){
-        parent::__construct();
-
+    private function is_loggedIn() {
         if (!isset($this->session->userdata['username'])){
+            $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
+                Anda Belum Login!
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                 </button>
+                </div>');
+            redirect('administrator/auth');
+        }
+    }
+
+    private function is_admin() {
+        if($this->session->userdata['level'] !== 'admin'){
             $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
                 Anda Belum Login!
                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -18,6 +28,10 @@ function __construct(){
 
 	public function index()
 	{
+
+        $this->is_loggedIn();
+        $this->is_admin();
+
 		$data['title'] = "data kinerja";
 		$data['kinerja']	= $this->kinerja_model->tampil_data()->result();
 		$this->load->view('template_administrator/header');
@@ -28,6 +42,10 @@ function __construct(){
 
 	public function input()
 	{
+
+        $this->is_loggedIn();
+        $this->is_admin();
+
 		$data = array(
             'tanggal'  => set_value('tanggal'),
             'tgl'  => set_value('tgl'),
@@ -45,14 +63,23 @@ function __construct(){
 		$this->load->view('administrator/kinerja_form',$data);
 		$this->load->view('template_administrator/footer');
 	}
+
 	public function input_aksi()
 	{
+
+        $this->is_loggedIn();
+        $this->is_admin();
+
         // rules loaded
 		$this->_rules();
 
         // check if form not valid / return FALSE
 		if($this->form_validation->run() == FALSE) {
+<<<<<<< HEAD
 		$this->input();
+=======
+			$this->input();
+>>>>>>> b3444d17174be84b3807ae4e953ad94fef00d879
         }
 
         // form is valid
@@ -77,7 +104,6 @@ function __construct(){
 
             // check if upload is successful
             if(!$this->upload->do_upload('dokumentasi')) {
-                echo "upload gagal";
                 $this->input();
             }
             else {
@@ -119,67 +145,7 @@ function __construct(){
             }
 		}
     }
-            /*
-			$dokumentasi 	= $_FILES['dokumentasi'];
-            if($dokumentasi['size'] == 0) { 
-                echo "file empty\n";
-            } 
-            elseif($dokumentasi['error'] > 0) { 
-                if ($dokumentasi['error'] == 1) {
-                    echo "filesize exceeds php maxlimit\n";
-                }
-                elseif ($dokumentasi['error'] == 2) {
-                    echo "filesize exceeds html form maxlimit\n";
-                }
-                elseif ($dokumentasi['error'] == 3) {
-                    echo "file partially uploaded\n";
-                }
-                elseif ($dokumentasi['error'] == 4) {
-                    echo "No file uploaded\n";
-                }
-                elseif ($dokumentasi['error'] == 6) {
-                    echo "Missing temp folder\n";
-                }
-                elseif ($dokumentasi['error'] == 7) {
-                    echo "failed write file to disk\n";
-                }
-                elseif ($dokumentasi['error'] == 8) {
-                    echo "upload process stopped\n";
-                }
-            }
-            else {
-                echo "file not empty and uploaded with success\n";
-                echo $_FILES['dokumentasi']['name']."\n";
-                $config['upload_path'] = './assets/upload/';
-                $config['allowed_types'] = 'gif|jpg|png';
-                $config['max_size'] = 2000; 
-                $this->load->library('upload', $config);
-                if(!$this->upload->do_upload('dokumentasi'))
-                {
-                    echo "Upload Gagal\n"; 
-                } 
-                else {
-                    echo "upload berhasil\n";
-                    $dokumentasi = $this->upload->data('file_name');
-                    $data = array(
-                        'nama'			=> $nama,
-                        'bidang'		=> $bidang,
-                        'kegiatan'		=> $kegiatan,
-                        'dokumentasi'	=> $dokumentasi
-                    );
-                    $this->kinerja_model->input_data($data);
-                }
- 			}	
-             */
-            /*$this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
-                    Data Berhasil Ditambahkan!
-                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                     </button>
-                    </div>');
-             */
-            //redirect('administrator/kinerja');
-	
+
 	public function _rules()
 	{
 		$this->form_validation->set_rules('nama','nama','required',['required' => 'Nama Wajib Diisi']);
@@ -188,12 +154,65 @@ function __construct(){
         $this->form_validation->set_rules('lokasi','lokasi','required',['required' => 'Lokasi Wajib Diisi']);
 	}
 
+    public function print_form(){
+
+        $this->is_loggedIn();
+        $this->is_admin();
+
+        $data['operator']= $this->user_model->getOperatorOnly()->result();
+        $this->load->view('template_administrator/header.php');
+        $this->load->view('template_administrator/sidebar.php');
+        $this->load->view('administrator/kinerja_print_form',$data);
+        $this->load->view('template_administrator/footer.php');
+    }
+
+    public function print_dinas() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->_rules_print(); 
+        if($this->form_validation->run() == FALSE){
+            $this->print_form();
+        } else {
+            $this->load->library('Pdf');
+
+            $name = $this->input->post('username');
+            $startDate = $this->input->post('starting_date');
+            $endDate = $this->input->post('end_date');
+            $data = $this->kinerja_model->getSpecificKinerja($name,$startDate,$endDate)->result();
+
+            $pdf = new Pdf();
+            $pdf->AddPage("L");
+
+            $pdf->SetFont('Times','BU',14);
+            $pdf->Cell(0,0,'Kinerja PJLP Bidang Pengemudi Alat Berat',0,1,'C');
+            $pdf->ln(5);
+            
+            $pdf->Nama($this->input->post('username'));
+            $pdf->Jabatan('pengemudi alat berat');
+            $pdf->Tanggal($this->input->post('starting_date'),$this->input->post('end_date'));
+            $header = ['Tanggal','Waktu','Kegiatan','Lokasi'];
+            // total width = 205
+            $pdf->TabelKinerja($header,$data,[30,15,100,60]);
+
+            $pdf->Output();
+        }
+    }
+
+    // obosolete
     public function print(){
+
+        $this->is_loggedIn();
+        $this->is_admin();
+
         $data['kinerja']   = $this->kinerja_model->tampil_data("kinerja")->result();
         $this->load->view('administrator/print_kinerja',$data);
     }
 
     public function excel(){
+
+        $this->is_loggedIn();
+        $this->is_admin();
+
         $data['kinerja']   = $this->kinerja_model->tampil_data("kinerja")->result();
 
         require(APPPATH. 'PHPExcel-1.8/Classes/PHPExcel.php');
@@ -286,6 +305,10 @@ function __construct(){
 
     public function hapus($no)
     {
+
+        $this->is_loggedIn();
+        $this->is_admin();
+
         $data = array('no'=>$no);
         $this->kinerja_model->hapus_data($data, 'kinerja');
         redirect('administrator/kinerja');
@@ -334,6 +357,12 @@ function __construct(){
                      </button>
                     </div>');
         redirect('administrator/kinerja');
+    }
+
+    public function _rules_print(){
+		$this->form_validation->set_rules('username','username','required',['required' => 'Nama Wajib Diisi']);
+		$this->form_validation->set_rules('starting_date','starting_date','required',['required' => 'Tanggal Awal Wajib Diisi']);
+		$this->form_validation->set_rules('end_date','end_date','required',['required' => 'Tanggal Akhir Wajib Diisi']);
     }
 
 }
