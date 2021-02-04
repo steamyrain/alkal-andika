@@ -1,7 +1,7 @@
 <div class="container-fluid">
 
 	 <div class="alert alert-success" role="alert">
-      <i class="fas fa-clipboard"></i> Alat Berat 
+      <i class="fas fa-clipboard"></i> Surat Tugas 
     </div>
 
     <?php echo $this->session->flashdata('pesan') ?>
