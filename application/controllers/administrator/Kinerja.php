@@ -75,11 +75,7 @@ class Kinerja extends CI_Controller{
 
         // check if form not valid / return FALSE
 		if($this->form_validation->run() == FALSE) {
-<<<<<<< HEAD
-		$this->input();
-=======
 			$this->input();
->>>>>>> b3444d17174be84b3807ae4e953ad94fef00d879
         }
 
         // form is valid
