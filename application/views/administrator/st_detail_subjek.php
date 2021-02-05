@@ -324,12 +324,6 @@
                 "st_la_buffer":stLabourBuffer
             }
 
-            console.log(data);
-            console.log(selected_operator);
-            console.log(selected_driver);
-            console.log(selected_labour);
-
-            /*
             xhttp_surat = new XMLHttpRequest();
             xhttp_surat.onload = function() {
                 var jsonResponse = JSON.parse(this.responseText);
@@ -365,7 +359,6 @@
             xhttp_surat.open("POST","<?php echo base_URL('administrator/surattugas/edit_subject'); ?>");
             xhttp_surat.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhttp_surat.send(JSON.stringify(data));
-             */
         },false);
     });
 
