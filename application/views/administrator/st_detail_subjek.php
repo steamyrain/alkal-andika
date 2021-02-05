@@ -496,7 +496,7 @@
                 event.preventDefault();
                 var select_id = `subject-driver-${total_driver}`;
                 addSubject(event,subjectDriverContainer,subject_driver,len_driver,select_id,selected_driver);
-                total_operator++;
+                total_driver++;
             });
 
         }; 
@@ -529,7 +529,7 @@
                 event.preventDefault();
                 var select_id = `subject-labour-${total_labour}`;
                 addSubject(event,subjectLabourContainer,subject_labour,len_labour,select_id,selected_labour);
-                total_operator++;
+                total_labour++;
             });
 
 

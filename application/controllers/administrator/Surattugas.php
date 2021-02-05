@@ -267,19 +267,24 @@ class Surattugas extends CI_Controller {
         if (($this->input->post('id')!==null) && !empty($this->input->post('id'))){
             $id = $this->input->post('id');
             $st = $this->SuratTugasModel->getSpecificSuratTugas($id)->result();
-            $pdf = new Fpdf();
+            $this->load->library('STPdf');
+
+            $pdf = new STPdf();
             $pdf->AddPage();
-            $this->set_header($pdf);
+
             $pdf->SetFont('Times','BU',14);
             $pdf->Cell(0,0,'SURAT TUGAS',0,1,'C');
             $pdf->ln(5);
+
             $pdf->SetFont('Times','',12);
             $pdf->Cell(40,10,'Lokasi Kerja',0);
             $pdf->Cell(10,10,': '.$st[0]->location,0);
             $pdf->ln(10);
+
             $pdf->Cell(40,10,'Tanggal',0);
             $pdf->Cell(10,10,': '.$st[0]->date,0);
             $pdf->ln(10);
+
             $pdf->Cell(40,10,'Deskripsi Pekerjaan',0);
             $pdf->Cell(10,10,': '.$st[0]->job_desc,0);
             $pdf->ln(10);
