@@ -324,6 +324,12 @@
                 "st_la_buffer":stLabourBuffer
             }
 
+            console.log(data);
+            console.log(selected_operator);
+            console.log(selected_driver);
+            console.log(selected_labour);
+
+            /*
             xhttp_surat = new XMLHttpRequest();
             xhttp_surat.onload = function() {
                 var jsonResponse = JSON.parse(this.responseText);
@@ -359,6 +365,7 @@
             xhttp_surat.open("POST","<?php echo base_URL('administrator/surattugas/edit_subject'); ?>");
             xhttp_surat.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhttp_surat.send(JSON.stringify(data));
+             */
         },false);
     });
 
@@ -496,7 +503,7 @@
                 event.preventDefault();
                 var select_id = `subject-driver-${total_driver}`;
                 addSubject(event,subjectDriverContainer,subject_driver,len_driver,select_id,selected_driver);
-                total_operator++;
+                total_driver++;
             });
 
         }; 
@@ -529,7 +536,7 @@
                 event.preventDefault();
                 var select_id = `subject-labour-${total_labour}`;
                 addSubject(event,subjectLabourContainer,subject_labour,len_labour,select_id,selected_labour);
-                total_operator++;
+                total_labour++;
             });
 
 
