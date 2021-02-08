@@ -5,6 +5,7 @@ class SuratTugasModel extends CI_Model {
     private $tableSubject = 'alkal_st_subject';
     private $tableHeavy = 'alkal_st_heavy';
     private $tableDT = 'alkal_st_dt';
+    private $tableKDO = 'alkal_st_kdo';
 
     public function insertSuratTugas($data) {
         $this->db->insert($this->table,$data);
@@ -124,6 +125,22 @@ class SuratTugasModel extends CI_Model {
         $this->db->join($this->tableDT,$this->tableDT.'.surat_id='.$this->table.'.id');
         $this->db->join('alkal_dump_truck','alkal_dump_truck.id='.$this->tableDT.'.dt_id');
         $this->db->join('alkal_category_dt','alkal_dump_truck.catId=alkal_category_dt.id');
+        $this->db->where($this->table.'.id='.$id);
+        return $this->db->get();
+    }
+    
+    public function getSpecificSuratTugasKDO($id){
+        $this->db->select('
+                alkal_category_kdo.category,
+                alkal_kdo.type,
+                alkal_kdo.plate_number,
+                alkal_st_kdo.kdo_fuel
+            '
+        );
+        $this->db->from($this->table);
+        $this->db->join($this->tableKDO,$this->tableKDO.'.surat_id='.$this->table.'.id');
+        $this->db->join('alkal_kdo','alkal_kdo.id='.$this->tableKDO.'.kdo_id');
+        $this->db->join('alkal_category_kdo','alkal_kdo.catId=alkal_category_kdo.id','left');
         $this->db->where($this->table.'.id='.$id);
         return $this->db->get();
     }
