@@ -103,6 +103,7 @@
                 <h6 class="collapse-header">Pilihan :</h6> 
                 <a class="collapse-item" style="color:black;" href="<?php echo base_URL('administrator/alatberat'); ?>">Alat Berat</a>
                 <a class="collapse-item" style="color:black;" href="<?php echo base_URL('administrator/dumptruck'); ?>">Dump Truck</a>
+                <a class="collapse-item" style="color:black;" href="<?php echo base_URL('administrator/kdo'); ?>">KDO</a>
             </div>
         </div>
     </li>
