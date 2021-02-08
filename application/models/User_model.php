@@ -56,4 +56,12 @@ class user_model extends CI_Model{
         $this->db->limit(1);
 		return $this->db->get();
 	}
+
+    public function getDriverPlusMechanic(){
+        $this->db->select("id,username");
+        $this->db->from("user");
+        $this->db->where("job_id = 2 or job_id = 3");
+        $this->db->order_by("username");
+        return $this->db->get();
+    }
 }

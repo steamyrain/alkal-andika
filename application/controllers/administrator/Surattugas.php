@@ -61,7 +61,7 @@ class Surattugas extends CI_Controller {
     public function subject_driver() {
         $this->is_loggedIn();
         $this->is_admin();
-        $subject = $this->user_model->getDriver()->result();
+        $subject = $this->user_model->getDriverPlusMechanic()->result();
         $data = [
             "subject_driver"=>$subject
         ];
@@ -310,7 +310,7 @@ class Surattugas extends CI_Controller {
 
             $pdf->Cell(40,10,'Pengemudi',0);
             $i=0;
-            $st = $this->SuratTugasModel->getSpecificSuratTugasDriver($id)->result();
+            $st = $this->SuratTugasModel->getSpecificSuratTugasDriverPlusMechanic($id)->result();
             foreach($st as $surat){
                 if($i == 0){
                     $pdf->Cell(10,10,': '.$surat->username,0);
@@ -414,7 +414,7 @@ class Surattugas extends CI_Controller {
         $this->is_admin();
         $id = $this->input->post('id');
         $operator = $this->SuratTugasModel->getAllSTOperator($id)->result();
-        $driver = $this->SuratTugasModel->getAllSTDriver($id)->result();
+        $driver = $this->SuratTugasModel->getAllSTDriverPlusMechanic($id)->result();
         $labour = $this->SuratTugasModel->getAllSTLabour($id)->result();
         $data = [
             'st_id'=>$id,
