@@ -23,6 +23,10 @@ class SuratTugasModel extends CI_Model {
     public function insertSTDT($data) {
         $this->db->insert_batch($this->tableDT,$data);
     }
+
+    public function insertSTKDO($data) {
+        $this->db->insert_batch($this->tableKDO,$data);
+    }
     
     public function getSuratTugas(){
         return $this->db->get($this->table);
@@ -225,6 +229,18 @@ class SuratTugasModel extends CI_Model {
         return $this->db->get();
     }
 
+    public function getAllSTKDO($id){
+        $this->db->select(
+            $this->tableKDO.'.id as stKDOId,'
+            .$this->tableKDO.'.kdo_id,'
+            .$this->tableKDO.'.kdo_fuel'
+        );
+        $this->db->from($this->table);
+        $this->db->join($this->tableKDO,$this->tableKDO.'.surat_id='.$this->table.'.id');
+        $this->db->where($this->table.'.id='.$id);
+        return $this->db->get();
+    }
+
     public function updateSTSubject($id,$data){
         $this->db->set('subject_id',$data);
         $this->db->where('id',$id);
@@ -254,6 +270,16 @@ class SuratTugasModel extends CI_Model {
     public function deleteSTDT($id){
         $this->db->where('id',$id);
         $this->db->delete($this->tableDT);
+    }
+
+    public function updateSTKDO($id,$data){
+        $this->db->where('id',$id);
+        $this->db->update($this->tableKDO,$data);
+    }
+
+    public function deleteSTKDO($id){
+        $this->db->where('id',$id);
+        $this->db->delete($this->tableKDO);
     }
 
     public function getSpecificSTDetail($id){
