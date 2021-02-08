@@ -5,14 +5,14 @@
   	</div>
         <?php 
             echo form_open(
-                base_URL('administrator/operator/print_dinas')
+                base_URL('administrator/mekanik/print_dinas')
             ); 
         ?>
         <!-- select nama operator -->
 		<div class="form-group">
 			<label> Nama Yang Akan Diprint :</label>
 			<select name="username" class="form-control">
-                <?php foreach($driver as $o): ?>
+                <?php foreach($mekanik as $o): ?>
                     <option value="<?php echo $o->username; ?>">
                         <?php echo $o->username; ?>
                     </option>

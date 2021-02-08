@@ -2,9 +2,7 @@
 
 class Operator extends CI_Controller{
 
-function __construct(){
-        parent::__construct();
-
+private function is_loggedIn() {
         if (!isset($this->session->userdata['username'])){
             $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
                 Anda Belum Login!
@@ -14,7 +12,19 @@ function __construct(){
                 </div>');
             redirect('administrator/auth');
         }
-    } 
+    }
+
+    private function is_admin() {
+        if($this->session->userdata['level'] !== 'admin'){
+            $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
+                Anda Belum Login!
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                 </button>
+                </div>');
+            redirect('administrator/auth');
+        }
+    }
 
     public function index()
     {
@@ -188,8 +198,57 @@ function __construct(){
         $this->form_validation->set_rules('waktu','waktu','required',['required' => 'Nama Wajib Diisi']);
         $this->form_validation->set_rules('bidang','bidang','required',['required' => 'Bidang Wajib Diisi']);
     }
+    
+    public function print_form(){
 
+        $this->is_loggedIn();
+        $this->is_admin();
+
+        $data['driver']= $this->user_model->getDriver()->result();
+        $this->load->view('template_administrator/header.php');
+        $this->load->view('template_administrator/sidebar.php');
+        $this->load->view('administrator/operator_print_form',$data);
+        $this->load->view('template_administrator/footer.php');
+    }
+
+    public function print_dinas() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->_rules_print(); 
+        if($this->form_validation->run() == FALSE){
+            $this->print_form();
+        } else {
+            $this->load->library('Pdf');
+
+            $name = $this->input->post('username');
+            $startDate = $this->input->post('starting_date');
+            $endDate = $this->input->post('end_date');
+            $data = $this->operator_model->getSpecificDriver($name,$startDate,$endDate)->result();
+
+            $pdf = new Pdf();
+            $pdf->AddPage("L");
+
+            $pdf->SetFont('Times','BU',14);
+            $pdf->Cell(0,0,'Kinerja PJLP Bidang Pengemudi Operasional Lapangan',0,1,'C');
+            $pdf->ln(5);
+            
+            $pdf->Nama($this->input->post('username'));
+            $pdf->Jabatan('pengemudi operasional lapangan');
+            $pdf->Tanggal($this->input->post('starting_date'),$this->input->post('end_date'));
+            $header = ['Tanggal','Waktu','Kegiatan','Lokasi'];
+            // total width = 205
+            $pdf->TabelKinerja($header,$data,[30,15,100,60]);
+
+            $pdf->Output();
+        }
+    }
+
+    // obosolete
     public function print(){
+
+        $this->is_loggedIn();
+        $this->is_admin();
+
         $data['operator']   = $this->operator_model->tampil_data("operator")->result();
         $this->load->view('administrator/print_operator',$data);
     }
@@ -330,5 +389,10 @@ function __construct(){
                     </div>');
         redirect('administrator/operator');
     }
-
+    
+     public function _rules_print(){
+		$this->form_validation->set_rules('username','username','required',['required' => 'Nama Wajib Diisi']);
+		$this->form_validation->set_rules('starting_date','starting_date','required',['required' => 'Tanggal Awal Wajib Diisi']);
+		$this->form_validation->set_rules('end_date','end_date','required',['required' => 'Tanggal Akhir Wajib Diisi']);
+    }
 }

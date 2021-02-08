@@ -15,7 +15,7 @@
     ?>
     <?php
     echo anchor(
-        'administrator/mekanik/print',
+        'administrator/mekanik/print_form',
         '<button class="btn btn-sm btn-info mb-3">
             <i class="fa fa-print"></i> 
             Print

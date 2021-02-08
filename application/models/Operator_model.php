@@ -35,4 +35,13 @@ class Operator_model extends CI_Model{
 		$this->db->where($where);
 		$this->db->update($table,$data);
 	}
+	
+	public function getSpecificDriver($name,$startDate,$endDate){
+        $this->db->select('tanggal,waktu,kegiatan,lokasi');
+        $this->db->from('operator');
+        $this->db->where("tanggal between '".$startDate."' and '".$endDate."'");
+        $this->db->like('nama',$name);
+        $this->db->order_by('tanggal');
+        return $this->db->get();
+    }
 }

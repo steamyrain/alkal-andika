@@ -15,7 +15,7 @@
     ?>
     <?php
     echo anchor(
-        'administrator/peralatan/print',
+        'administrator/peralatan/print_form',
         '<button class="btn btn-sm btn-info mb-3">
             <i class="fa fa-print"></i> 
             Print

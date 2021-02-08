@@ -31,6 +31,14 @@ class user_model extends CI_Model{
         $this->db->order_by("username");
         return $this->db->get();
     }
+    
+    public function getMekanik(){
+        $this->db->select("id,username");
+        $this->db->from("user");
+        $this->db->where("job_id = 3");
+        $this->db->order_by("username");
+        return $this->db->get();
+    }
 
     public function getLabour(){
         $this->db->select("id,username");
