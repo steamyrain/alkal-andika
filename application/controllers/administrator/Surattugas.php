@@ -384,6 +384,25 @@ class Surattugas extends CI_Controller {
                     $pdf->ln(10);
             }
 
+            $pdf->Cell(40,10,'KDO & BBM',0);
+            $st = $this->SuratTugasModel->getSpecificSuratTugasKDO($id)->result();
+            $i=0;
+            foreach($st as $surat){
+                if($i == 0){
+                    $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->kdo_fuel.' liter)',0);
+                    $pdf->ln(10);
+                } else {
+                    $pdf->Cell(40,10,'',0);
+                    $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->kdo_fuel.' liter)',0);
+                    $pdf->ln(10);
+                }
+                $i++;
+            }
+            if($st == null){
+                    $pdf->Cell(10,10,': -',0);
+                    $pdf->ln(10);
+            }
+
             $pdf->Output();
         } else {
             redirect(base_URL('administrator/surattugas'));
