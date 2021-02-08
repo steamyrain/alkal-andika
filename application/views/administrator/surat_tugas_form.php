@@ -220,6 +220,47 @@
         </div>
         </div>
 
+        <!-- kdo -->
+        <div style="
+            border: 2px solid rgba(211,211,211,.5); 
+            -webkit-background-clip: padding-box;
+            bakground-clip: padding-box;
+            border-radius: 0.5rem; 
+            padding: 0.5vw;
+            margin-top: 1rem;
+        ">
+        <div id="vehicle-kdo-container">
+            <div class="form-group">
+                <label>KDO & BBM (Liter) :</label>
+                <div id= "div-vehicle-kdo-0" style="display: grid; grid-template-columns: 3fr 1fr 0.2fr; grid-gap: 0.75vw;">
+                    <select 
+                        name="vehicle-kdo-0" 
+                        id="vehicle-kdo-0" 
+                        class="form-control" 
+                        placeholder="Masukkan KDO" 
+                    >
+                    </select>
+                    <input 
+                        type="number" 
+                        id="fuel-vehicle-kdo-0"
+                        name="fuel-vehicle-kdo-0"
+                        class="form-control"
+                        placeholder = "Liter"
+                    />
+                    <button class="btn btn-danger form-control" id="vehicle-container--delete-kdo-button" onclick="event.preventDefault();">
+                            <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div style="display: none" class="text-danger small ml-3" id="kdo-error-message"></div>
+        <div class="form-group">
+            <button class="btn btn-secondary" id="vehicle-container--add-kdo-button" onclick="event.preventDefault();">
+                tambah
+            </button>
+        </div>
+        </div>
+
         <!-- Submit -->
         <button 
             type="submit" 
@@ -240,6 +281,7 @@
     var subjectLabourContainer;
     var vehicleHeavyContainer;
     var vehicleDTContainer
+    var vehicleKDOContainer
 
     // add button
     var addSubjectDriverButton;
@@ -247,6 +289,7 @@
     var addSubjectLabourButton;
     var addVehicleHeavyButton;
     var addVehicleDTButton;
+    var addVehicleKDOButton;
 
     // delete button
     var deleteSubjectLabourButton;
@@ -254,6 +297,7 @@
     var deleteSubjectDriverButton;
     var deleteVehicleHeavyButton;
     var deleteVehicleDTButton;
+    var deleteVehicleKDOButton;
 
     // select element
     var subjectDriverSelect;
@@ -261,6 +305,7 @@
     var subjectLabourSelect;
     var vehicleHeavySelect;
     var vehicleDTSelect;
+    var vehicleKDOSelect;
 
     // support variables
     var subject_operator;
@@ -272,7 +317,9 @@
     var vehicle_heavy;
     var len_heavy;
     var vehicle_dt;
+    var vehicle_kdo;
     var len_dt;
+    var len_kdo;
 
     // total variable (don't use this variable as total counter!
     // use it for select element's unique id)
@@ -281,6 +328,7 @@
     var total_labour;
     var total_heavy;
     var total_dt;
+    var total_kdo;
 
     // initialize object, we use this cause we need the random access through object's keys/properties
     // could use the linked list cause insertion and deletion cost O(1)
@@ -289,6 +337,7 @@
     var selected_labour;
     var selected_heavy;
     var selected_dt;
+    var selected_kdo;
 
 
     // populate select's option with vehicle
@@ -300,6 +349,7 @@
     var xhttp_labour;
     var xhttp_heavy;
     var xhttp_dt;
+    var xhttp_kdo;
         
     // All operations will be done when Dom finally loaded
     window.addEventListener("DOMContentLoaded", ()=> { 
@@ -316,13 +366,15 @@
             var suratSubject = subjectOperator.concat(subjectDriver,subjectLabour);
             var suratHeavy = Object.values(selected_heavy);
             var suratDT = Object.values(selected_dt);
+            var suratKDO = Object.values(selected_kdo);
             var suratTugas = {
                 date: suratDate,
                 location: suratLocation,
                 job_desc: suratJobDesc,
                 subject: suratSubject,
                 heavy: suratHeavy,
-                dt: suratDT
+                dt: suratDT,
+                kdo: suratKDO,
             };
             var xhrSuratTugas = new XMLHttpRequest();
             xhrSuratTugas.open("POST","<?php echo base_URL('administrator/surattugas/input_aksi'); ?>");
@@ -388,6 +440,12 @@
                         divErrorDT.style.display = 'block';
                         divErrorDT.innerHTML = message['dt'];
                     }
+
+                    if(message['kdo']){
+                        var divErrorKDO = document.getElementById('kdo-error-message');
+                        divErrorKDO.style.display = 'block';
+                        divErrorKDO.innerHTML = message['kdo'];
+                    }
                 }
             }
         },false);
@@ -398,6 +456,7 @@
         subjectLabourContainer = document.getElementById("subject-labour-container");
         vehicleHeavyContainer = document.getElementById("vehicle-heavy-container");
         vehicleDTContainer = document.getElementById("vehicle-dt-container");
+        vehicleKDOContainer = document.getElementById("vehicle-kdo-container");
 
         // add button
         addSubjectDriverButton = document.getElementById("subject-container--add-driver-button")
@@ -405,6 +464,7 @@
         addSubjectLabourButton = document.getElementById("subject-container--add-labour-button")
         addVehicleHeavyButton = document.getElementById("vehicle-container--add-heavy-button")
         addVehicleDTButton = document.getElementById("vehicle-container--add-dt-button")
+        addVehicleKDOButton = document.getElementById("vehicle-container--add-kdo-button")
 
         // delete button
         deleteSubjectLabourButton = document.getElementById("subject-container--delete-labour-button")
@@ -412,6 +472,7 @@
         deleteSubjectDriverButton = document.getElementById("subject-container--delete-driver-button")
         deleteVehicleHeavyButton = document.getElementById("vehicle-container--delete-heavy-button")
         deleteVehicleDTButton = document.getElementById("vehicle-container--delete-dt-button")
+        deleteVehicleKDOButton = document.getElementById("vehicle-container--delete-kdo-button")
 
         // select element
         subjectDriverSelect = document.getElementById("subject-driver-0");
@@ -419,6 +480,7 @@
         subjectLabourSelect = document.getElementById("subject-labour-0");
         vehicleHeavySelect = document.getElementById("vehicle-heavy-0");
         vehicleDTSelect = document.getElementById("vehicle-dt-0");
+        vehicleKDOSelect = document.getElementById("vehicle-kdo-0");
 
         // total variable (don't use this variable as total counter!
         // use it for select element's unique id)
@@ -427,6 +489,7 @@
         total_labour = 1;
         total_heavy = 1;
         total_dt = 1;
+        total_kdo = 1;
 
         // initialize object, we use this cause we need the random access through object's keys/properties
         // could use the linked list cause insertion and deletion cost O(1)
@@ -435,6 +498,7 @@
         selected_labour = new Object();
         selected_heavy = new Object();
         selected_dt = new Object();
+        selected_kdo = new Object();
 
         // populate select's option with vehicle
         //function initVehicle(vehicle,vehicleSelect,)
@@ -703,6 +767,124 @@
                     divGrid.appendChild(deleteButton);
                     div.appendChild(divGrid);
                     vehicleDTContainer.appendChild(div);
+                }); 
+            }
+        };
+
+        xhttp_kdo = new XMLHttpRequest();
+        xhttp_kdo.open("GET","<?php echo base_URL('administrator/surattugas/vehicle_kdo')?>"); 
+        xhttp_kdo.send();
+        // use function instead of arrow function for assigning callback outside parameter 
+        xhttp_kdo.onreadystatechange = function() {
+            if((this.readyState === XMLHttpRequest.DONE) && (this.status === 307)){
+                var jsonResponse = JSON.parse(this.responseText);
+                window.location.href = jsonResponse['Location'];
+            }
+            if ((this.readyState === XMLHttpRequest.DONE) && (this.status === 200)){
+                var obj = JSON.parse(this.responseText);
+                vehicle_kdo = obj.vehicle_kdo;
+                len_kdo = Object.keys(vehicle_kdo).length; 
+
+                // populate options for select kdo
+                var option;
+                var optgroup;
+                var category = "";
+                for (i=0;i<len_kdo;i++) {
+                    optgroup = document.createElement("optgroup");
+                    option = document.createElement("option"); 
+                    option.value = vehicle_kdo[i].id;
+                    option.innerHTML = vehicle_kdo[i].plate_number;
+                    if (category != vehicle_kdo[i].category){
+                        optgroup.label = vehicle_kdo[i].category;
+                        category = vehicle_kdo[i].category;
+                        vehicleKDOSelect.appendChild(optgroup);
+                    }
+                    vehicleKDOSelect.appendChild(option);
+                }
+
+                selected_kdo['div-vehicle-kdo-0']={
+                    'vehicle-kdo-0': vehicleKDOSelect.value,
+                    'fuel-vehicle-kdo-0': 0
+                };
+
+                vehicleKDOSelect.addEventListener('change',(event)=>{
+                    selected_kdo['div-vehicle-kdo-0']["vehicle-kdo-0"]=vehicleKDOSelect.value;
+                });
+
+                document.getElementById('fuel-vehicle-kdo-0').addEventListener('change',(event)=>{
+                    selected_kdo['div-vehicle-kdo-0']['fuel-vehicle-kdo-0']=document.getElementById('fuel-vehicle-kdo-0').value;
+                });
+
+                deleteVehicleKDOButton.addEventListener('click',(event)=>{
+                    event.preventDefault();
+                    var div = document.getElementById('div-vehicle-kdo-0');
+                    div.remove();
+                    delete selected_kdo['div-vehicle-kdo-0'];
+                });
+
+                // logic for addVehicleButton
+                addVehicleKDOButton.addEventListener('click',(event)=>{
+                    event.preventDefault();
+                    var selectId = `vehicle-kdo-${total_kdo}`;
+                    var div = document.createElement("div");
+                    var select = document.createElement("select");
+                    var input = document.createElement("input");
+                    var deleteButton = document.createElement("button");
+                    var divGrid = document.createElement("div");
+                    div.className = "form-group";
+                    div.id = `div-${selectId}`;
+                    select.className="form-control";
+                    select.id=selectId;
+                    input.type="number";
+                    input.id=`fuel-${selectId}`;
+                    input.className="form-control";
+                    input.placeholder="Liter"
+                    deleteButton.innerHTML='<i class="fa fa-trash"></i>'; 
+                    deleteButton.className="form-control btn btn-danger"
+
+                    var option;
+                    var optgroup;
+                    var category="";
+                    for (i=0;i<len_kdo;i++){
+                        option= document.createElement("option");
+                        optgroup = document.createElement("optgroup");
+                        option.value = vehicle_kdo[i].id;
+                        option.innerHTML = vehicle_kdo[i].plate_number;
+                        if (category != vehicle_kdo[i].category) {
+                            optgroup.label = vehicle_kdo[i].category;
+                            select.appendChild(optgroup);
+                            category = vehicle_kdo[i].category;
+                        } 
+                        select.appendChild(option);
+                    }
+                    var dataKDO = new Object();
+                    dataKDO[select.id] = select.value;
+                    dataKDO[input.id]=0;
+                    selected_kdo[div.id] = dataKDO;
+
+                    total_kdo++;
+
+                    select.addEventListener('change',(event)=>{
+                        selected_kdo[div.id][select.id]=select.value;
+                    });
+
+                    input.addEventListener('change',(event)=>{
+                        selected_kdo[div.id][input.id]=input.value;
+                    });
+
+                    deleteButton.addEventListener('click',(event)=>{
+                        event.preventDefault();
+                        div.remove();
+                        delete selected_kdo[div.id];
+                    });
+
+                    divGrid.style="display: grid; grid-template-columns: 3fr 1fr 0.2fr; grid-gap: 0.75vw;";
+                    deleteButton.addEventListener('click',(event)=>{event.preventDefault();});
+                    divGrid.appendChild(select);
+                    divGrid.appendChild(input);
+                    divGrid.appendChild(deleteButton);
+                    div.appendChild(divGrid);
+                    vehicleKDOContainer.appendChild(div);
                 }); 
             }
         };

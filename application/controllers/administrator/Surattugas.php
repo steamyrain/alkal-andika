@@ -106,7 +106,8 @@ class Surattugas extends CI_Controller {
                'job'=>form_error('job'),
                'subject'=>form_error('subject'),
                'heavy'=>form_error('heavy'),
-               'dt'=>form_error('dt')
+               'dt'=>form_error('dt'),
+               'kdo'=>form_error('kdo')
             ];
             $this->output->set_header('HTTP/1.1 400 Bad Request');
             $this->output->set_content_type('application/json');
@@ -156,6 +157,20 @@ class Surattugas extends CI_Controller {
             if (sizeof($insertDT) != 0){
                 $this->SuratTugasModel->insertSTDT($insertDT);
             }
+
+            // insert surat tugas kdo to correspoding table with its data;
+            $insertKDO = Array();
+            $dataKDO;
+            foreach ($data->kdo as $kdo) {
+                $dataKDO = Array();
+                foreach ($kdo as $key => $value){
+                    array_push($dataKDO,$value);
+                }
+                array_push($insertKDO,Array("kdo_id"=>$dataKDO[0],"surat_id"=>$last_id,"kdo_fuel"=>$dataKDO[1]));
+            }
+            if (sizeof($insertKDO) != 0){
+                $this->SuratTugasModel->insertSTKDO($insertKDO);
+            }
             
 
             $result['status']='success';
@@ -175,6 +190,16 @@ class Surattugas extends CI_Controller {
         $this->output->set_content_type('application/json')->set_output(json_encode($data));
     }
 
+    public function vehicle_kdo() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $vehicle = $this->KdoModel->getPNCategory()->result();
+        $data = [
+            "vehicle_kdo"=>$vehicle
+        ];
+        $this->output->set_content_type('application/json')->set_output(json_encode($data));
+    }
+
     public function _rules() {
         $this->form_validation->set_rules('date','date','callback_post_date_check');
         $this->form_validation->set_rules('job','job','callback_post_job_check');
@@ -182,6 +207,7 @@ class Surattugas extends CI_Controller {
         $this->form_validation->set_rules('subject','subject','callback_post_subject_check');
         $this->form_validation->set_rules('heavy','heavy','callback_post_heavy_check');
         $this->form_validation->set_rules('dt','dt','callback_post_dt_check');
+        $this->form_validation->set_rules('kdo','kdo','callback_post_kdo_check');
     }
 
     public function post_job_check() {
@@ -256,6 +282,28 @@ class Surattugas extends CI_Controller {
         $dtIdBuffer = array_unique($dtId);
         if((sizeof($dtId) != sizeof($dtIdBuffer)) or ($emptyFuel)){
             $this->form_validation->set_message('post_dt_check',"DumpTruck Tidak Boleh Sama / BBM Tidak Boleh Minus");
+            return false;
+        }
+            return true;
+    }
+
+    public function post_kdo_check() {
+        $kdoId = Array();
+        $emptyFuel = false;
+        foreach ($this->input->post('kdo') as $kdo) {
+            $i=0;
+            foreach ($kdo as $key => $value){
+                if ($i == 0){
+                    array_push($kdoId,$value);
+                } else {
+                    ((int)$value<0)?$emptyFuel=true:$emptyFuel=$emptyFuel;
+                }
+                $i++;
+            }
+        }
+        $kdoIdBuffer = array_unique($kdoId);
+        if((sizeof($kdoId) != sizeof($kdoIdBuffer)) or ($emptyFuel)){
+            $this->form_validation->set_message('post_kdo_check',"KDO Tidak Boleh Sama / BBM Tidak Boleh Minus");
             return false;
         }
             return true;
@@ -666,6 +714,87 @@ class Surattugas extends CI_Controller {
         }
     }
 
+    public function detail_kdo() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $id = $this->input->post('id');
+        $kdo = $this->SuratTugasModel->getAllSTKDO($id)->result();
+        $data = [
+            'st_id'=>$id,
+            'st_kdo_og'=>json_encode($kdo)
+        ];
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/st_detail_kdo',$data);
+        $this->load->view('template_administrator/footer');
+    }
+
+    public function edit_kdo() {
+        $this->is_loggedIn();
+        $this->is_admin();
+
+        // initialized support variables
+        $json = file_get_contents('php://input');
+        $data = json_decode($json);
+        $_POST = json_decode($json,true);
+        $result = [];
+
+        $this->_rules_edit_kdo();
+
+        if ($this->form_validation->run() == false){
+            $result['message']= [
+               'kdo'=>form_error('kdo')
+            ];
+            $this->output->set_header('HTTP/1.1 400 Bad Request');
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode($result));
+        } else {
+            if (isset($data->og_keys) && !empty($data->og_keys)) {
+                $i = 0;
+                foreach($data->og_keys as $key) {
+                    $this->SuratTugasModel->updateSTKDO($key,$data->og_dat[$i]);
+                    $i++;
+                }
+                $result['redirect_url'] = base_URL('administrator/surattugas');
+            }
+            if (isset($data->og_dKeys) && !empty($data->og_dKeys)){
+                foreach($data->og_dKeys as $key) {
+                    $this->SuratTugasModel->deleteSTKDO($key);
+                }
+                $result['redirect_url'] = base_URL('administrator/surattugas');
+            }
+            if (isset($data->new_dat) && !empty($data->new_dat)){
+                $this->SuratTugasModel->insertSTKDO($data->new_dat);
+                $result = [
+                    "redirect_url"=> base_URL('administrator/surattugas')
+                ]; 
+            }
+            $this->session->set_flashdata('pesan',
+                '<div 
+                    class=" alert 
+                            alert-success 
+                            dismissible 
+                            fade 
+                            show
+                            " 
+                    role="alert">
+                Data Berhasil Diubah!
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="alert" 
+                    aria-label="Close">
+                <span 
+                    aria-hidden="true">
+                &times;
+                </span>
+                </button>
+                </div>');
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode($result)); 
+        }
+    }
+
     public function detail_surat($id) {
         $this->is_loggedIn();
         $this->is_admin();
@@ -809,7 +938,20 @@ class Surattugas extends CI_Controller {
     public function post_edit_dt_check() {
         $dtBuffer = array_unique($this->input->post('st_dt_buffer'));
         if(sizeof($this->input->post('st_dt_buffer')) != sizeof($dtBuffer)) {
-            $this->form_validation->set_message('post_edit_dt_check',"Alat Berat Tidak Boleh Sama");
+            $this->form_validation->set_message('post_edit_dt_check',"Dump Truck Tidak Boleh Sama");
+            return false;
+        }
+            return true;
+    }
+
+    public function _rules_edit_kdo() {
+        $this->form_validation->set_rules('kdo','kdo','callback_post_edit_kdo_check');
+    }
+
+    public function post_edit_kdo_check() {
+        $kdoBuffer = array_unique($this->input->post('st_kdo_buffer'));
+        if(sizeof($this->input->post('st_kdo_buffer')) != sizeof($kdoBuffer)) {
+            $this->form_validation->set_message('post_edit_kdo_check',"KDO Tidak Boleh Sama");
             return false;
         }
             return true;
