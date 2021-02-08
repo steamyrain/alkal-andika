@@ -115,8 +115,8 @@
         var optgroup;
         for(i=0;i<len;i++){
             option = document.createElement("option");
-            optgroup = document.createElement("optgroup");
             if (dtCategory != dt[i].category){
+                optgroup = document.createElement("optgroup");
                 dtCategory = dt[i].category;
                 optgroup.label =  dtCategory;
             }
@@ -126,7 +126,7 @@
                 option.selected = "true";
             }
             option.innerHTML=dt[i].plate_number+' / '+dt[i].type;
-            dtSelect.appendChild(option);
+            optgroup.appendChild(option);
         }
         fuelInput.value=ogDTFuel;
     }
@@ -299,33 +299,20 @@
         deleteButton.className="form-control btn btn-danger"
 
         var dtCategory="";
-        var dtSubcategory="";
         var option;
         var optgroup;
 
         for(i=0;i<len;i++){
             option = document.createElement("option");
-            optgroup = document.createElement("optgroup");
             if (dtCategory != dt[i].category){
+                optgroup = document.createElement("optgroup");
                 dtCategory = dt[i].category;
+                optgroup.label =  dtCategory;
             }
-            if (dtSubcategory != dt[i].sub_category){
-                dtSubcategory = dt[i].sub_category;
-                if (dtCategory == dtSubcategory) {
-                    optgroup.label =  dtCategory;
-                } else {
-                    optgroup.label =  dtCategory+" "+dt[i].sub_category;
-                }
-                select.appendChild(optgroup);
-            }
+            select.appendChild(optgroup);
             option.value=dt[i].id;
-            if(dt[i].plate_number)
-            {
-                option.innerHTML=dt[i].plate_number+' / '+dt[i].type;
-            } else {
-                option.innerHTML=dt[i].serial_number+' / '+dt[i].type;
-            }
-            select.appendChild(option);
+            option.innerHTML=dt[i].plate_number+' / '+dt[i].type;
+            optgroup.appendChild(option);
         } 
 
 
