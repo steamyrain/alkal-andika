@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <h5 style="text-align: center;">DETAIL DUMPTRUCK SURAT TUGAS</h5>
+    <h5 style="text-align: center;">DETAIL KDO SURAT TUGAS</h5>
     <br>
     <form id="form-surat-tugas">
 
@@ -14,7 +14,7 @@
         ">
             <div id="vehicle-kdo-container">
                 <div class="form-group">
-                    <label>Dumptruck & BBM (Liter) :</label>
+                    <label>KDO & BBM (Liter) :</label>
                     <?php 
                         $kdoBuff=json_decode($st_kdo_og); 
                         $i = 0;
@@ -29,7 +29,7 @@
                                 name="vehicle-kdo-<?php echo $i; ?>" 
                                 id="vehicle-kdo-<?php echo $i; ?>" 
                                 class="form-control" 
-                                placeholder="Masukkan Dumptruck" 
+                                placeholder="Masukkan KDO" 
                             >
                             </select>
                             <input 
@@ -115,8 +115,8 @@
         var optgroup;
         for(i=0;i<len;i++){
             option = document.createElement("option");
-            optgroup = document.createElement("optgroup");
             if (kdoCategory != kdo[i].category){
+                optgroup = document.createElement("optgroup");
                 kdoCategory = kdo[i].category;
                 optgroup.label =  kdoCategory;
             }
@@ -126,7 +126,7 @@
                 option.selected = "true";
             }
             option.innerHTML=kdo[i].plate_number+' / '+kdo[i].type;
-            kdoSelect.appendChild(option);
+            optgroup.appendChild(option);
         }
         fuelInput.value=ogKDOFuel;
     }
@@ -149,7 +149,7 @@
         document.getElementById('submit').addEventListener('click',(event)=>{
             event.preventDefault();
 
-            var og_stDt_id = Object.keys(selected_og_kdo);
+            var og_stKdo_id = Object.keys(selected_og_kdo);
             var og_kdo_dat = Object.values(selected_og_kdo);        
             var og_dKeys = deleted_og;
             var new_kdo_dat = Object.values(selected_kdo);
@@ -169,14 +169,14 @@
             }
             
             for (var i=0;i<len_st_kdo;i++){
-                if (!og_stDt_id.includes(st_kdo[i].stKDOId) && !deleted_og.includes(st_kdo[i].stKDOId)){
+                if (!og_stKdo_id.includes(st_kdo[i].stKDOId) && !deleted_og.includes(st_kdo[i].stKDOId)){
                     st_kdo_buffer = st_kdo_buffer.concat(st_kdo[i].kdo_id);
                 }
             }
 
             var data = {
                 "og_sId": stId,
-                "og_keys": og_stDt_id,
+                "og_keys": og_stKdo_id,
                 "og_dat": og_kdo_dat,
                 "og_dKeys":deleted_og,
                 "new_dat":new_kdo_dat,
@@ -299,33 +299,20 @@
         deleteButton.className="form-control btn btn-danger"
 
         var kdoCategory="";
-        var kdoSubcategory="";
         var option;
         var optgroup;
 
         for(i=0;i<len;i++){
             option = document.createElement("option");
-            optgroup = document.createElement("optgroup");
             if (kdoCategory != kdo[i].category){
+                optgroup = document.createElement("optgroup");
                 kdoCategory = kdo[i].category;
-            }
-            if (kdoSubcategory != kdo[i].sub_category){
-                kdoSubcategory = kdo[i].sub_category;
-                if (kdoCategory == kdoSubcategory) {
-                    optgroup.label =  kdoCategory;
-                } else {
-                    optgroup.label =  kdoCategory+" "+kdo[i].sub_category;
-                }
-                select.appendChild(optgroup);
+                optgroup.label =  kdoCategory;
             }
             option.value=kdo[i].id;
-            if(kdo[i].plate_number)
-            {
-                option.innerHTML=kdo[i].plate_number+' / '+kdo[i].type;
-            } else {
-                option.innerHTML=kdo[i].serial_number+' / '+kdo[i].type;
-            }
-            select.appendChild(option);
+            option.innerHTML=kdo[i].plate_number+' / '+kdo[i].type;
+            optgroup.appendChild(option);
+            select.appendChild(optgroup);
         } 
 
 
