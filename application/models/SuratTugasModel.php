@@ -55,6 +55,20 @@ class SuratTugasModel extends CI_Model {
         return $this->db->get();
     }
 
+    public function getSpecificSuratTugasDriverPlusMechanic($id){
+        $this->db->select(
+            '
+                user.username,
+            '
+        );
+        $this->db->from($this->tableSubject);
+        $this->db->join('user','user.id='.$this->tableSubject.'.subject_id');
+        $this->db->where($this->tableSubject.'.surat_id='.$id);
+        $this->db->where('user.job_id=2 or user.job_id=3');
+        $this->db->order_by('user.username');
+        return $this->db->get();
+    }
+
     public function getSpecificSuratTugasLabour($id){
         $this->db->select(
             '
@@ -139,6 +153,20 @@ class SuratTugasModel extends CI_Model {
         $this->db->join($this->tableSubject,$this->tableSubject.'.surat_id='.$this->table.'.id');
         $this->db->join('user','user.id='.$this->tableSubject.'.subject_id');
         $this->db->where($this->table.'.id='.$id.' AND user.job_id=2');
+        return $this->db->get();
+    }
+
+    public function getAllSTDriverPlusMechanic($id){
+        $this->db->select(
+            ' 
+                user.id,
+            '
+            .$this->tableSubject.'.id as stDrId'
+        );
+        $this->db->from($this->table);
+        $this->db->join($this->tableSubject,$this->tableSubject.'.surat_id='.$this->table.'.id');
+        $this->db->join('user','user.id='.$this->tableSubject.'.subject_id');
+        $this->db->where($this->table.'.id='.$id.' AND user.job_id=2 OR user.job_id=3');
         return $this->db->get();
     }
 
