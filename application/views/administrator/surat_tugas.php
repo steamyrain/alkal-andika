@@ -26,6 +26,7 @@
   		<th class="text-center">Subjek</th>
   		<th class="text-center">Alat Berat</th>
   		<th class="text-center">Dump Truck</th>
+  		<th class="text-center">KDO</th>
   		<th class="text-center">Dokumen</th>
   		<th class="text-center">Aksi</th>
     </tr>
@@ -83,6 +84,22 @@
                     onclick="event.preventDefault();document.getElementById('form-dt-<?php echo $i; ?>').submit()"
                 >
                     detail dumptruck
+                </a>
+            </td>
+            <td>
+                <form 
+                    id="<?php echo 'form-kdo-'.$i; ?>" 
+                    style="display: none;" 
+                    method="post" 
+                    action="<?php echo base_URL('administrator/surattugas/detail_kdo')?>"
+                > 
+                    <input type="text" name="id" value="<?php echo $st->id; ?>">
+                </form>
+                <a 
+                    href="#"
+                    onclick="event.preventDefault();document.getElementById('form-kdo-<?php echo $i; ?>').submit()"
+                >
+                    detail KDO
                 </a>
             </td>
             <td>
