@@ -184,9 +184,9 @@ class SuratTugasModel extends CI_Model {
             .$this->tableSubject.'.id as stDrId'
         );
         $this->db->from($this->table);
-        $this->db->join($this->tableSubject,$this->tableSubject.'.surat_id='.$this->table.'.id');
+        $this->db->join($this->tableSubject,$this->tableSubject.'.surat_id='.$this->table.'.id and '.$this->table.'.id='.$id);
         $this->db->join('user','user.id='.$this->tableSubject.'.subject_id');
-        $this->db->where($this->table.'.id='.$id.' AND user.job_id=2 OR user.job_id=3');
+        $this->db->where('user.job_id=2 OR user.job_id=3');
         return $this->db->get();
     }
 
