@@ -67,8 +67,7 @@ class SuratTugasModel extends CI_Model {
             '
         );
         $this->db->from($this->tableSubject);
-        $this->db->join('user','user.id='.$this->tableSubject.'.subject_id');
-        $this->db->where($this->tableSubject.'.surat_id='.$id);
+        $this->db->join('user','user.id='.$this->tableSubject.'.subject_id and '.$this->tableSubject.'.surat_id='.$id);
         $this->db->where('user.job_id=2 or user.job_id=3');
         $this->db->order_by('user.username');
         return $this->db->get();
