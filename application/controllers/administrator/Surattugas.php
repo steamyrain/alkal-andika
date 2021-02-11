@@ -518,24 +518,29 @@ class Surattugas extends CI_Controller {
             $this->output->set_output(json_encode($result));
         } else {
 
+            $message = "";
+
             if (isset($data->og_keys) && !empty($data->og_keys)){
                 for($i=0;$i<sizeof($data->og_keys);$i++){
                     $this->SuratTugasModel->updateSTSubject($data->og_keys[$i],$data->og_uId[$i]);
                 }
+                
+                $message="Sukses, Data Berhasil Diubah!";
                 $result = [
-                    "message"=>"Sukses, Data Berhasil Diubah!",
                     "redirect_url"=> base_URL('administrator/surattugas')
                 ]; 
             } 
+
             if (isset($data->og_dKeys) && !empty($data->og_dKeys)){
                 for($i=0;$i<sizeof($data->og_dKeys);$i++) {
                     $this->SuratTugasModel->deleteSTSubject($data->og_dKeys[$i]);
                 }
+                $message="Sukses, Data Berhasil Dihapus!";
                 $result = [
-                    "message"=>"Sukses, Data Berhasil Dihapus!",
                     "redirect_url"=> base_URL('administrator/surattugas')
                 ]; 
             } 
+
             if (isset($data->new_uId) && !empty($data->new_uId)){
                     // insert surat tugas subject to correspoding table with its data;
                     $insertSubject = Array();
@@ -543,11 +548,46 @@ class Surattugas extends CI_Controller {
                         array_push($insertSubject,Array("subject_id"=>$subject,"surat_id"=>$data->og_sId));
                     }
                     $this->SuratTugasModel->insertSTSubject($insertSubject);
+                    $message="Sukses, Data Berhasil Ditambah!";
                     $result = [
-                        "message"=>"Sukses, Data Berhasil Ditambah!",
                         "redirect_url"=> base_URL('administrator/surattugas')
                     ]; 
             }
+
+            if (
+                !(isset($data->og_keys) && !empty($data->og_keys)) && 
+                !(isset($data->og_dKeys) && !empty($data->og_dKeys)) &&
+                !(isset($data->new_uId) && !empty($data->new_uId))
+            ) {
+                $message="Data tidak berubah!";
+                $result = [
+                    "redirect_url"=> base_URL('administrator/surattugas')
+                ];  
+            }
+
+            $this->session->set_flashdata('pesan',
+                '<div 
+                    class=" alert 
+                            alert-success 
+                            dismissible 
+                            fade 
+                            show
+                            " 
+                    role="alert">'.
+                $message.
+                '
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="alert" 
+                    aria-label="Close">
+                <span 
+                    aria-hidden="true">
+                &times;
+                </span>
+                </button>
+                </div>');
+
             $this->output->set_content_type('application/json');
             $this->output->set_output(json_encode($result)); 
         }
@@ -588,25 +628,39 @@ class Surattugas extends CI_Controller {
             $this->output->set_content_type('application/json');
             $this->output->set_output(json_encode($result));
         } else {
+            $message = "";
             if (isset($data->og_keys) && !empty($data->og_keys)) {
                 $i = 0;
                 foreach($data->og_keys as $key) {
                     $this->SuratTugasModel->updateSTHeavy($key,$data->og_dat[$i]);
                     $i++;
                 }
+                $message="Sukses, Data Berhasil Diubah!";
                 $result['redirect_url'] = base_URL('administrator/surattugas');
             }
             if (isset($data->og_dKeys) && !empty($data->og_dKeys)){
                 foreach($data->og_dKeys as $key) {
                     $this->SuratTugasModel->deleteSTHeavy($key);
                 }
+                $message="Sukses, Data Berhasil Dihapus!";
                 $result['redirect_url'] = base_URL('administrator/surattugas');
             }
             if (isset($data->new_dat) && !empty($data->new_dat)){
                 $this->SuratTugasModel->insertSTHeavy($data->new_dat);
+                $message="Sukses, Data Berhasil Ditambah!";
                 $result = [
                     "redirect_url"=> base_URL('administrator/surattugas')
                 ]; 
+            }
+            if (
+                !(isset($data->og_keys) && !empty($data->og_keys)) && 
+                !(isset($data->og_dKeys) && !empty($data->og_dKeys)) &&
+                !(isset($data->new_dat) && !empty($data->new_dat))
+            ) {
+                $message="Data tidak berubah!";
+                $result = [
+                    "redirect_url"=> base_URL('administrator/surattugas')
+                ];  
             }
             $this->session->set_flashdata('pesan',
                 '<div 
@@ -616,8 +670,9 @@ class Surattugas extends CI_Controller {
                             fade 
                             show
                             " 
-                    role="alert">
-                Data Berhasil Diubah!
+                    role="alert">'.
+                $message.
+                '
                 <button 
                     type="button" 
                     class="close" 
@@ -648,6 +703,7 @@ class Surattugas extends CI_Controller {
         $this->load->view('administrator/st_detail_dt',$data);
         $this->load->view('template_administrator/footer');
     }
+
     public function edit_dt() {
         $this->is_loggedIn();
         $this->is_admin();
@@ -668,25 +724,39 @@ class Surattugas extends CI_Controller {
             $this->output->set_content_type('application/json');
             $this->output->set_output(json_encode($result));
         } else {
+            $message="";
             if (isset($data->og_keys) && !empty($data->og_keys)) {
                 $i = 0;
                 foreach($data->og_keys as $key) {
                     $this->SuratTugasModel->updateSTDT($key,$data->og_dat[$i]);
                     $i++;
                 }
+                $message="Sukses, Data Berhasil Diubah!";
                 $result['redirect_url'] = base_URL('administrator/surattugas');
             }
             if (isset($data->og_dKeys) && !empty($data->og_dKeys)){
                 foreach($data->og_dKeys as $key) {
                     $this->SuratTugasModel->deleteSTDT($key);
                 }
+                $message="Sukses, Data Berhasil Dihapus!";
                 $result['redirect_url'] = base_URL('administrator/surattugas');
             }
             if (isset($data->new_dat) && !empty($data->new_dat)){
                 $this->SuratTugasModel->insertSTDT($data->new_dat);
+                $message="Sukses, Data Berhasil Ditambah!";
                 $result = [
                     "redirect_url"=> base_URL('administrator/surattugas')
                 ]; 
+            }
+            if (
+                !(isset($data->og_keys) && !empty($data->og_keys)) && 
+                !(isset($data->og_dKeys) && !empty($data->og_dKeys)) &&
+                !(isset($data->new_dat) && !empty($data->new_dat))
+            ) {
+                $message="Data tidak berubah!";
+                $result = [
+                    "redirect_url"=> base_URL('administrator/surattugas')
+                ];  
             }
             $this->session->set_flashdata('pesan',
                 '<div 
@@ -696,8 +766,9 @@ class Surattugas extends CI_Controller {
                             fade 
                             show
                             " 
-                    role="alert">
-                Data Berhasil Diubah!
+                    role="alert">'.
+                $message.
+                '
                 <button 
                     type="button" 
                     class="close" 
@@ -749,25 +820,39 @@ class Surattugas extends CI_Controller {
             $this->output->set_content_type('application/json');
             $this->output->set_output(json_encode($result));
         } else {
+            $message="";
             if (isset($data->og_keys) && !empty($data->og_keys)) {
                 $i = 0;
                 foreach($data->og_keys as $key) {
                     $this->SuratTugasModel->updateSTKDO($key,$data->og_dat[$i]);
                     $i++;
                 }
+                $message="Sukses, Data Berhasil Diubah!";
                 $result['redirect_url'] = base_URL('administrator/surattugas');
             }
             if (isset($data->og_dKeys) && !empty($data->og_dKeys)){
                 foreach($data->og_dKeys as $key) {
                     $this->SuratTugasModel->deleteSTKDO($key);
                 }
+                $message="Sukses, Data Berhasil Dihapus!";
                 $result['redirect_url'] = base_URL('administrator/surattugas');
             }
             if (isset($data->new_dat) && !empty($data->new_dat)){
                 $this->SuratTugasModel->insertSTKDO($data->new_dat);
+                $message="Sukses, Data Berhasil Ditambah!";
                 $result = [
                     "redirect_url"=> base_URL('administrator/surattugas')
                 ]; 
+            }
+            if (
+                !(isset($data->og_keys) && !empty($data->og_keys)) && 
+                !(isset($data->og_dKeys) && !empty($data->og_dKeys)) &&
+                !(isset($data->new_dat) && !empty($data->new_dat))
+            ) {
+                $message="Data tidak berubah!";
+                $result = [
+                    "redirect_url"=> base_URL('administrator/surattugas')
+                ];  
             }
             $this->session->set_flashdata('pesan',
                 '<div 
@@ -777,8 +862,9 @@ class Surattugas extends CI_Controller {
                             fade 
                             show
                             " 
-                    role="alert">
-                Data Berhasil Diubah!
+                    role="alert">'.
+                $message.
+                '
                 <button 
                     type="button" 
                     class="close" 
