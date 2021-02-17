@@ -31,7 +31,7 @@ class Surattugas extends CI_Controller {
     public function index() {
         $this->is_loggedIn();
         $this->is_admin();
-        $suratTugas = $this->SuratTugasModel->getSuratTugas()->result();
+        $suratTugas = $this->SuratTugasModel->getSuratTugasLJEsignReq()->result();
         $data['suratTugas']=$suratTugas;
         $this->load->view('template_administrator/header');
         $this->load->view('template_administrator/sidebar');
@@ -1041,5 +1041,37 @@ class Surattugas extends CI_Controller {
             return false;
         }
             return true;
+    }
+
+    public function request_esign_form() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $signer = $this->ESignModel->getVerificator()->result();
+        $suratTugas = $this->SuratTugasModel->getSpecificSuratTugas($this->input->post('id'))->row();
+        $data = [
+            'stId'=>$this->input->post('id'),
+            'st'=>$suratTugas,
+            'stSigner'=>$signer
+        ];
+        $this->load->view('template_administrator/header.php');
+        $this->load->view('template_administrator/sidebar.php');
+        $this->load->view('administrator/st_req_esign_form.php',$data);
+        $this->load->view('template_administrator/footer.php');
+    }
+
+    public function request_esign(){
+        $stId = $this->input->post('id');
+        $reqBy = $this->session->userdata['uId'];
+        $reqTo = $this->input->post('reqTo');
+        $verificator = $this->ESignModel->getSpecificVerificator($reqTo)->row();
+        $data = [
+            'stId'=>$stId,
+            'reqBy'=>$reqBy,
+            'reqTo'=>$reqTo,
+            'jobTitle'=>$verificator->jobTitle,
+            'reqToName'=>$verificator->legalName
+        ];
+        $this->ESignModel->setSTReq($data);
+        redirect(base_URL('administrator/surattugas'),'refresh'); 
     }
 }

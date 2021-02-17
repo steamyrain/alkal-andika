@@ -6,6 +6,7 @@ class SuratTugasModel extends CI_Model {
     private $tableHeavy = 'alkal_st_heavy';
     private $tableDT = 'alkal_st_dt';
     private $tableKDO = 'alkal_st_kdo';
+    private $tableESReq = 'alkal_st_esign_req';
 
     public function insertSuratTugas($data) {
         $this->db->insert($this->table,$data);
@@ -30,6 +31,19 @@ class SuratTugasModel extends CI_Model {
     
     public function getSuratTugas(){
         return $this->db->get($this->table);
+    }
+
+    public function getSuratTugasLJEsignReq(){
+        $this->db->select(
+            $this->table.'.id,'.
+            $this->table.'.location,'.
+            $this->table.'.date,'.
+            $this->table.'.job_desc,'.
+            $this->tableESReq.'.status'
+        );
+        $this->db->from($this->table);
+        $this->db->join($this->tableESReq,$this->tableESReq.'.stId = '.$this->table.'.id','left');
+        return $this->db->get();
     }
 
     public function getSpecificSuratTugasOperator($id){
