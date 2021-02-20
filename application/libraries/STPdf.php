@@ -19,4 +19,11 @@ class STPdf extends Fpdf
         $this->Cell(0,0,'',1,1,'C');
         $this->ln(5);
     }
+
+    function Esign($signedDate,$jobTitle) {
+        $this->SetY(-50);
+        $this->SetFont('Times','',12);
+        $this->Cell(0,10,'Jakarta, '.$signedDate,0,1,'R');
+        $this->Cell(0,10,$jobTitle,0,1,'R');
+    }
 }

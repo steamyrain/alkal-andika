@@ -109,30 +109,32 @@
     </li>
 
     <!-- esign Collapse Menu -->
-    <li class="nav-item">
-        <a 
-            class="nav-link collapsed" 
-            href="#"
-            data-toggle="collapse" 
-            data-target="#collapseESign" 
-            aria-expanded="true" 
-            aria-controls="collapseESign"
-        >
-            <i class="fas fa-signature" style="color:black;"></i>
-            <span style="color:black;">e-sign</span>
-        </a>
-        <div 
-            id="collapseESign"
-            class="collapse" 
-            aria-labelledby="headingPages" 
-            data-parent="#accordionSidebar"
-        >
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-                <a class="collapse-item" href="<?php echo base_URL('administrator/esign')?>">surat tugas</a>
+    <?php if(isset($this->session->userdata['nip']) and !empty($this->session->userdata['nip'])) {?>
+        <li class="nav-item">
+            <a 
+                class="nav-link collapsed" 
+                href="#"
+                data-toggle="collapse" 
+                data-target="#collapseESign" 
+                aria-expanded="true" 
+                aria-controls="collapseESign"
+            >
+                <i class="fas fa-signature" style="color:black;"></i>
+                <span style="color:black;">e-sign</span>
+            </a>
+            <div 
+                id="collapseESign"
+                class="collapse" 
+                aria-labelledby="headingPages" 
+                data-parent="#accordionSidebar"
+            >
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
+                    <a class="collapse-item" href="<?php echo base_URL('administrator/esign')?>">surat tugas</a>
+                </div>
             </div>
-        </div>
-    </li>
+        </li>
+    <?php } ?>
 
     <!-- Material Collapse Menu -->
     <li class="nav-item">

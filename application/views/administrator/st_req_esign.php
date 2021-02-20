@@ -26,68 +26,60 @@
             <td><?php echo $st->date?></td>
   			<td><?php echo $st->location?></td>
   			<td><?php echo $st->job_desc?></td>
-            <td>
+            <td style="text-align: center">
                 <form 
                     id="<?php echo 'form-document-'.$i; ?>" 
-                    style="display: none;" 
                     method="post" 
                     action="<?php echo base_URL('administrator/surattugas/print_surat')?>"
                 > 
-                    <input type="text" name="id" value="<?php echo $st->stId; ?>">
+                    <input style="display: none" type="text" name="id" value="<?php echo $st->stId; ?>">
+                    <button 
+                        type="submit" 
+                        name="submit" 
+                        value="submit"
+                        class="btn btn-primary btn-sm"
+                    >
+                        <span>
+                            <i class="fa fa-file"></i>
+                            Dokumen
+                        <span>
+                    </button>
                 </form>
-                <a 
-                    href="#"
-                    onclick="event.preventDefault();document.getElementById('form-document-<?php echo $i; ?>').submit()"
-                >
-                    detail dokumen
-                </a>
             </td>
   			<td><?php echo $st->reqByName?></td>
   			<td><?php echo $st->reqDate?></td>
             <td style="text-align=center;">
                 <div class="aksi" style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 5px;">
                 <form 
-                    id="<?php echo 'form-req-'.$i; ?>" 
-                    style="display: none;" 
+                    id="<?php echo 'form-confirm-'.$i; ?>" 
+                    style="display:grid"
                     method="post" 
-                    action=""
+                    action="<?php echo base_URL('administrator/esign/confirm'); ?>"
                 > 
-                    <input type="text" name="id" value="<?php echo $st->stId; ?>">
-                </form>
-                <a 
-                    href="#"
-                    style="display:grid;"
-                    onclick="
-                        javascript: 
-                        if(confirm('Yakin Konfirmasi Esign?')){
-                            event.preventDefault();
-                            document.getElementById('form-req-<?php echo $i; ?>').submit();
-                        } else {
-                            event.preventDefault();
-                        }
-                    "
-                >
-                    <div class="btn btn-success btn-sm">
+                    <input type="text" name="id" style="display: none" value="<?php echo $st->stId; ?>">
+                    <button 
+                        style="display:grid" 
+                        type="submit" 
+                        class="btn btn-success btn-sm"
+                    >
                         <i class="fa fa-check"></i>
-                    </div>
-                </a>
-                <a 
-                    href="#"
-                    style="display:grid;"
-                    onclick="
-                        javascript: 
-                        if(confirm('Yakin Batalkan Esign?')){
-                            event.preventDefault();
-                            document.getElementById('form-req-<?php echo $i; ?>').submit();
-                        } else {
-                            event.preventDefault();
-                        }
-                    "
-                >
-                    <div class="btn btn-danger btn-sm">
+                    </button>
+                </form>
+                <form 
+                    id="<?php echo 'form-reject-'.$i; ?>" 
+                    style="display:grid"
+                    method="post" 
+                    action="<?php echo base_URL('administrator/esign/reject'); ?>"
+                > 
+                    <input type="text" name="id" style="display: none" value="<?php echo $st->stId; ?>">
+                    <button 
+                        style="display:grid" 
+                        type="submit" 
+                        class="btn btn-danger btn-sm"
+                    >
                         <i class="fa fa-times"></i>
-                    </div>
-                </a>
+                    </button>
+                </form>
                 </div>
             </td>
   		</tr>
