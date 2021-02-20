@@ -318,276 +318,146 @@ class Surattugas extends CI_Controller {
             $this->load->library('STPdf');
             $pdf = new STPdf();
 
-            if ($st->status === 'signed') {
-                $signedDate = $st->signedDate;
-                $jobTitle = $st->jobTitle;
-                $pdf->AddPage();
+            $signedDate = $st->signedDate;
+            $jobTitle = $st->jobTitle;
+            $status = $st->status;
+            $nip = $st->nip;
+            $legalName = $st->legalName;
+            $pdf->AddPage();
 
-                $pdf->SetFont('Times','BU',14);
-                $pdf->Cell(0,0,'SURAT TUGAS',0,1,'C');
-                $pdf->ln(5);
+            $pdf->SetFont('Times','BU',14);
+            $pdf->Cell(0,0,'SURAT TUGAS',0,1,'C');
+            $pdf->ln(5);
 
-                $pdf->SetFont('Times','',12);
-                $pdf->Cell(40,10,'Lokasi Kerja',0);
-                $pdf->Cell(10,10,': '.$st->location,0);
-                $pdf->ln(10);
+            $pdf->SetFont('Times','',12);
+            $pdf->Cell(40,10,'Lokasi Kerja',0);
+            $pdf->Cell(10,10,': '.$st->location,0);
+            $pdf->ln(10);
 
-                $pdf->Cell(40,10,'Tanggal',0);
-                $pdf->Cell(10,10,': '.$st->date,0);
-                $pdf->ln(10);
+            $pdf->Cell(40,10,'Tanggal',0);
+            $pdf->Cell(10,10,': '.$st->date,0);
+            $pdf->ln(10);
 
-                $pdf->Cell(40,10,'Deskripsi Pekerjaan',0);
-                $pdf->Cell(10,10,': '.$st->job_desc,0);
-                $pdf->ln(10);
+            $pdf->Cell(40,10,'Deskripsi Pekerjaan',0);
+            $pdf->Cell(10,10,': '.$st->job_desc,0);
+            $pdf->ln(10);
 
-                $pdf->Cell(40,10,'Operator',0);
-                $i=0;
-                $st = $this->SuratTugasModel->getSpecificSuratTugasOperator($id)->result();
-                foreach($st as $surat){
-                    if($i == 0){
-                        $pdf->Cell(10,10,': '.$surat->username,0);
-                        $pdf->ln(10);
-                    } else {
-                        $pdf->Cell(40,10,'',0);
-                        $pdf->Cell(10,10,': '.$surat->username,0);
-                        $pdf->ln(10);
-                    }
-                    $i++;
+            $pdf->Cell(40,10,'Operator',0);
+            $i=0;
+            $st = $this->SuratTugasModel->getSpecificSuratTugasOperator($id)->result();
+            foreach($st as $surat){
+                if($i == 0){
+                    $pdf->Cell(10,10,': '.$surat->username,0);
+                    $pdf->ln(10);
+                } else {
+                    $pdf->Cell(40,10,'',0);
+                    $pdf->Cell(10,10,': '.$surat->username,0);
+                    $pdf->ln(10);
                 }
-                if($st == null){
-                        $pdf->Cell(10,10,': -',0);
-                        $pdf->ln(10);
-                }
+                $i++;
+            }
+            if($st == null){
+                    $pdf->Cell(10,10,': -',0);
+                    $pdf->ln(10);
+            }
 
-                $pdf->Cell(40,10,'Pengemudi',0);
-                $i=0;
-                $st = $this->SuratTugasModel->getSpecificSuratTugasDriverPlusMechanic($id)->result();
-                foreach($st as $surat){
-                    if($i == 0){
-                        $pdf->Cell(10,10,': '.$surat->username,0);
-                        $pdf->ln(10);
-                    } else {
-                        $pdf->Cell(40,10,'',0);
-                        $pdf->Cell(10,10,': '.$surat->username,0);
-                        $pdf->ln(10);
-                    }
-                    $i++;
+            $pdf->Cell(40,10,'Pengemudi',0);
+            $i=0;
+            $st = $this->SuratTugasModel->getSpecificSuratTugasDriverPlusMechanic($id)->result();
+            foreach($st as $surat){
+                if($i == 0){
+                    $pdf->Cell(10,10,': '.$surat->username,0);
+                    $pdf->ln(10);
+                } else {
+                    $pdf->Cell(40,10,'',0);
+                    $pdf->Cell(10,10,': '.$surat->username,0);
+                    $pdf->ln(10);
                 }
-                if($st == null){
-                        $pdf->Cell(10,10,': -',0);
-                        $pdf->ln(10);
-                }
+                $i++;
+            }
+            if($st == null){
+                    $pdf->Cell(10,10,': -',0);
+                    $pdf->ln(10);
+            }
 
-                $pdf->Cell(40,10,'Tenaga Kerja',0);
-                $i=0;
-                $st = $this->SuratTugasModel->getSpecificSuratTugasLabour($id)->result();
-                foreach($st as $surat){
-                    if($i == 0){
-                        $pdf->Cell(10,10,': '.$surat->username,0);
-                        $pdf->ln(10);
-                    } else {
-                        $pdf->Cell(40,10,'',0);
-                        $pdf->Cell(10,10,': '.$surat->username,0);
-                        $pdf->ln(10);
-                    }
-                    $i++;
+            $pdf->Cell(40,10,'Tenaga Kerja',0);
+            $i=0;
+            $st = $this->SuratTugasModel->getSpecificSuratTugasLabour($id)->result();
+            foreach($st as $surat){
+                if($i == 0){
+                    $pdf->Cell(10,10,': '.$surat->username,0);
+                    $pdf->ln(10);
+                } else {
+                    $pdf->Cell(40,10,'',0);
+                    $pdf->Cell(10,10,': '.$surat->username,0);
+                    $pdf->ln(10);
                 }
-                if($st == null){
-                        $pdf->Cell(10,10,': -',0);
-                        $pdf->ln(10);
-                }
+                $i++;
+            }
+            if($st == null){
+                    $pdf->Cell(10,10,': -',0);
+                    $pdf->ln(10);
+            }
 
-                $pdf->Cell(40,10,'Alat Berat & BBM',0);
-                $st = $this->SuratTugasModel->getSpecificSuratTugasHeavy($id)->result();
-                $i=0;
-                foreach($st as $surat){
-                    if($i == 0){
-                        $pdf->Cell(10,10,': '.$this->vinChecker($surat->plate_number,$surat->serial_number).'/'.$surat->category.'/'.$surat->sub_category.' ('.$surat->heavy_fuel.' liter)',0);
-                        $pdf->ln(10);
-                    } else {
-                        $pdf->Cell(40,10,'',0);
-                        $pdf->Cell(10,10,': '.$this->vinChecker($surat->plate_number,$surat->serial_number).'/'.$surat->category.'/'.$surat->sub_category.' ('.$surat->heavy_fuel.' liter)',0);
-                        $pdf->ln(10);
-                    }
-                    $i++;
+            $pdf->Cell(40,10,'Alat Berat & BBM',0);
+            $st = $this->SuratTugasModel->getSpecificSuratTugasHeavy($id)->result();
+            $i=0;
+            foreach($st as $surat){
+                if($i == 0){
+                    $pdf->Cell(10,10,': '.$this->vinChecker($surat->plate_number,$surat->serial_number).'/'.$surat->category.'/'.$surat->sub_category.' ('.$surat->heavy_fuel.' liter)',0);
+                    $pdf->ln(10);
+                } else {
+                    $pdf->Cell(40,10,'',0);
+                    $pdf->Cell(10,10,': '.$this->vinChecker($surat->plate_number,$surat->serial_number).'/'.$surat->category.'/'.$surat->sub_category.' ('.$surat->heavy_fuel.' liter)',0);
+                    $pdf->ln(10);
                 }
-                if($st == null){
-                        $pdf->Cell(10,10,': -',0);
-                        $pdf->ln(10);
-                }
+                $i++;
+            }
+            if($st == null){
+                    $pdf->Cell(10,10,': -',0);
+                    $pdf->ln(10);
+            }
 
-                $pdf->Cell(40,10,'Dump Truck & BBM',0);
-                $st = $this->SuratTugasModel->getSpecificSuratTugasDT($id)->result();
-                $i=0;
-                foreach($st as $surat){
-                    if($i == 0){
-                        $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->dt_fuel.' liter)',0);
-                        $pdf->ln(10);
-                    } else {
-                        $pdf->Cell(40,10,'',0);
-                        $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->dt_fuel.' liter)',0);
-                        $pdf->ln(10);
-                    }
-                    $i++;
+            $pdf->Cell(40,10,'Dump Truck & BBM',0);
+            $st = $this->SuratTugasModel->getSpecificSuratTugasDT($id)->result();
+            $i=0;
+            foreach($st as $surat){
+                if($i == 0){
+                    $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->dt_fuel.' liter)',0);
+                    $pdf->ln(10);
+                } else {
+                    $pdf->Cell(40,10,'',0);
+                    $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->dt_fuel.' liter)',0);
+                    $pdf->ln(10);
                 }
-                if($st == null){
-                        $pdf->Cell(10,10,': -',0);
-                        $pdf->ln(10);
-                }
+                $i++;
+            }
+            if($st == null){
+                    $pdf->Cell(10,10,': -',0);
+                    $pdf->ln(10);
+            }
 
-                $pdf->Cell(40,10,'KDO & BBM',0);
-                $st = $this->SuratTugasModel->getSpecificSuratTugasKDO($id)->result();
-                $i=0;
-                foreach($st as $surat){
-                    if($i == 0){
-                        $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->kdo_fuel.' liter)',0);
-                        $pdf->ln(10);
-                    } else {
-                        $pdf->Cell(40,10,'',0);
-                        $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->kdo_fuel.' liter)',0);
-                        $pdf->ln(10);
-                    }
-                    $i++;
+            $pdf->Cell(40,10,'KDO & BBM',0);
+            $st = $this->SuratTugasModel->getSpecificSuratTugasKDO($id)->result();
+            $i=0;
+            foreach($st as $surat){
+                if($i == 0){
+                    $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->kdo_fuel.' liter)',0);
+                    $pdf->ln(10);
+                } else {
+                    $pdf->Cell(40,10,'',0);
+                    $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->kdo_fuel.' liter)',0);
+                    $pdf->ln(10);
                 }
-                if($st == null){
-                        $pdf->Cell(10,10,': -',0);
-                        $pdf->ln(10);
-                }
+                $i++;
+            }
+            if($st == null){
+                    $pdf->Cell(10,10,': -',0);
+                    $pdf->ln(10);
+            }
 
-                $pdf->Esign($signedDate,$jobTitle);
-            } else {
-                $pdf->AddPage();
-
-                $pdf->SetFont('Times','BU',14);
-                $pdf->Cell(0,0,'SURAT TUGAS',0,1,'C');
-                $pdf->ln(5);
-
-                $pdf->SetFont('Times','',12);
-                $pdf->Cell(40,10,'Lokasi Kerja',0);
-                $pdf->Cell(10,10,': '.$st->location,0);
-                $pdf->ln(10);
-
-                $pdf->Cell(40,10,'Tanggal',0);
-                $pdf->Cell(10,10,': '.$st->date,0);
-                $pdf->ln(10);
-
-                $pdf->Cell(40,10,'Deskripsi Pekerjaan',0);
-                $pdf->Cell(10,10,': '.$st->job_desc,0);
-                $pdf->ln(10);
-
-                $pdf->Cell(40,10,'Operator',0);
-                $i=0;
-                $st = $this->SuratTugasModel->getSpecificSuratTugasOperator($id)->result();
-                foreach($st as $surat){
-                    if($i == 0){
-                        $pdf->Cell(10,10,': '.$surat->username,0);
-                        $pdf->ln(10);
-                    } else {
-                        $pdf->Cell(40,10,'',0);
-                        $pdf->Cell(10,10,': '.$surat->username,0);
-                        $pdf->ln(10);
-                    }
-                    $i++;
-                }
-                if($st == null){
-                        $pdf->Cell(10,10,': -',0);
-                        $pdf->ln(10);
-                }
-
-                $pdf->Cell(40,10,'Pengemudi',0);
-                $i=0;
-                $st = $this->SuratTugasModel->getSpecificSuratTugasDriverPlusMechanic($id)->result();
-                foreach($st as $surat){
-                    if($i == 0){
-                        $pdf->Cell(10,10,': '.$surat->username,0);
-                        $pdf->ln(10);
-                    } else {
-                        $pdf->Cell(40,10,'',0);
-                        $pdf->Cell(10,10,': '.$surat->username,0);
-                        $pdf->ln(10);
-                    }
-                    $i++;
-                }
-                if($st == null){
-                        $pdf->Cell(10,10,': -',0);
-                        $pdf->ln(10);
-                }
-
-                $pdf->Cell(40,10,'Tenaga Kerja',0);
-                $i=0;
-                $st = $this->SuratTugasModel->getSpecificSuratTugasLabour($id)->result();
-                foreach($st as $surat){
-                    if($i == 0){
-                        $pdf->Cell(10,10,': '.$surat->username,0);
-                        $pdf->ln(10);
-                    } else {
-                        $pdf->Cell(40,10,'',0);
-                        $pdf->Cell(10,10,': '.$surat->username,0);
-                        $pdf->ln(10);
-                    }
-                    $i++;
-                }
-                if($st == null){
-                        $pdf->Cell(10,10,': -',0);
-                        $pdf->ln(10);
-                }
-
-                $pdf->Cell(40,10,'Alat Berat & BBM',0);
-                $st = $this->SuratTugasModel->getSpecificSuratTugasHeavy($id)->result();
-                $i=0;
-                foreach($st as $surat){
-                    if($i == 0){
-                        $pdf->Cell(10,10,': '.$this->vinChecker($surat->plate_number,$surat->serial_number).'/'.$surat->category.'/'.$surat->sub_category.' ('.$surat->heavy_fuel.' liter)',0);
-                        $pdf->ln(10);
-                    } else {
-                        $pdf->Cell(40,10,'',0);
-                        $pdf->Cell(10,10,': '.$this->vinChecker($surat->plate_number,$surat->serial_number).'/'.$surat->category.'/'.$surat->sub_category.' ('.$surat->heavy_fuel.' liter)',0);
-                        $pdf->ln(10);
-                    }
-                    $i++;
-                }
-                if($st == null){
-                        $pdf->Cell(10,10,': -',0);
-                        $pdf->ln(10);
-                }
-
-                $pdf->Cell(40,10,'Dump Truck & BBM',0);
-                $st = $this->SuratTugasModel->getSpecificSuratTugasDT($id)->result();
-                $i=0;
-                foreach($st as $surat){
-                    if($i == 0){
-                        $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->dt_fuel.' liter)',0);
-                        $pdf->ln(10);
-                    } else {
-                        $pdf->Cell(40,10,'',0);
-                        $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->dt_fuel.' liter)',0);
-                        $pdf->ln(10);
-                    }
-                    $i++;
-                }
-                if($st == null){
-                        $pdf->Cell(10,10,': -',0);
-                        $pdf->ln(10);
-                }
-
-                $pdf->Cell(40,10,'KDO & BBM',0);
-                $st = $this->SuratTugasModel->getSpecificSuratTugasKDO($id)->result();
-                $i=0;
-                foreach($st as $surat){
-                    if($i == 0){
-                        $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->kdo_fuel.' liter)',0);
-                        $pdf->ln(10);
-                    } else {
-                        $pdf->Cell(40,10,'',0);
-                        $pdf->Cell(10,10,': '.$surat->plate_number.'/'.$surat->category.' ('.$surat->kdo_fuel.' liter)',0);
-                        $pdf->ln(10);
-                    }
-                    $i++;
-                }
-                if($st == null){
-                        $pdf->Cell(10,10,': -',0);
-                        $pdf->ln(10);
-                }
+            if ($status === 'signed') {
+                $pdf->Esign($signedDate,$jobTitle,$legalName,$nip);
             }
 
             $pdf->Output();

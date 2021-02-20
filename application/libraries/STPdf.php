@@ -20,10 +20,16 @@ class STPdf extends Fpdf
         $this->ln(5);
     }
 
-    function Esign($signedDate,$jobTitle) {
-        $this->SetY(-50);
+    function Esign($signedDate,$jobTitle,$legalName,$nip) {
+        $this->SetY(-90);
         $this->SetFont('Times','',12);
-        $this->Cell(0,10,'Jakarta, '.$signedDate,0,1,'R');
-        $this->Cell(0,10,$jobTitle,0,1,'R');
+        $this->SetLeftMargin(130);
+        $date;
+        preg_match('/^[0-9]{4}-[0-9][0-9]-[0-9][0-9]/',$signedDate,$date);
+        $this->MultiCell(70,5,'Jakarta, '.$date[0],0,'C');
+        $this->MultiCell(70,5,$jobTitle,0,'C');
+        $this->ln(30);
+        $this->MultiCell(70,5,$legalName,0,'C');
+        $this->MultiCell(70,5,'NIP. '.$nip,0,'C');
     }
 }
