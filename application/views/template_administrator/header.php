@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="style.css">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <!-- Custom styles for this template-->
     <link href="<?php echo base_url() ?>assets/css/sb-admin-2.min.css" rel="stylesheet">
