@@ -31,7 +31,7 @@ class Surattugas extends CI_Controller {
     public function index() {
         $this->is_loggedIn();
         $this->is_admin();
-        $suratTugas = $this->SuratTugasModel->getSuratTugas()->result();
+        $suratTugas = $this->SuratTugasModel->getSuratTugasLJEsignReq()->result();
         $data['suratTugas']=$suratTugas;
         $this->load->view('template_administrator/header');
         $this->load->view('template_administrator/sidebar');
@@ -314,10 +314,15 @@ class Surattugas extends CI_Controller {
         $this->is_admin();
         if (($this->input->post('id')!==null) && !empty($this->input->post('id'))){
             $id = $this->input->post('id');
-            $st = $this->SuratTugasModel->getSpecificSuratTugas($id)->result();
+            $st = $this->SuratTugasModel->getSpecificSuratTugas($id)->row();
             $this->load->library('STPdf');
-
             $pdf = new STPdf();
+
+            $signedDate = $st->signedDate;
+            $jobTitle = $st->jobTitle;
+            $status = $st->status;
+            $nip = $st->nip;
+            $legalName = $st->legalName;
             $pdf->AddPage();
 
             $pdf->SetFont('Times','BU',14);
@@ -326,15 +331,15 @@ class Surattugas extends CI_Controller {
 
             $pdf->SetFont('Times','',12);
             $pdf->Cell(40,10,'Lokasi Kerja',0);
-            $pdf->Cell(10,10,': '.$st[0]->location,0);
+            $pdf->Cell(10,10,': '.$st->location,0);
             $pdf->ln(10);
 
             $pdf->Cell(40,10,'Tanggal',0);
-            $pdf->Cell(10,10,': '.$st[0]->date,0);
+            $pdf->Cell(10,10,': '.$st->date,0);
             $pdf->ln(10);
 
             $pdf->Cell(40,10,'Deskripsi Pekerjaan',0);
-            $pdf->Cell(10,10,': '.$st[0]->job_desc,0);
+            $pdf->Cell(10,10,': '.$st->job_desc,0);
             $pdf->ln(10);
 
             $pdf->Cell(40,10,'Operator',0);
@@ -449,6 +454,10 @@ class Surattugas extends CI_Controller {
             if($st == null){
                     $pdf->Cell(10,10,': -',0);
                     $pdf->ln(10);
+            }
+
+            if ($status === 'signed') {
+                $pdf->Esign($signedDate,$jobTitle,$legalName,$nip);
             }
 
             $pdf->Output();
@@ -1041,5 +1050,37 @@ class Surattugas extends CI_Controller {
             return false;
         }
             return true;
+    }
+
+    public function request_esign_form() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $signer = $this->ESignModel->getVerificator()->result();
+        $suratTugas = $this->SuratTugasModel->getSpecificSuratTugas($this->input->post('id'))->row();
+        $data = [
+            'stId'=>$this->input->post('id'),
+            'st'=>$suratTugas,
+            'stSigner'=>$signer
+        ];
+        $this->load->view('template_administrator/header.php');
+        $this->load->view('template_administrator/sidebar.php');
+        $this->load->view('administrator/st_req_esign_form.php',$data);
+        $this->load->view('template_administrator/footer.php');
+    }
+
+    public function request_esign(){
+        $stId = $this->input->post('id');
+        $reqBy = $this->session->userdata['uId'];
+        $reqTo = $this->input->post('reqTo');
+        $verificator = $this->ESignModel->getSpecificVerificator($reqTo)->row();
+        $data = [
+            'stId'=>$stId,
+            'reqBy'=>$reqBy,
+            'reqTo'=>$reqTo,
+            'jobTitle'=>$verificator->jobTitle,
+            'reqToName'=>$verificator->legalName
+        ];
+        $this->ESignModel->setSTReq($data);
+        redirect(base_URL('administrator/surattugas'),'refresh'); 
     }
 }

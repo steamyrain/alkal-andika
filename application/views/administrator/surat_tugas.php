@@ -28,6 +28,7 @@
   		<th class="text-center">Dump Truck</th>
   		<th class="text-center">KDO</th>
   		<th class="text-center">Dokumen</th>
+  		<th class="text-center">ESign</th>
   		<th class="text-center">Aksi</th>
     </tr>
     </thead>
@@ -118,6 +119,31 @@
                     detail dokumen
                 </a>
             </td>
+            <td>
+                <?php 
+                    if(!(($st->status === 'pending') or ($st->status === 'signed'))) {
+                ?>
+                        <form 
+                            id="<?php echo 'form-esign-'.$i; ?>" 
+                            style="display: none;" 
+                            method="post" 
+                            action="<?php echo base_URL('administrator/surattugas/request_esign_form')?>"
+                        > 
+                            <input type="text" name="id" value="<?php echo $st->id; ?>">
+                        </form>
+                        <button 
+                            href="#"
+                            onclick="event.preventDefault();document.getElementById('form-esign-<?php echo $i; ?>').submit()"
+                            class="btn btn-primary"
+                        >
+                            Request 
+                        </button>
+                <?php 
+                    } else {
+                        echo $st->status;
+                    }
+                ?>
+            </td>
             <td style="text-align=center;">
                 <div class="aksi" style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 5px;">
                 <form 
@@ -139,9 +165,17 @@
                 <a 
                     href="#"
                     style="display:grid;"
-                    onclick="document.getElementById('form-surat-<?php echo $i; ?>').submit()"
+                    onclick="
+                        javascript: 
+                        if(confirm('Yakin Hapus?')){
+                            event.preventDefault();
+                            document.getElementById('form-surat-<?php echo $i; ?>').submit();
+                        } else {
+                            event.preventDefault();
+                        }
+                    "
                 >
-                    <div class="btn btn-danger btn-sm" onclick="javascript: return confirm('Yakin Hapus?')">
+                    <div class="btn btn-danger btn-sm">
                         <i class="fa fa-trash"></i>
                     </div>
                 </a>

@@ -29,9 +29,11 @@ class Auth extends CI_Controller{
 			if ($cek->num_rows() > 0){
 
 				foreach ($cek->result() as $ck) {
+                    $sess_data['uId'] = $ck->id;
 					$sess_data['username'] = $ck->username;
 					$sess_data['email'] = $ck->email;
 					$sess_data['level'] = $ck->level;
+                    $sess_data['nip'] = $ck->nip;
 
 					$this->session->set_userdata($sess_data);
 				}

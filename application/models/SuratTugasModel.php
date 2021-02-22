@@ -2,10 +2,12 @@
 class SuratTugasModel extends CI_Model {
 
     private $table='alkal_surat_tugas';
+    private $tableVerificator = 'alkal_user_verificator';
     private $tableSubject = 'alkal_st_subject';
     private $tableHeavy = 'alkal_st_heavy';
     private $tableDT = 'alkal_st_dt';
     private $tableKDO = 'alkal_st_kdo';
+    private $tableESReq = 'alkal_st_esign_req';
 
     public function insertSuratTugas($data) {
         $this->db->insert($this->table,$data);
@@ -30,6 +32,19 @@ class SuratTugasModel extends CI_Model {
     
     public function getSuratTugas(){
         return $this->db->get($this->table);
+    }
+
+    public function getSuratTugasLJEsignReq(){
+        $this->db->select(
+            $this->table.'.id,'.
+            $this->table.'.location,'.
+            $this->table.'.date,'.
+            $this->table.'.job_desc,'.
+            $this->tableESReq.'.status'
+        );
+        $this->db->from($this->table);
+        $this->db->join($this->tableESReq,$this->tableESReq.'.stId = '.$this->table.'.id','left');
+        return $this->db->get();
     }
 
     public function getSpecificSuratTugasOperator($id){
@@ -90,10 +105,17 @@ class SuratTugasModel extends CI_Model {
     public function getSpecificSuratTugas($id){
         $this->db->select(
             $this->table.'
-                .* 
-            '
+                .*, 
+            '.
+            $this->tableESReq.'.status,'.
+            $this->tableESReq.'.signedDate,'.
+            $this->tableVerificator.'.nip,'.
+            $this->tableVerificator.'.jobTitle,'.
+            $this->tableVerificator.'.legalName'
         );
         $this->db->from($this->table);
+        $this->db->join($this->tableESReq,$this->tableESReq.'.stID = '.$this->table.'.id','left');
+        $this->db->join($this->tableVerificator,$this->tableVerificator.'.nip = '.$this->tableESReq.'.reqTo','left');
         $this->db->where($this->table.'.id='.$id);
         return $this->db->get();
     }

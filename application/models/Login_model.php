@@ -2,11 +2,24 @@
 
 class Login_model extends CI_Model{
 
+    private $table = 'user';
+    private $tableV = 'alkal_user_verificator';
+
 	public function cek_login($username, $password)
 	{
+        $this->db->select(
+            $this->table.'.id,'.
+            $this->table.'.username,'.
+            $this->table.'.email,'.
+            $this->table.'.password,'.
+            $this->table.'.level,'.
+            $this->tableV.'.nip'
+        );
+        $this->db->join($this->tableV,$this->tableV.'.uId = '.$this->table.'.id','left');
 		$this->db->where("username", $username);
 		$this->db->where("password", $password);
-		return $this->db->get('user');
+        $this->db->from($this->table);
+		return $this->db->get();
 	}
 
 	public function getLoginData($user, $pass)
