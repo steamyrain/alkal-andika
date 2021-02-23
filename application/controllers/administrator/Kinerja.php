@@ -312,4 +312,80 @@ class Kinerja extends CI_Controller{
 		$this->form_validation->set_rules('end_date','end_date','required',['required' => 'Tanggal Akhir Wajib Diisi']);
     }
 
+    public function request_esign_form() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $data['operator']= $this->user_model->getOperatorOnly()->result();
+        $this->load->view('template_administrator/header.php');
+        $this->load->view('template_administrator/sidebar.php');
+        $this->load->view('administrator/kinerja_req_esign_form',$data);
+        $this->load->view('template_administrator/footer.php');
+    }
+
+    public function request_esign() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->_rules_request_esign();
+        if($this->form_validation->run() == FALSE) {
+            $this->request_esign_form();
+        } else {
+            $postUsername = explode('|',$this->input->post('username'));
+            $uId = $postUsername[0];
+            $uName = $postUsername[1];
+            $ekin_start = $this->input->post('starting_date');
+            $ekin_end = $this->input->post('end_date');
+            $reqBy = $this->session->userdata['uId'];
+            $data = [
+                'uId'=>$uId,
+                'uName'=>$uName,
+                'ekin_start'=>$ekin_start,
+                'ekin_end'=>$ekin_end,
+                'reqBy'=>$reqBy
+            ];
+            $this->ESignModel->SetEKReq($data);
+            $message = "Request EKinerja Operator Berhasil Ditambahkan!";
+            $this->session->set_flashdata('pesan',
+                '<div 
+                    class=" alert 
+                            alert-success 
+                            dismissible 
+                            fade 
+                            show
+                            " 
+                    role="alert">'.
+                $message.
+                '
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="alert" 
+                    aria-label="Close">
+                <span 
+                    aria-hidden="true">
+                &times;
+                </span>
+                </button>
+                </div>');
+            redirect(base_URL('administrator/kinerja/esign'),'refresh'); 
+        }
+
+    }
+
+    public function esign() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $ekReq = $this->ESignModel->getEKReqReqBy($this->session->userdata['uId'])->result();
+        $data['eKinerja']=$ekReq;
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/kinerja_req_esign_status',$data);
+        $this->load->view('template_administrator/footer');
+    }
+
+    public function _rules_request_esign() {
+		$this->form_validation->set_rules('username','username','required',['required' => 'Nama Wajib Diisi']);
+		$this->form_validation->set_rules('starting_date','starting_date','required',['required' => 'Tanggal Awal Wajib Diisi']);
+		$this->form_validation->set_rules('end_date','end_date','required',['required' => 'Tanggal Akhir Wajib Diisi']);
+    }
+
 }

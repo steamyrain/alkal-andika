@@ -5,6 +5,7 @@ class ESignModel extends CI_Model{
     private $table = 'alkal_user_verificator';
     private $tableUser= 'user';
     private $tableSTReq = 'alkal_st_esign_req';
+    private $tableEKReq = 'alkal_ekindr_esign_req';
     private $tableST= 'alkal_surat_tugas';
 
     public function getVerificator(){
@@ -36,6 +37,10 @@ class ESignModel extends CI_Model{
 
     public function setSTReq($data){
         $this->db->insert($this->tableSTReq,$data);
+    }
+
+    public function setEKReq($data){
+        $this->db->insert($this->tableEKReq,$data);
     }
 
     public function getSTReqSpecific($nip){
@@ -72,6 +77,16 @@ class ESignModel extends CI_Model{
         $this->db->where('stId',$stId);
         $this->db->where('reqTo',$reqTo);
         $this->db->update($this->tableSTReq);
+    }
+
+    public function getEKReqReqBy($uId) {
+        $this->db->select($this->tableEKReq.'.*,'
+                            .$this->tableUser.'.username as reqByName'
+                        );
+        $this->db->from($this->tableEKReq);
+        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKReq.'.reqBy');
+        $this->db->where($this->tableEKReq.'.reqBy = '.$uId);
+        return $this->db->get();
     }
 
 }

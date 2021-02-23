@@ -50,7 +50,7 @@
             <a class="collapse-item" href="<?php echo base_url('administrator/tu') ?>">Admin TU</a>
             <hr style="width: inherit; height: inherit;">
             <h6 class="collapse-header" style="color:black;">Esign Kinerja:</h6>
-            <a class="collapse-item" href="<?php echo '#'; ?>">Request Esign</a>
+            <a class="collapse-item" href="<?php echo base_URL('administrator/kinerja/esign'); ?>">Request Esign Operator</a>
           </div>
         </div>
       </li>
@@ -78,8 +78,8 @@
             <a class="collapse-item" href="<?php echo base_url('administrator/laporan') ?>">Laporan Kerja Alat Berat</a>
             <a class="collapse-item" href="<?php echo base_url('administrator/laporandt') ?>">Laporan Kerja Dump Truck</a>
             <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas'); ?>">Surat Tugas</a>
-            <h6 class="collapse-header" style="color:black;">Esign Surat Tugas:</h6>
-            <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas/esign'); ?>">Request Esign</a>
+            <h6 class="collapse-header" style="color:black;">Esign Daily Task:</h6>
+            <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas/esign'); ?>">Request Esign Surat Tugas</a>
           </div>
         </div>
       </li>

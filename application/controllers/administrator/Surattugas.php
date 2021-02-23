@@ -1081,6 +1081,29 @@ class Surattugas extends CI_Controller {
             'reqToName'=>$verificator->legalName
         ];
         $this->ESignModel->setSTReq($data);
+        $message = "Request Surat Tugas Berhasil Ditambahkan!";
+        $this->session->set_flashdata('pesan',
+            '<div 
+                class=" alert 
+                        alert-success 
+                        dismissible 
+                        fade 
+                        show
+                        " 
+                role="alert">'.
+            $message.
+            '
+            <button 
+                type="button" 
+                class="close" 
+                data-dismiss="alert" 
+                aria-label="Close">
+            <span 
+                aria-hidden="true">
+            &times;
+            </span>
+            </button>
+            </div>');
         redirect(base_URL('administrator/surattugas'),'refresh'); 
     }
 

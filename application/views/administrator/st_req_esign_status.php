@@ -4,6 +4,8 @@
       <i class="fas fa-clipboard"></i> Request ESign Surat Tugas 
     </div>
 
+    <?php echo $this->session->flashdata('pesan') ?>
+
     <?php 
     echo anchor(
         base_URL('administrator/surattugas/'),
@@ -13,8 +15,6 @@
         </button>'
     ) 
     ?>
-
-    <?php echo $this->session->flashdata('pesan') ?>
 
     <div style="overflow-x: auto;">
   <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
