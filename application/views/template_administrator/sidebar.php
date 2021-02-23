@@ -40,7 +40,7 @@
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
+            <h6 class="collapse-header" style="color:black;">Pilihan Kinerja:</h6>
             <a class="collapse-item" href="<?php echo base_url('administrator/kinerja') ?>">Operator</a>
             <a class="collapse-item" href="<?php echo base_url('administrator/operator') ?>">Pengemudi</a>
             <a class="collapse-item" href="<?php echo base_url('administrator/mekanik') ?>">Mekanik</a>
@@ -48,6 +48,9 @@
             <a class="collapse-item" href="<?php echo base_url('administrator/perbekalan') ?>">Admin Perbekalan</a>
             <a class="collapse-item" href="<?php echo base_url('administrator/peralatan') ?>">Admin Peralatan</a>
             <a class="collapse-item" href="<?php echo base_url('administrator/tu') ?>">Admin TU</a>
+            <hr style="width: inherit; height: inherit;">
+            <h6 class="collapse-header" style="color:black;">Esign Kinerja:</h6>
+            <a class="collapse-item" href="<?php echo '#'; ?>">Request Esign</a>
           </div>
         </div>
       </li>
@@ -75,6 +78,8 @@
             <a class="collapse-item" href="<?php echo base_url('administrator/laporan') ?>">Laporan Kerja Alat Berat</a>
             <a class="collapse-item" href="<?php echo base_url('administrator/laporandt') ?>">Laporan Kerja Dump Truck</a>
             <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas'); ?>">Surat Tugas</a>
+            <h6 class="collapse-header" style="color:black;">Esign Surat Tugas:</h6>
+            <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas/esign'); ?>">Request Esign</a>
           </div>
         </div>
       </li>

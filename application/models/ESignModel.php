@@ -53,6 +53,20 @@ class ESignModel extends CI_Model{
         return $this->db->get();
     }
 
+    public function getSTReqReqBy($uId) {
+        $this->db->select($this->tableSTReq.'.*,'
+                            .$this->tableUser.'.username as reqByName,'
+                            .$this->tableST.'.date,'
+                            .$this->tableST.'.location,'
+                            .$this->tableST.'.job_desc'
+                        );
+        $this->db->from($this->tableSTReq);
+        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableSTReq.'.reqBy');
+        $this->db->join($this->tableST,$this->tableST.'.id = '.$this->tableSTReq.'.stId');
+        $this->db->where($this->tableSTReq.'.reqBy = '.$uId);
+        return $this->db->get();
+    }
+
     public function updateSTReq($stId,$reqTo,$data){
         $this->db->set($data);
         $this->db->where('stId',$stId);

@@ -462,7 +462,7 @@ class Surattugas extends CI_Controller {
 
             $pdf->Output();
         } else {
-            redirect(base_URL('administrator/surattugas'));
+            redirect(base_URL('administrator/dashboard'));
         }
     }
 
@@ -1082,5 +1082,16 @@ class Surattugas extends CI_Controller {
         ];
         $this->ESignModel->setSTReq($data);
         redirect(base_URL('administrator/surattugas'),'refresh'); 
+    }
+
+    public function esign() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $stReq = $this->ESignModel->getSTReqReqBy($this->session->userdata['uId'])->result();
+        $data['suratTugas']=$stReq;
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/st_req_esign_status',$data);
+        $this->load->view('template_administrator/footer');
     }
 }
