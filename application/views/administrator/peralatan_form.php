@@ -4,7 +4,7 @@
   	<i class="fas fa-clipboard"></i> Form Input Kinerja
   	</div>
 
-	<?php echo form_open_multipart('administrator/pmj/input_aksi'); ?>
+	<?php echo form_open_multipart('administrator/peralatan/input_aksi'); ?>
 		<div class="form-group">
 			<label> Nama Lengkap :</label>
 			<select name="nama" class="form-control" value="<?php echo $k->nama?>">
@@ -16,18 +16,29 @@
 			<option>Muhammad Faisal Ridho</option>
 			<option>Reinhard Aditya Petradi</option>
 			<option>Muhamad Andyka Bakry</option>
+			<option>Tri Yanto</option>
  		    <option></option>
   			</select>
 		</div>
 		<div class="form-group">
-			 <p>Pilih Waktu :</p>
- 		<input type="radio" id="Pagi" name="waktu" value="Pagi">
- 		<label for="Pagi">Pagi</label><br>
- 		<input type="radio" id="Siang" name="waktu" value="Siang">
- 		<label for="Siang">Siang</label><br>
- 		<input type="radio" id="Sore" name="waktu" value="Sore">
- 		<label for="Sore">Sore</label><br>
+            <label>Tanggal :</label>
+            <input 
+                type="date" 
+                name="tgl"
+                id="tgl"
+                class="form-control"
+            />
+            <div style="display: none" class="text-danger small ml-3" id="tgl"></div>
+        </div>
+		<div class="form-group">
+			 <p>Pilih Jam Mulai :</p>
+ 		<input type="time" id="waktu" name="waktu">
 			<?php echo form_error('waktu', '<div class="text-danger small" ml-3>') ?>
+		</div>
+		<div class="form-group">
+			 <p>Pilih Jam Selesai :</p>
+ 		<input type="time" name="pulang">
+			<?php echo form_error('pulang', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
 			 <p>Pilih Bidang :</p>
@@ -44,6 +55,19 @@
 			<option>Siang - Melaksanakan Perintah Atasan</option>
 			<option>Sore - Melaksanakan Perintah Atasan</option>
 			<option>Pagi - Apel Pagi Persiapan Kerja</option>
+			<option>Menginput KM/HM Alat Berat dan Dump Truck</option>
+			<option>Koordinasi dengan Koordinator Pengemudi Dump Truck</option>
+			<option>Koordinasi dengan Koordinator Pengemudi Alat Berat</option>
+            <option>Dokumentasi Kegiataan</option>
+            <option>Perencanaan BBM</option>
+            <option>Monitoring Kegiatan</option>
+            <option>Editing Video</option>
+            <option>Melakukan Backup File</option>
+            <option>Mengembangkan Aplikasi</option>
+            <option>Perencanaan Kegiatan</option>
+            <option>Monitoring tim IT</option>
+            <option>Mencatat Rekapitulasi Pelaksanaan Kegiatan Harian</option>
+            <option>Membantu Melakukan Perencanaan Kegiatan</option>
 		</select>
 			<?php echo form_error('kegiatan', '<div class="text-danger small" ml-3>') ?>
 		</div>

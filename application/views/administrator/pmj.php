@@ -15,7 +15,7 @@
     ?>
     <?php
     echo anchor(
-        'administrator/pmj/print',
+        'administrator/pmj/print_form',
         '<button class="btn btn-sm btn-info mb-3">
             <i class="fa fa-print"></i> 
             Print
@@ -35,33 +35,36 @@
   <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
     <thead>
       <tr>
+      <th>Tanggal Penginputan</th>
       <th>Tanggal</th>
-      <th>No</th>
-      <th>Waktu</th>
+  		<th>No</th>
+  		<th colspan="2">Waktu</th>
       <th>Nama</th>
-      <th>Bidang</th>
-      <th>Kegiatan</th>
+  		<th>Bidang</th>
+  		<th>Kegiatan</th>
       <th>Lokasi</th>
-      <th>Dokumentasi</th>
+  		<th>Dokumentasi</th>
       <th>Aksi</th>
     </tr>
   </thead>
   <tbody>
-    <?php $no=1; foreach($pmj as $k) : ?>
-      <tr>
+  	<?php $no=1; foreach($pmj as $k) : ?>
+  		<tr>
         <td><?php echo $k->tanggal ?></td>
-        <td width="20px"><?php echo $no++ ?></td>
+        <td><?php echo $k->tgl ?></td>
+  			<td width="20px"><?php echo $no++ ?></td>
         <td><?php echo $k->waktu ?></td>
-        <td><?php echo $k->nama ?></td>
-        <td><?php echo $k->bidang ?></td>
-        <td><?php echo $k->kegiatan ?></td>
+        <td><?php echo $k->pulang ?></td>
+  			<td><?php echo $k->nama ?></td>
+  			<td><?php echo $k->bidang ?></td>
+  			<td><?php echo $k->kegiatan ?></td>
         <td><?php echo $k->lokasi ?></td>
             <td>
-            <a href="<?php echo base_url('assets/upload/').$k->dokumentasi ?>">dokumentasi</a>
-            </td>
+                    <img width="60px" src="<?php echo base_url().'assets/upload/'.$k->dokumentasi ?>">    
+                  </td>
         <td onclick="javascript: return confirm('Yakin Hapus?')"><?php echo anchor('administrator/pmj/hapus/'.$k->no, '<div class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></div>') ?></td>
-      </tr>
-    <?php endforeach; ?>
+  		</tr>
+  	<?php endforeach; ?>
   </table>
   </tbody>
 </div>
@@ -95,7 +98,7 @@ $(document).ready(function()
               {
                 extend: "excelHtml5",
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4, 5, 6]
+                  columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 }
               },
               {

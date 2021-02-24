@@ -9,7 +9,6 @@
 			<label> Nama Lengkap :</label>
 			<select name="nama" class="form-control" value="<?php echo $k->nama?>">
 			<option>Agung Permana</option>
-			<option>Ahmad Baktiar</option>
 			<option>Ahmad Yapie Ta'as</option>
 			<option>Akhmad Rafik Cahyadi</option>
 			<option>Aminudin</option>
@@ -47,15 +46,15 @@
  		    <option></option>
   			</select>
 		</div>
-	<div class="form-group">
-			 <p>Pilih Waktu :</p>
- 		<input type="radio" id="Pagi" name="waktu" value="Pagi">
- 		<label for="Pagi">Pagi</label><br>
- 		<input type="radio" id="Siang" name="waktu" value="Siang">
- 		<label for="Siang">Siang</label><br>
- 		<input type="radio" id="Sore" name="waktu" value="Sore">
- 		<label for="Sore">Sore</label><br>
+		<div class="form-group">
+			 <p>Pilih Jam Mulai :</p>
+ 		<input type="time" id="waktu" name="waktu">
 			<?php echo form_error('waktu', '<div class="text-danger small" ml-3>') ?>
+		</div>
+		<div class="form-group">
+			 <p>Pilih Jam Selesai :</p>
+ 		<input type="time" name="pulang">
+			<?php echo form_error('pulang', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
 			 <p>Pilih Bidang :</p>
@@ -67,52 +66,21 @@
 			<label>Kegiatan</label>
 			<label> Pilih Kegiatan :</label>
 			<select name="kegiatan" class="form-control" value="<?php echo $k->kegiatan?>">
-			<option>Pagi - Apel Pagi Persiapan Kerja</option>
-			<option>Pagi - Melaksanakan Perintah Atasan</option>
-			<option>Pagi - Apel Pagi Persiapan Kerja</option>
-			<option>Pagi - Membantu Perapihan Lahan</option>
-			<option>Pagi - Membantu Pemadatan Lahan</option>
-			<option>Pagi - Membantu Pergantian Spare Part</option>
-			<option>Pagi - Membantu Perbaikan Alat</option>
-			<option>Pagi - Membantu Bersih-Bersih Kendaraan dan Alat</option>
-			<option>Pagi - Membantu Antar Muat Puing Atau Scrap</option>
-			<option>Pagi - Membantu Jetting Pembersihan Trotoar</option>
-			<option>Pagi - Membantu Pekerjaan Jetting Di Lokasi</option>
-			<option>Pagi - Membantu Perapihan dan Pemsangan MCB</option>
-			<option>Pagi - Membantu Perapihan Bongkaran
-			<option>Pagi - Membantu Menghantarkan Scrap</option>
-			<option>Pagi - Membantu Mobilisasi Alat</option>
-			<option>Pagi - Membantu Perapihan Material</option>
-			<option>Siang - Melaksanakan Perintah Atasan</option>
-			<option>Siang - Apel Pagi Persiapan Kerja</option>
-			<option>Siang - Membantu Perapihan Lahan</option>
-			<option>Siang - Membantu Pemadatan Lahan</option>
-			<option>Siang - Membantu Pergantian Spare Part</option>
-			<option>Siang - Membantu Perbaikan Alat</option>
-			<option>Siang - Membantu Bersih-Bersih Kendaraan dan Alat</option>
-			<option>Siang - Membantu Antar Muat Puing Atau Scrap</option>
-			<option>Siang - Membantu Jetting Pembersihan Trotoar</option>
-			<option>Siang - Membantu Pekerjaan Jetting Di Lokasi</option>
-			<option>Siang - Membantu Perapihan dan Pemsangan MCB</option>
-			<option>Siang - Membantu Perapihan Bongkaran
-			<option>Siang - Membantu Menghantarkan Scrap</option>
-			<option>Siang - Membantu Mobilisasi Alat</option>
-			<option>Siang - Membantu Perapihan Material</option>
-			<option>Sore - Melaksanakan Perintah Atasan</option>
-			<option>Sore - Apel Pagi Persiapan Kerja</option>
-			<option>Sore - Membantu Perapihan Lahan</option>
-			<option>Sore - Membantu Pemadatan Lahan</option>
-			<option>Sore - Membantu Pergantian Spare Part</option>
-			<option>Sore - Membantu Perbaikan Alat</option>
-			<option>Sore - Membantu Bersih-Bersih Kendaraan dan Alat</option>
-			<option>Sore - Membantu Antar Muat Puing Atau Scrap</option>
-			<option>Sore - Membantu Jetting Pembersihan Trotoar</option>
-			<option>Sore - Membantu Pekerjaan Jetting Di Lokasi</option>
-			<option>Sore - Membantu Perapihan dan Pemsangan MCB</option>
-			<option>Sore - Membantu Perapihan Bongkaran
-			<option>Sore - Membantu Menghantarkan Scrap</option>
-			<option>Sore - Membantu Mobilisasi Alat</option>
-			<option>Sore - Membantu Perapihan Material</option>
+			<option>Apel Pagi Persiapan Kerja</option>
+			<option>Melaksanakan Perintah Atasan</option>
+			<option>Membantu Perapihan Lahan</option>
+			<option>Membantu Pemadatan Lahan</option>
+			<option>Membantu Pergantian Spare Part</option>
+			<option>Membantu Perbaikan Alat</option>
+			<option>Membantu Bersih-Bersih Kendaraan dan Alat</option>
+			<option>Membantu Antar Muat Puing Atau Scrap</option>
+			<option>Membantu Jetting Pembersihan Trotoar</option>
+			<option>Membantu Pekerjaan Jetting Di Lokasi</option>
+			<option>Membantu Perapihan dan Pemsangan MCB</option>
+			<option>Membantu Perapihan Bongkaran
+			<option>Membantu Menghantarkan Scrap</option>
+			<option>Membantu Mobilisasi Alat</option>
+			<option>Membantu Perapihan Material</option>
 		</select>
 			<?php echo form_error('kegiatan', '<div class="text-danger small" ml-3>') ?>
 		</div>

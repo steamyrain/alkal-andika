@@ -12,8 +12,8 @@
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo base_URL('administrator/dashboard')?>">
-        <div class="sidebar-brand-icon">
-          <img src="<?php echo base_url() ?>assets/img/ab.png" alt="ab" width="60">
+        <div class="sidebar-brand-icon animated slideInUp">
+          <img src="<?php echo base_url() ?>assets/img/ac.png" alt="ac" width="60">
         </div>
         <div class="sidebar-brand-text mx-1" style="color:black;">SILOLABIMA</div>
       </a>
@@ -213,7 +213,7 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">welcome</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Welcome, <?php echo $this->session->userdata('username') ?></span>
                 <img class="img-profile rounded-circle" src="<?php echo base_url() ?>assets/img/BM.png" alt="bm" width="60">
 
                 </a>

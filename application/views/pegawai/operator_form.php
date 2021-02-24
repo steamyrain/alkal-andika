@@ -43,108 +43,48 @@
 			<option>Muhammad Usman Abdillah</option>
 			<option>Doddy Mardjono</option>
 			<option>Dedi Gariyanto</option>
-			<option>Ambar Wisetyo</option>
-			<option>Fajar Adytia Ramadan</option>
-			<option>Frayogi Rizcha</option>
-			<option>Jon Faizal</option>
-			<option>Khrisna Bayu Aji</option>
-			<option>Markoni</option>
-			<option>Muhammad Hafiz</option>
-			<option>Muhammad Syafi'I</option>
-			<option>Achmad Rizky</option>
-			<option>Ade Adam Hanifianto</option>
-			<option>Agung Permana</option>
-			<option>Agung Pramono</option>
-			<option>Ahmad Baktiar</option>
-			<option>Ahmad Yapie Ta'as</option>
-			<option>Akhmad Rafik Cahyadi</option>
-			<option>Aminudin</option>
-			<option>Andy Setiawan</option>
-			<option>Anindya Indriasari</option>
-			<option>Bagus Setia A. K</option>
-			<option>Deni Wahyudi</option>
-			<option>Didit Triady</option>
-			<option>Dwi Fitri Meiranda</option>
-			<option>Fedo Alviansyah</option>
-			<option>Firman</option>
-			<option>Halimi</option>
-			<option>Harun Al Rasyid</option>
-			<option>Heru Susanto</option>
-			<option>Husni</option>
-			<option>Husni Safar</option>
-			<option>Indra Sucianto</option>
-			<option>Indra Suyono</option>
-			<option>Ismail Marjuki</option>
-			<option>Iswahyudi</option>
-			<option>M. Ali Agung</option>
-			<option>M. Yunus</option>
-			<option>Moch Rizqi Hafian S</option>
-			<option>Mohamad Yusup</option>
-			<option>Raiman</option>
-			<option>Rangga Marettayasa</option>
-			<option>Recky Pratama Putra</option>
-			<option>Renaldi</option>
-			<option>Rio Danar Prawito</option>
-			<option>Riyanto</option>
-			<option>Roni Sugiartono</option>
-			<option>Rudi Sugiarto</option>
-			<option>Riyan Nurman Wardaya</option>
-			<option>Sandy Aditya Gunawan</option>
-			<option>Santoso</option>
-			<option>Soni Herawan</option>
-			<option>Sri Muliati</option>
-			<option>Sugiono</option>
-			<option>Syaifudin</option>
-			<option>Toto Pranoto</option>
-			<option>Tri Yanto</option>
-			<option>U. Santoso</option>
-			<option>Vicky Ambiyah</option>
-			<option>Wahyu Setiaji</option>
-			<option>Wawan Setiawan</option>
-			<option>Aulia Mursalin</option>
-			<option>Muhammad Faisal Ridho</option>
-			<option>Nana<option> Supriyatna</option>
-			<option>Ahmad Zulfikar</option>
-			<option>Reinhard Aditya Petradi</option>
  		    <option></option>
   			</select>
 		</div>
-	<div class="form-group">
-			 <p>Pilih Waktu :</p>
- 		<input type="radio" id="Pagi" name="waktu" value="Pagi">
- 		<label for="Pagi">Pagi</label><br>
- 		<input type="radio" id="Siang" name="waktu" value="Siang">
- 		<label for="Siang">Siang</label><br>
- 		<input type="radio" id="Sore" name="waktu" value="Sore">
- 		<label for="Sore">Sore</label><br>
+		<div class="form-group">
+            <label>Tanggal :</label>
+            <input 
+                type="date" 
+                name="tgl"
+                id="tgl"
+                class="form-control"
+            />
+            <div style="display: none" class="text-danger small ml-3" id="tgl"></div>
+        </div>
+		<div class="form-group">
+			 <p>Pilih Jam Mulai :</p>
+ 		<input type="time" id="waktu" name="waktu">
 			<?php echo form_error('waktu', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
+			 <p>Pilih Jam Selesai :</p>
+ 		<input type="time" name="pulang">
+			<?php echo form_error('pulang', '<div class="text-danger small" ml-3>') ?>
+		</div>
+		<div class="form-group">
 			 <p>Pilih Bidang :</p>
- 		<input type="radio" id="Kendaraan Operasional Lapangan" name="bidang" value="Kendaraan Operasional Lapangan">
- 		<label for="Kendaraan Operasional Lapangan">Kendaraan Operasional Lapangan</label><br>
+ 		<input type="radio" id="Pengemudi Kendaraan Operasional Lapangan" name="bidang" value="Pengemudi Kendaraan Operasional Lapangan">
+ 		<label for="Pengemudi Kendaraan Operasional Lapangan">Pengemudi Kendaraan Operasional Lapangan</label><br>
 			<?php echo form_error('bidang', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
 			<label>Kegiatan</label>
 			<label> Pilih Kegiatan :</label>
 			<select name="kegiatan" class="form-control" value="<?php echo $k->kegiatan?>">
-			<option>Pagi - Apel Pagi dan Pengarahan dari Pimpinan</option>
-			<option>Pagi - Melakukan Persiapan Kendaraan</option>
-			<option>Pagi - Melakukan Pemanasan Kendaraan</option>
-			<option>Pagi - Melakukan Pengisian Bahan Bakar Minyak di SPBU</option>
-			<option>Pagi - Melakukan Pengisian Bahan Bakar Minyak Menggunakan Jerigen</option>
-			<option>Siang - Membantu Mekanik dalam Perbaikan Alat Berat</option>
-			<option>Siang - Melakukan Pengiriman Bahan Material</option>
-			<option>Sore - Melakukan Pengiriman Bahan Material</option>
-			<option>Pagi - Melaksanakan Perintah Atasan</option>
-			<option>Siang - Melaksanakan Perintah Atasan</option>
-			<option>Sore - Melaksanakan Perintah Atasan</option>
-			<option>Pagi - Melakukan Pengantaran Kru Ke Lokasi Pekerjaan</option>
-			<option>Pagi - Melakukan Pengantaran Kendaraan Untuk Service</option>
-			<option>Pagi - Melakukan Pematangan Lahan</option>
-			<option>Siang - Membantu Pematangan Lahan</option>
-			<option>Sore - Membantu Pematangan Lahan</option>	
+			<option>Apel Pagi dan Pengarahan dari Pimpinan</option>
+			<option>Melakukan Persiapan Kendaraan</option>
+			<option>Melakukan Pemanasan Kendaraan</option>
+			<option>Melakukan Pengisian Bahan Bakar Minyak di SPBU</option>
+			<option>Melakukan Pengisian Bahan Bakar Minyak Menggunakan Jerigen</option>
+			<option>Melakukan Pengantaran Kru Ke Lokasi Pekerjaan</option>
+			<option>Melakukan Pengantaran Kendaraan Untuk Service</option>
+			<option>Melakukan Pematangan Lahan</option>
+			<option>Melaksanakan Perintah Atasan</option>
 		</select>
 			<?php echo form_error('kegiatan', '<div class="text-danger small" ml-3>') ?>
 		</div>

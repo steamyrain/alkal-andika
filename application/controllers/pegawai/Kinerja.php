@@ -30,7 +30,9 @@ function __construct(){
 	{
 		$data = array(
 			'no'  => set_value('no'),
+			'tgl'  => set_value('tgl'),
             'waktu'  => set_value('waktu'),
+            'pulang'  => set_value('pulang'),
 			'nama'   => set_value('nama'),
 			'bidang'   => set_value('bidang'),
 			'kegiatan'   => set_value('kegiatan'),
@@ -59,6 +61,8 @@ function __construct(){
             echo "form valid\n";
             // assign form input values to variables
             $waktu         = $this->input->post('waktu');
+            $tgl         = $this->input->post('tgl');
+            $pulang         = $this->input->post('pulang');
 			$nama 			= $this->input->post('nama');
 			$bidang 		= $this->input->post('bidang');
 			$kegiatan 		= $this->input->post('kegiatan');
@@ -66,7 +70,7 @@ function __construct(){
             // codeigniter's upload config
             $config['upload_path'] = './assets/upload/';
             $config['allowed_types'] = 'gif|jpg|png';
-            $config['max_size'] = 2000; 
+            $config['max_size'] = 10000; 
 
             // initialize upload with predefined config
             $this->upload->initialize($config);
@@ -81,6 +85,8 @@ function __construct(){
                 $data = array(
                     'nama' => $nama,
                     'waktu' => $waktu,
+                    'tgl' => $tgl,
+                    'pulang' => $pulang,
                     'bidang' => $bidang,
                     'kegiatan' => $kegiatan,
                     'lokasi' => $lokasi,

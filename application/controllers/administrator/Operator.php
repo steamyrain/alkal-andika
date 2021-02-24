@@ -2,9 +2,7 @@
 
 class Operator extends CI_Controller{
 
-function __construct(){
-        parent::__construct();
-
+private function is_loggedIn() {
         if (!isset($this->session->userdata['username'])){
             $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
                 Anda Belum Login!
@@ -14,7 +12,19 @@ function __construct(){
                 </div>');
             redirect('administrator/auth');
         }
-    } 
+    }
+
+    private function is_admin() {
+        if($this->session->userdata['level'] !== 'admin'){
+            $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
+                Anda Belum Login!
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                 </button>
+                </div>');
+            redirect('administrator/auth');
+        }
+    }
 
     public function index()
     {
@@ -30,13 +40,15 @@ function __construct(){
     {
         $data = array(
             'tanggal'  => set_value('tanggal'),
-            'no'  => set_value('no'),
+            'tgl'  => set_value('tgl'),
+			'no'  => set_value('no'),
             'waktu'  => set_value('waktu'),
-            'nama'   => set_value('nama'),
-            'bidang'   => set_value('bidang'),
-            'kegiatan'   => set_value('kegiatan'),
+            'pulang'  => set_value('pulang'),
+			'nama'   => set_value('nama'),
+			'bidang'   => set_value('bidang'),
+			'kegiatan'   => set_value('kegiatan'),
             'lokasi'   => set_value('lokasi'),
-            'dokumentasi'   => set_value('dokumentasi'),
+			'dokumentasi'   => set_value('dokumentasi'),
         );
         $this->load->view('template_administrator/header');
         $this->load->view('template_administrator/sidebar');
@@ -59,11 +71,14 @@ function __construct(){
         {
             echo "form valid\n";
             // assign form input values to variables
-            $nama           = $this->input->post('nama');
+            $nama 			= $this->input->post('nama');
+			$tgl 			= $this->input->post('tgl');
+            $lokasi         = $this->input->post('lokasi');
             $waktu          = $this->input->post('waktu');
-            $bidang         = $this->input->post('bidang');
-            $kegiatan       = $this->input->post('kegiatan');
-            $lokasi       = $this->input->post('lokasi');
+            $pulang         = $this->input->post('pulang');
+			$bidang 		= $this->input->post('bidang');
+			$kegiatan 		= $this->input->post('kegiatan');
+
             // codeigniter's upload config
             $config['upload_path'] = './assets/upload/';
             $config['allowed_types'] = 'gif|jpg|png';
@@ -81,6 +96,8 @@ function __construct(){
                 $dokumentasi = $this->upload->data('file_name');
                 $data = array(
                     'waktu' => $waktu,
+                    'tgl' => $tgl,
+                    'pulang' => $pulang,
                     'nama' => $nama,
                     'bidang' => $bidang,
                     'kegiatan' => $kegiatan,
@@ -173,7 +190,7 @@ function __construct(){
                      </button>
                     </div>');
              */
-            //redirect('administrator/kinerja');
+            //redirect('administrator/operator');
     
     public function _rules()
     {
@@ -181,8 +198,57 @@ function __construct(){
         $this->form_validation->set_rules('waktu','waktu','required',['required' => 'Nama Wajib Diisi']);
         $this->form_validation->set_rules('bidang','bidang','required',['required' => 'Bidang Wajib Diisi']);
     }
+    
+    public function print_form(){
 
+        $this->is_loggedIn();
+        $this->is_admin();
+
+        $data['driver']= $this->user_model->getDriver()->result();
+        $this->load->view('template_administrator/header.php');
+        $this->load->view('template_administrator/sidebar.php');
+        $this->load->view('administrator/operator_print_form',$data);
+        $this->load->view('template_administrator/footer.php');
+    }
+
+    public function print_dinas() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->_rules_print(); 
+        if($this->form_validation->run() == FALSE){
+            $this->print_form();
+        } else {
+            $this->load->library('Pdf');
+
+            $name = $this->input->post('username');
+            $startDate = $this->input->post('starting_date');
+            $endDate = $this->input->post('end_date');
+            $data = $this->operator_model->getSpecificDriver($name,$startDate,$endDate)->result();
+
+            $pdf = new Pdf();
+            $pdf->AddPage("L");
+
+            $pdf->SetFont('Times','BU',14);
+            $pdf->Cell(0,0,'Kinerja PJLP Bidang Pengemudi Operasional Lapangan',0,1,'C');
+            $pdf->ln(5);
+            
+            $pdf->Nama($this->input->post('username'));
+            $pdf->Jabatan('pengemudi operasional lapangan');
+            $pdf->Tanggal($this->input->post('starting_date'),$this->input->post('end_date'));
+            $header = ['Tanggal','Waktu','Kegiatan','Lokasi'];
+            // total width = 205
+            $pdf->TabelKinerja($header,$data,[30,15,100,60]);
+
+            $pdf->Output();
+        }
+    }
+
+    // obosolete
     public function print(){
+
+        $this->is_loggedIn();
+        $this->is_admin();
+
         $data['operator']   = $this->operator_model->tampil_data("operator")->result();
         $this->load->view('administrator/print_operator',$data);
     }
@@ -198,29 +264,67 @@ function __construct(){
         $object->getProperties()->setCreator("kitsui");
         $object->getProperties()->setLastModifiedBy("kitsui");
         $object->getProperties()->setTitle("Data Operator");
-
+// Buat sebuah variabel untuk menampung pengaturan style dari header tabel
+    $style_col = array(
+      'font' => array('bold' => true), // Set font nya jadi bold
+      'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+      ),
+      'borders' => array(
+        'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
+        'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
+        'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
+        'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
+      )
+    );
+    // Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
+    $style_row = array(
+      'alignment' => array(
+        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+      ),
+      'borders' => array(
+        'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
+        'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
+        'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
+        'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
+      )
+    );
+    $object->setActiveSheetIndex(0)->setCellValue('F1', "DAFTAR KEGIATAN HARIAN PJLP "); // Set kolom A1 dengan tulisan "DATA SISWA"
+    $object->getActiveSheet()->getStyle('F1')->getFont()->setBold(TRUE); // Set bold kolom A1
+    $object->getActiveSheet()->getStyle('F1')->getFont()->setSize(15); // Set font size 15 untuk kolom A1
+    $object->getActiveSheet()->getStyle('F1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
+     $object->setActiveSheetIndex(0)->setCellValue('F2', "UNIT ALKAL DINAS BINA MARGA PROVINSI DKI JAKARTA "); // Set kolom A1 dengan tulisan "DATA SISWA"
+    $object->getActiveSheet()->getStyle('F2')->getFont()->setBold(TRUE); // Set bold kolom A1
+    $object->getActiveSheet()->getStyle('F2')->getFont()->setSize(15); // Set font size 15 untuk kolom A1
+    $object->getActiveSheet()->getStyle('F2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
+     $object->setActiveSheetIndex(0)->setCellValue('F3', "2021"); // Set kolom A1 dengan tulisan "DATA SISWA"
+    $object->getActiveSheet()->getStyle('F3')->getFont()->setBold(TRUE); // Set bold kolom A1
+    $object->getActiveSheet()->getStyle('F3')->getFont()->setSize(15); // Set font size 15 untuk kolom A1
+    $object->getActiveSheet()->getStyle('F3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
+    $object->getActiveSheet()->setAutoFilter('A4:G4');
         $object->setActiveSheetIndex(0);
-        $object->getActiveSheet()->setCellValue('A1', 'Tanggal');
-        $object->getActiveSheet()->setCellValue('B1', 'No');
-        $object->getActiveSheet()->setCellValue('C1', 'Nama');
-        $object->getActiveSheet()->setCellValue('D1', 'Waktu');
-        $object->getActiveSheet()->setCellValue('E1', 'Bidang');
-        $object->getActiveSheet()->setCellValue('F1', 'Kegiatan');
-        $object->getActiveSheet()->setCellValue('G1', 'Lokasi');
-    $object->getActiveSheet()->setCellValue('H1', 'Dokumentasi');
+        $object->getActiveSheet()->setCellValue('A4', 'Tgl/Hari');
+        $object->getActiveSheet()->setCellValue('B4', 'No');
+        $object->getActiveSheet()->setCellValue('C4', 'Nama');
+        $object->getActiveSheet()->setCellValue('D4', 'Waktu');
+        $object->getActiveSheet()->setCellValue('E4', 'Bidang');
+        $object->getActiveSheet()->setCellValue('F4', 'Kegiatan');
+        $object->getActiveSheet()->setCellValue('G4', 'Lokasi');
+	   $object->getActiveSheet()->setCellValue('H4', 'Keterangan');
 
-        $baris = 2;
+        $baris = 5;
         $no = 1;
 
         foreach ($data['operator'] as $k) {
             $object->getActiveSheet()->setCellValue('B'.$baris, $no++);
-            $object->getActiveSheet()->setCellValue('A'.$baris, $k->tanggal);
+            $object->getActiveSheet()->setCellValue('A'.$baris, $k->tgl);
             $object->getActiveSheet()->setCellValue('C'.$baris, $k->nama);
             $object->getActiveSheet()->setCellValue('D'.$baris, $k->waktu);
             $object->getActiveSheet()->setCellValue('E'.$baris, $k->bidang);
             $object->getActiveSheet()->setCellValue('F'.$baris, $k->kegiatan);
             $object->getActiveSheet()->setCellValue('G'.$baris, $k->lokasi);
-            $object->getActiveSheet()->setCellValue('H'.$baris, $k->dokumentasi);
+            
 
             $baris++;
         }
@@ -285,5 +389,10 @@ function __construct(){
                     </div>');
         redirect('administrator/operator');
     }
-
+    
+     public function _rules_print(){
+		$this->form_validation->set_rules('username','username','required',['required' => 'Nama Wajib Diisi']);
+		$this->form_validation->set_rules('starting_date','starting_date','required',['required' => 'Tanggal Awal Wajib Diisi']);
+		$this->form_validation->set_rules('end_date','end_date','required',['required' => 'Tanggal Akhir Wajib Diisi']);
+    }
 }

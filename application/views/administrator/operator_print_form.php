@@ -1,20 +1,24 @@
 <div class="container-fluid">
 
 	<div class="alert alert-success" role="alert">
-        <i class="fas fa-clipboard"></i> FORM PRINT DINAS
+        <i class="fas fa-clipboard"></i> FORM PRINT KINERJA DINAS
   	</div>
-        <form>
-
+        <?php 
+            echo form_open(
+                base_URL('administrator/operator/print_dinas')
+            ); 
+        ?>
         <!-- select nama operator -->
 		<div class="form-group">
 			<label> Nama Yang Akan Diprint :</label>
 			<select name="username" class="form-control">
-                <?php foreach($operator as $o): ?>
+                <?php foreach($driver as $o): ?>
                     <option value="<?php echo $o->username; ?>">
                         <?php echo $o->username; ?>
                     </option>
                 <?php endforeach; ?>
   			</select>
+			<?php echo form_error('username', '<div class="text-danger small">') ?>
 		</div>
 
         <!-- range tanggal (start-end) -->
@@ -39,5 +43,5 @@
 	
         <!-- form submit -->
 		<button type="submit" class="btn btn-primary mb-5 mt-3"><span><i class="fas fa-print"></i>  Print</span></button>
-    </form>
+    <?php echo form_close(); ?>
 </div>

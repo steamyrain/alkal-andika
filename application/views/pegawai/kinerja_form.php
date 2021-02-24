@@ -56,15 +56,25 @@
  		    <option></option>
   			</select>
 		</div>
+	<div class="form-group">
+            <label>Tanggal :</label>
+            <input 
+                type="date" 
+                name="tgl"
+                id="tgl"
+                class="form-control"
+            />
+            <div style="display: none" class="text-danger small ml-3" id="tgl"></div>
+        </div>
 		<div class="form-group">
-			 <p>Pilih Waktu :</p>
- 		<input type="radio" id="Pagi" name="waktu" value="Pagi">
- 		<label for="Pagi">Pagi</label><br>
- 		<input type="radio" id="Siang" name="waktu" value="Siang">
- 		<label for="Siang">Siang</label><br>
- 		<input type="radio" id="Sore" name="waktu" value="Sore">
- 		<label for="Sore">Sore</label><br>
+			 <p>Pilih Jam Mulai :</p>
+ 		<input type="time" id="waktu" name="waktu">
 			<?php echo form_error('waktu', '<div class="text-danger small" ml-3>') ?>
+		</div>
+		<div class="form-group">
+			 <p>Pilih Jam Selesai :</p>
+ 		<input type="time" name="pulang">
+			<?php echo form_error('pulang', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
 			 <p>Pilih Bidang :</p>
@@ -72,53 +82,26 @@
  		<label for="Pengemudi Alat Berat">Operator Alat Berat</label><br>
 			<?php echo form_error('bidang', '<div class="text-danger small" ml-3>') ?>
 		</div>
-		<div class="form-group">
+	<div class="form-group">
 			<label>Kegiatan</label>
 			<label> Pilih Kegiatan :</label>
 			<select name="kegiatan" class="form-control" value="<?php echo $k->kegiatan?>">
-			<option>Pagi - Apel Pagi dan Pengarahan dari Pimpinan</option>
-			<option>Pagi - Melakukan Persiapan Alat Berat</option>
-			<option>Pagi - Melakukan Pemanasan Alat Berat</option>
-			<option>Pagi - Melakukan Pengisian Bahan Bakar Minyak Pada Alat Berat</option>
-			<option>Pagi - Melakukan Pembersihan Trotoar Pejalan Kaki</option>
-			<option>Pagi - Membantu Pekerjaan Bersih-Bersih di Lokasi</option>
-			<option>Pagi - Melakukan Pembersihan Fasilitas dan Sarana Kantor</option>
-			<option>Pagi - Melakukan Perapihan Bongkaran</option>
-			<option>Pagi - Melakukan Perapihan dan Pemasangan MCB</option>
-			<option>Pagi - Melakukan Perapihan dan Angkut Material Kantor</option>
-			<option>Pagi - Melakukan Perapihan dan Membantu Angkut Material</option>
-			<option>Pagi - Melakukan Mobilisasi Alat</option>
-			<option>Pagi - Melakukan Pematangan Lahan</option>
-			<option>Pagi - Melakukan Perapihan Lahan</option>
-			<option>Pagi - Menggali Lubang di Lokasi</option>
-			<option>Pagi - Membantu Meratakan Tanah</option>
-			<option>Siang - Membantu Mekanik dalam Perbaikan Alat Berat</option>
-			<option>Siang - Melakukan Pembersihan Trotoar Pejalan Kaki</option>
-			<option>Siang - Membantu Pekerjaan Bersih-Bersih di Lokasi</option>
-			<option>Siang - Melakukan Pembersihan Fasilitas dan Sarana Kantor</option>
-			<option>Siang - Melakukan Peraphian Bongkaran</option>
-			<option>Siang - Melakukan Perapihan dan Pemasangan MCB</option>
-			<option>Siang - Melakukan Perapihan dan Angkut Material Kantor</option>
-			<option>Siang - Melakukan Perapihan dan Membantu Angkut Material</option>
-			<option>Siang - Melakukan Mobilisasi Alat</option>
-			<option>Siang - Melakukan Pematangan Lahan</option>
-			<option>Siang - Melakukan Perapihan Lahan</option>
-			<option>Siang - Menggali Lubang di Lokasi</option>
-			<option>Siang - Membantu Meratakan Tanah</option>
-			<option>Sore - Melakukan Penertiban Reklame</option>
-			<option>Sore - Melakukan Pembersihan Trotoar Pejalan Kaki</option>
-			<option>Sore - Membantu Pekerjaan Bersih-Bersih di Lokasi</option>
-			<option>Sore - Melakukan Pembersihan Fasilitas dan Sarana Kantor</option>
-			<option>Sore - Melakukan Peraphian Bongkaran</option>
-			<option>Sore - Melakukan Perapihan dan Pemasangan MCB</option>
-			<option>Sore - Melakukan Perapihan dan Angkut Material Kantor</option>
-			<option>Sore - Melakukan Perapihan dan Membantu Angkut Material</option>
-			<option>Sore - Melakukan Mobilisasi Alat</option>
-			<option>Sore - Melakukan Pematangan Lahan</option>
-			<option>Sore - Melakukan Perapihan Lahan</option>
-			<option>Sore - Menggali Lubang di Lokasi</option>
-			<option>Sore - Membantu Meratakan Tanah</option>
-
+			<option>Apel dan Pengarahan dari Pimpinan</option>
+			<option>Melakukan Persiapan Alat Berat</option>
+			<option>Melakukan Pemanasan Alat Berat</option>
+			<option>Melakukan Pengisian Bahan Bakar Minyak Pada Alat Berat</option>
+			<option>Melakukan Pembersihan Trotoar Pejalan Kaki</option>
+			<option>Membantu Pekerjaan Bersih-Bersih di Lokasi</option>
+			<option>Melakukan Pembersihan Fasilitas dan Sarana Kantor</option>
+			<option>Melakukan Perapihan Bongkaran</option>
+			<option>Melakukan Perapihan dan Pemasangan MCB</option>
+			<option>Melakukan Perapihan dan Angkut Material Kantor</option>
+			<option>Melakukan Perapihan dan Membantu Angkut Material</option>
+			<option>Melakukan Mobilisasi Alat</option>
+			<option>Melakukan Pematangan Lahan</option>
+			<option>Melakukan Perapihan Lahan</option>
+			<option>Menggali Lubang di Lokasi</option>
+			<option>Membantu Meratakan Tanah</option>
 		</select>
 			<?php echo form_error('kegiatan', '<div class="text-danger small" ml-3>') ?>
 		</div>
