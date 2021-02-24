@@ -89,4 +89,15 @@ class ESignModel extends CI_Model{
         return $this->db->get();
     }
 
+    public function getEKReqToOp($uId) {
+        $this->db->select($this->tableEKReq.'.*,'
+                            .$this->tableUser.'.username as reqByName,'
+                            .$this->tableUser.'.job_id'
+                        );
+        $this->db->from($this->tableEKReq);
+        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKReq.'.reqBy');
+        $this->db->where($this->tableEKReq.'.uId = '.$uId);
+        return $this->db->get();
+    }
+
 }
