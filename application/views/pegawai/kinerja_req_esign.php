@@ -53,23 +53,27 @@
   			<td><?php echo $ek->reqDate?></td>
             <td style="text-align=center;">
                 <div class="aksi" style="text-align: center">
-                <form 
-                    id="<?php echo 'form-confirm-'.$i; ?>" 
-                    style="display:grid"
-                    method="post" 
-                    action="<?php echo base_URL('administrator/esign/confirm'); ?>"
-                > 
-                    <input type="text" name="id" style="display: none" value="<?php echo $ek->uId; ?>">
-                    <input style="display: none" type="date" name="date_start" value="<?php echo $ek->ekin_start; ?>">
-                    <input style="display: none" type="date" name="date_end" value="<?php echo $ek->ekin_end; ?>">
-                    <button 
-                        style="display:grid" 
-                        type="submit" 
-                        class="btn btn-success btn-sm"
-                    >
-                        <i class="fa fa-check"></i>
-                    </button>
-                </form>
+                    <?php if ($ek->status == 'signed') { ?>
+                        <?php echo 'signed'; ?>
+                    <?php } else if ($ek->status == 'pending') { ?>
+                        <form 
+                            id="<?php echo 'form-confirm-'.$i; ?>" 
+                            style="display:grid"
+                            method="post" 
+                            action="<?php echo base_URL('pegawai/esign/confirm'); ?>"
+                        > 
+                            <input type="text" name="id" style="display: none" value="<?php echo $ek->uId; ?>">
+                            <input style="display: none" type="date" name="date_start" value="<?php echo $ek->ekin_start; ?>">
+                            <input style="display: none" type="date" name="date_end" value="<?php echo $ek->ekin_end; ?>">
+                            <button 
+                                style="display:grid" 
+                                type="submit" 
+                                class="btn btn-success btn-sm"
+                            >
+                                <i class="fa fa-check"></i>
+                            </button>
+                        </form>
+                    <?php } ?>
                 </div>
             </td>
   		</tr>

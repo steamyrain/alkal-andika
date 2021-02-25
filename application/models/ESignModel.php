@@ -79,6 +79,14 @@ class ESignModel extends CI_Model{
         $this->db->update($this->tableSTReq);
     }
 
+    public function updateEKReq($uId,$start,$end,$data){
+        $this->db->set($data);
+        $this->db->where('uId',$uId);
+        $this->db->where('ekin_start',$start);
+        $this->db->where('ekin_end',$end);
+        $this->db->update($this->tableEKReq);
+    }
+
     public function getEKReqReqBy($uId) {
         $this->db->select($this->tableEKReq.'.*,'
                             .$this->tableUser.'.username as reqByName'
