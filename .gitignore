@@ -1,7 +1,8 @@
 #codeigniter
 #------------------------
 */config/development
-*/config.php
+/config/config.php
+/config/database.php
 */logs/log-*.php
 !*/logs/index.html
 */cache/*
