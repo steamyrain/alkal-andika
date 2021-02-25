@@ -58,4 +58,4 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /assets/upload/
 
 # htaccess
-.htaccess
+/.htaccess
