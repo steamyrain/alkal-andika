@@ -25,6 +25,7 @@
   		<th class="text-center">Tanggal Akhir Kinerja</th>
   		<th class="text-center">Pemohon</th>
   		<th class="text-center">Tanggal Permohonan</th>
+  		<th class="text-center">Status</th>
     </tr>
     </thead>
     <tbody>
@@ -36,6 +37,7 @@
   			<td><?php echo $ek->ekin_end?></td>
   			<td><?php echo $ek->reqByName?></td>
   			<td><?php echo $ek->reqDate?></td>
+  			<td><?php echo $ek->status?></td>
   		</tr>
   	<?php endforeach; ?>
     </tbody>
