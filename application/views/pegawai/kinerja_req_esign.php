@@ -30,7 +30,7 @@
                 <form 
                     id="<?php echo 'form-document-'.$i; ?>" 
                     method="post" 
-                    action="<?php echo base_URL('')?>"
+                    action="<?php echo base_URL('pegawai/esign/print_dinas')?>"
                 > 
                     <input style="display: none" type="text" name="username" value="<?php echo $ek->uName; ?>">
                     <input style="display: none" type="date" name="date_start" value="<?php echo $ek->ekin_start; ?>">

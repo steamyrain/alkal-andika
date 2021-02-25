@@ -103,7 +103,7 @@ class ESignModel extends CI_Model{
                             .$this->tableUser.'.job_id'
                         );
         $this->db->from($this->tableEKReq);
-        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKReq.'.reqBy');
+        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKReq.'.uId');
         $this->db->where($this->tableEKReq.'.uId = '.$uId);
         return $this->db->get();
     }

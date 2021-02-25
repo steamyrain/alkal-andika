@@ -69,4 +69,44 @@ class Esign extends CI_Controller {
 		$this->form_validation->set_rules('date_end','date_end','required',['required' => 'tanggal akhir wajib ada!']);
     }
 
+    public function print_dinas() {
+        $this->is_loggedIn();
+        $this->_rules_print(); 
+        if($this->form_validation->run() == FALSE){
+            $this->print_index();
+        } else {
+            $this->load->library('Pdf');
+
+            $name = $this->input->post('username');
+            $startDate = $this->input->post('date_start');
+            $endDate = $this->input->post('date_end');
+            $job_id = $this->input->post('job_id');
+            if ($job_id == 1) {
+                $data = $this->kinerja_model->getSpecificKinerja($name,$startDate,$endDate)->result();
+            }
+
+            $pdf = new Pdf();
+            $pdf->AddPage("L");
+
+            $pdf->SetFont('Times','BU',14);
+            $pdf->Cell(0,0,'Kinerja PJLP Bidang Pengemudi Alat Berat',0,1,'C');
+            $pdf->ln(5);
+            
+            $pdf->Nama($this->input->post('username'));
+            $pdf->Jabatan('pengemudi alat berat');
+            $pdf->Tanggal($this->input->post('starting_date'),$this->input->post('end_date'));
+            $header = ['Tanggal','Waktu','Kegiatan','Lokasi'];
+            // total width = 205
+            $pdf->TabelKinerja($header,$data,[30,15,100,60]);
+
+            $pdf->Output();
+        }
+    }
+
+    public function _rules_print(){
+		$this->form_validation->set_rules('username','username','required',['required' => 'Nama Wajib Diisi!']);
+		$this->form_validation->set_rules('date_start','date_start','required',['required' => 'Tanggal Awal Wajib Diisi!']);
+		$this->form_validation->set_rules('date_end','date_end','required',['required' => 'Tanggal Akhir Wajib Diisi!']);
+		$this->form_validation->set_rules('job_id','job_id','required',['required' => 'Job ID Wajib Diisi!']);
+    }
 }
