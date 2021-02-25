@@ -26,6 +26,7 @@
   		<th class="text-center">Pemohon</th>
   		<th class="text-center">Tanggal Permohonan</th>
   		<th class="text-center">Status</th>
+  		<th class="text-center">Tanggal ESign</th>
     </tr>
     </thead>
     <tbody>
@@ -38,6 +39,7 @@
   			<td><?php echo $ek->reqByName?></td>
   			<td><?php echo $ek->reqDate?></td>
   			<td><?php echo $ek->status?></td>
+  			<td><?php echo $ek->signedDate?></td>
   		</tr>
   	<?php endforeach; ?>
     </tbody>
