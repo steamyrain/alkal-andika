@@ -1,6 +1,7 @@
 #codeigniter
 #------------------------
 */config/development
+*/config.php
 */logs/log-*.php
 !*/logs/index.html
 */cache/*
@@ -54,3 +55,6 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 
 ## assets
 /assets/upload/
+
+# htaccess
+.htaccess
