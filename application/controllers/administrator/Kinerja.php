@@ -194,7 +194,7 @@ class Kinerja extends CI_Controller{
         }
     }
 
-    // obosolete
+    // obsolete
     public function print(){
 
         $this->is_loggedIn();
@@ -436,5 +436,58 @@ class Kinerja extends CI_Controller{
 		$this->form_validation->set_rules('starting_date','starting_date','required',['required' => 'Tanggal Awal Wajib Diisi']);
 		$this->form_validation->set_rules('end_date','end_date','required',['required' => 'Tanggal Akhir Wajib Diisi']);
     }
+
+    public function print_dinas_esign() {
+        $this->is_loggedIn();
+        $this->is_admin();
+        if (($this->input->post('username')!==null) && !empty($this->input->post('username'))){
+            $this->load->library('Pdf');
+
+            $name = $this->input->post('username');
+            $startDate = $this->input->post('date_start');
+            $endDate = $this->input->post('date_end');
+            $status = $this->input->post('status');
+            $dateSigned= $this->input->post('dateSigned');
+
+            if ($status == 'signed') {
+                $data = $this->kinerja_model->getSpecificKinerja($name,$startDate,$endDate)->result();
+                $pdf = new Pdf($status,$name,$dateSigned);
+                $pdf->AddPage("L");
+
+                $pdf->SetFont('Times','BU',14);
+                $pdf->Cell(0,0,'Kinerja PJLP Bidang Pengemudi Alat Berat',0,1,'C');
+                $pdf->ln(5);
+                
+                $pdf->Nama($this->input->post('username'));
+                $pdf->Jabatan('pengemudi alat berat');
+                $pdf->Tanggal($startDate,$endDate);
+                $header = ['Tanggal','Waktu','Kegiatan','Lokasi'];
+                // total width = 205
+                $pdf->TabelKinerja($header,$data,[30,15,100,60]);
+
+                $pdf->Output();
+            } else {
+                $data = $this->kinerja_model->getSpecificKinerja($name,$startDate,$endDate)->result();
+                $pdf = new Pdf();
+                $pdf->AddPage("L");
+
+                $pdf->SetFont('Times','BU',14);
+                $pdf->Cell(0,0,'Kinerja PJLP Bidang Pengemudi Alat Berat',0,1,'C');
+                $pdf->ln(5);
+                
+                $pdf->Nama($this->input->post('username'));
+                $pdf->Jabatan('pengemudi alat berat');
+                $pdf->Tanggal($startDate,$endDate);
+                $header = ['Tanggal','Waktu','Kegiatan','Lokasi'];
+                // total width = 205
+                $pdf->TabelKinerja($header,$data,[30,15,100,60]);
+
+                $pdf->Output();
+            }
+        } else {
+            redirect(base_URL('administrator/dashboard'));
+        }
+    }
+
 
 }

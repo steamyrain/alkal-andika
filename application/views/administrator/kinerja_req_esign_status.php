@@ -25,8 +25,8 @@
   		<th class="text-center">Tanggal Akhir Kinerja</th>
   		<th class="text-center">Pemohon</th>
   		<th class="text-center">Tanggal Permohonan</th>
+  		<th class="text-center">Dokumen Kinerja</th>
   		<th class="text-center">Status</th>
-  		<th class="text-center">Tanggal ESign</th>
     </tr>
     </thead>
     <tbody>
@@ -38,8 +38,31 @@
   			<td><?php echo $ek->ekin_end?></td>
   			<td><?php echo $ek->reqByName?></td>
   			<td><?php echo $ek->reqDate?></td>
+            <td style="text-align: center">
+                <form 
+                    id="<?php echo 'form-document-'.$i; ?>" 
+                    method="post" 
+                    action="<?php echo base_URL('administrator/kinerja/print_dinas_esign')?>"
+                > 
+                    <input style="display: none" type="text" name="username" value="<?php echo $ek->uName; ?>">
+                    <input style="display: none" type="date" name="date_start" value="<?php echo $ek->ekin_start; ?>">
+                    <input style="display: none" type="date" name="date_end" value="<?php echo $ek->ekin_end; ?>">
+                    <input style="display: none" type="text" name="status" value="<?php echo $ek->status; ?>">
+                    <input style="display: none" type="text" name="dateSigned" value="<?php echo $ek->signedDate; ?>">
+                    <button 
+                        type="submit" 
+                        name="submit" 
+                        value="submit"
+                        class="btn btn-primary btn-sm"
+                    >
+                        <span>
+                            <i class="fa fa-file"></i>
+                            Dokumen
+                        <span>
+                    </button>
+                </form>
+            </td>
   			<td><?php echo $ek->status?></td>
-  			<td><?php echo $ek->signedDate?></td>
   		</tr>
   	<?php endforeach; ?>
     </tbody>

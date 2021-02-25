@@ -36,6 +36,8 @@
                     <input style="display: none" type="date" name="date_start" value="<?php echo $ek->ekin_start; ?>">
                     <input style="display: none" type="date" name="date_end" value="<?php echo $ek->ekin_end; ?>">
                     <input style="display: none" type="text" name="job_id" value="<?php echo $ek->job_id; ?>">
+                    <input style="display: none" type="text" name="status" value="<?php echo $ek->status; ?>">
+                    <input style="display: none" type="text" name="dateSigned" value="<?php echo $ek->signedDate; ?>">
                     <button 
                         type="submit" 
                         name="submit" 

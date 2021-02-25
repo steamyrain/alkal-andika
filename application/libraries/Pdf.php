@@ -5,6 +5,17 @@ use Fpdf\Fpdf;
 
 class Pdf extends Fpdf
 {
+    private string $status;
+    private string $pjlp;
+    private string $dateSigned;
+
+    public function __construct($status='',$pjlp='',$dateSigned=''){
+        parent::__construct();
+        $this->status = $status;
+        $this->pjlp = $pjlp;
+        $this->dateSigned = $dateSigned;
+    }
+
     function Header() {
         $this->Image('assets/img/logo-dki.png',10,8,20);
         $this->SetFont('Times','B',13);
@@ -73,6 +84,19 @@ class Pdf extends Fpdf
             }
             $i = 0;
             $this->ln();
+        }
+    }
+
+    function Footer(){
+        if ($this->status == 'signed'){
+            $this->SetY(-25);
+            $this->SetFont('Times','',12);
+            $this->SetLeftMargin(220);
+            $date;
+            preg_match('/^[0-9]{4}-[0-9][0-9]-[0-9][0-9]/',$this->dateSigned,$date);
+            $this->MultiCell(70,5,'Jakarta, '.$date[0],0,'C');
+            $this->ln(5);
+            $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->pjlp,1,'C');
         }
     }
 }
