@@ -28,8 +28,8 @@ class STPdf extends Fpdf
         preg_match('/^[0-9]{4}-[0-9][0-9]-[0-9][0-9]/',$signedDate,$date);
         $this->MultiCell(70,5,'Jakarta, '.$date[0],0,'C');
         $this->MultiCell(70,5,$jobTitle,0,'C');
-        $this->ln(30);
-        $this->MultiCell(70,5,$legalName,0,'C');
-        $this->MultiCell(70,5,'NIP. '.$nip,0,'C');
+        $this->ln(5);
+        $this->MultiCell(70,5,'Ditandatangani secara digital oleh '.$legalName,'LTR','C');
+        $this->MultiCell(70,5,'NIP. '.$nip,'LBR','C');
     }
 }
