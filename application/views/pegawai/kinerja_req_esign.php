@@ -1,7 +1,7 @@
 <div class="container-fluid">
 
 	 <div class="alert alert-success" role="alert">
-      <i class="fas fa-clipboard"></i> Request ESign Surat Tugas 
+      <i class="fas fa-clipboard"></i> Request ESign Kinerja PJLP
     </div>
 
     <?php echo $this->session->flashdata('pesan') ?>
@@ -10,7 +10,7 @@
   <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
     <thead>
   	<tr>
-  		<th class="text-center">Operator</th>
+  		<th class="text-center">PJLP</th>
   		<th class="text-center">Tanggal Awal Kinerja</th>
   		<th class="text-center">Tanggal Akhir Kinerja</th>
   		<th class="text-center">Dokumen Kinerja</th>
