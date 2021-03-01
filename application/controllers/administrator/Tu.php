@@ -2,9 +2,7 @@
 
 class Tu extends CI_Controller{
 
-function __construct(){
-        parent::__construct();
-
+    private function is_loggedIn() {
         if (!isset($this->session->userdata['username'])){
             $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
                 Anda Belum Login!
@@ -14,10 +12,24 @@ function __construct(){
                 </div>');
             redirect('administrator/auth');
         }
-    } 
+    }
+
+    private function is_admin() {
+        if($this->session->userdata['level'] !== 'admin'){
+            $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
+                Anda Belum Login!
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                 </button>
+                </div>');
+            redirect('administrator/auth');
+        }
+    }
 
     public function index()
     {
+        $this->is_loggedIn();
+        $this->is_admin();
         $data['title'] = "data pmj";
         $data['pmj']    = $this->pmj_model->tampil_data()->result();
         $this->load->view('template_administrator/header');
@@ -28,6 +40,8 @@ function __construct(){
 
     public function input()
     {
+        $this->is_loggedIn();
+        $this->is_admin();
         $data = array(
             'tanggal'  => set_value('tanggal'),
             'tgl'  => set_value('tgl'),
@@ -45,8 +59,11 @@ function __construct(){
         $this->load->view('administrator/tu_form',$data);
         $this->load->view('template_administrator/footer');
     }
+
     public function input_aksi()
     {
+        $this->is_loggedIn();
+        $this->is_admin();
         // rules loaded
         $this->_rules();
 
@@ -190,11 +207,15 @@ function __construct(){
     }
 
     public function print(){
+        $this->is_loggedIn();
+        $this->is_admin();
         $data['pmj']   = $this->pmj_model->tampil_data("pmj")->result();
         $this->load->view('administrator/print_pmj',$data);
     }
 
     public function excel(){
+        $this->is_loggedIn();
+        $this->is_admin();
         $data['pmj']   = $this->pmj_model->tampil_data("pmj")->result();
 
         require(APPPATH. 'PHPExcel-1.8/Classes/PHPExcel.php');
@@ -287,6 +308,8 @@ function __construct(){
 
     public function hapus($no)
     {
+        $this->is_loggedIn();
+        $this->is_admin();
         $data = array('no'=>$no);
         $this->pmj_model->hapus_data($data, 'pmj');
         redirect('administrator/tu');
@@ -303,6 +326,8 @@ function __construct(){
 
     public function update_aksi()
     {
+        $this->is_loggedIn();
+        $this->is_admin();
         $no = $this->input->post('no');
         $waktu = $this->input->post('waktu');
         $nama = $this->input->post('nama');

@@ -14,10 +14,22 @@ class Tu extends CI_Controller{
         }
     }
 
+    private function is_user() {
+        if($this->session->userdata['level'] !== 'user'){
+            $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
+                Anda tidak terdaftar sebagai user!
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                 </button>
+                </div>');
+            redirect('pegawai/auth');
+        }
+    }
 
 	public function index()
 	{
         $this->is_loggedIn();
+        $this->is_user();
 		$data['title'] = "data pmj";
 		$data['pmj'] = $this->pmj_model->showSpecificPmj($this->session->userdata['username'])->result();
 		$this->load->view('template_pegawai/header');
@@ -29,6 +41,7 @@ class Tu extends CI_Controller{
 	public function input()
 	{
         $this->is_loggedIn();
+        $this->is_user();
 		$data = array(
 			'no'  => set_value('no'),
 			'tgl'  => set_value('tgl'),
@@ -49,6 +62,7 @@ class Tu extends CI_Controller{
 	public function input_aksi()
 	{
         $this->is_loggedIn();
+        $this->is_user();
         // rules loaded
 		$this->_rules();
 
