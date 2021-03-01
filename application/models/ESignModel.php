@@ -5,7 +5,7 @@ class ESignModel extends CI_Model{
     private $table = 'alkal_user_verificator';
     private $tableUser= 'user';
     private $tableSTReq = 'alkal_st_esign_req';
-    private $tableEKReq = 'alkal_ekindr_esign_req';
+    private $tableEKOpReq = 'alkal_ekinop_esign_req';
     private $tableST= 'alkal_surat_tugas';
 
     public function getVerificator(){
@@ -40,7 +40,7 @@ class ESignModel extends CI_Model{
     }
 
     public function setEKReq($data){
-        $this->db->insert($this->tableEKReq,$data);
+        $this->db->insert($this->tableEKOpReq,$data);
     }
 
     public function getSTReqSpecific($nip){
@@ -84,27 +84,27 @@ class ESignModel extends CI_Model{
         $this->db->where('uId',$uId);
         $this->db->where('ekin_start',$start);
         $this->db->where('ekin_end',$end);
-        $this->db->update($this->tableEKReq);
+        $this->db->update($this->tableEKOpReq);
     }
 
     public function getEKReqReqBy($uId) {
-        $this->db->select($this->tableEKReq.'.*,'
+        $this->db->select($this->tableEKOpReq.'.*,'
                             .$this->tableUser.'.username as reqByName'
                         );
-        $this->db->from($this->tableEKReq);
-        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKReq.'.reqBy');
-        $this->db->where($this->tableEKReq.'.reqBy = '.$uId);
+        $this->db->from($this->tableEKOpReq);
+        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKOpReq.'.reqBy');
+        $this->db->where($this->tableEKOpReq.'.reqBy = '.$uId);
         return $this->db->get();
     }
 
     public function getEKReqToOp($uId) {
-        $this->db->select($this->tableEKReq.'.*,'
+        $this->db->select($this->tableEKOpReq.'.*,'
                             .$this->tableUser.'.username as reqByName,'
                             .$this->tableUser.'.job_id'
                         );
-        $this->db->from($this->tableEKReq);
-        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKReq.'.uId');
-        $this->db->where($this->tableEKReq.'.uId = '.$uId);
+        $this->db->from($this->tableEKOpReq);
+        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKOpReq.'.uId');
+        $this->db->where($this->tableEKOpReq.'.uId = '.$uId);
         return $this->db->get();
     }
 
