@@ -27,12 +27,12 @@
             <div style="display: none" class="text-danger small ml-3" id="tgl"></div>
         </div>
 		<div class="form-group">
-			 <p>Pilih Datang :</p>
+			 <p>Pilih Jam Mulai :</p>
  		<input type="time" id="waktu" name="waktu">
 			<?php echo form_error('waktu', '<div class="text-danger small" ml-3>') ?>
 		</div>
 		<div class="form-group">
-			 <p>Pilih Pulang :</p>
+			 <p>Pilih Jam Selesai :</p>
  		<input type="time" name="pulang">
 			<?php echo form_error('pulang', '<div class="text-danger small" ml-3>') ?>
 		</div>

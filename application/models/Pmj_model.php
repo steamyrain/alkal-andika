@@ -44,4 +44,11 @@ class Pmj_model extends CI_Model{
         $this->db->order_by('tanggal');
         return $this->db->get();
     }
+
+    public function showSpecificPmj($name){
+       $this->db->select('pmj.*');
+       $this->db->from('pmj');
+       $this->db->like('nama',$name);
+       return $this->db->get();
+    }
 }
