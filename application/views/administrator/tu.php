@@ -48,7 +48,7 @@
     </tr>
   </thead>
   <tbody>
-  	<?php $no=1; foreach($kinerja as $k) : ?>
+  	<?php $no=1; foreach($pmj as $k) : ?>
   		<tr>
         <td><?php echo $k->tanggal ?></td>
         <td><?php echo $k->tgl ?></td>
