@@ -71,7 +71,11 @@ class Esign extends CI_Controller {
 
     public function print_dinas() {
         $this->is_loggedIn();
-        if (($this->input->post('username')!==null) && !empty($this->input->post('username'))){
+        if (
+            (($this->input->post('username') !== null) && !empty($this->input->post('username'))) &&
+            (($this->input->post('uId') !== null) && !empty($this->input->post('uId')))
+
+        ){
             $this->load->library('Pdf');
 
             $name = $this->input->post('username');
@@ -82,25 +86,11 @@ class Esign extends CI_Controller {
             $dateSigned= $this->input->post('dateSigned');
 
             if (($job_id == 1) && ($status == 'signed')) {
-                $data = $this->kinerja_model->getSpecificKinerja($name,$startDate,$endDate)->result();
-                $pdf = new Pdf($status,$name,$dateSigned);
-                $pdf->AddPage("L");
-
-                $pdf->SetFont('Times','BU',14);
-                $pdf->Cell(0,0,'Kinerja PJLP Bidang Pengemudi Alat Berat',0,1,'C');
-                $pdf->ln(5);
                 
-                $pdf->Nama($this->input->post('username'));
-                $pdf->Jabatan('pengemudi alat berat');
-                $pdf->Tanggal($startDate,$endDate);
-                $header = ['Tanggal','Waktu','Kegiatan','Lokasi'];
-                // total width = 205
-                $pdf->TabelKinerja($header,$data,[30,15,100,60]);
-
-                $pdf->Output();
-            } else if(($job_id == 1) && !($status == 'signed')) {
+                $verificators = $this->ESignModel->getEKReqVfc($uId,$startDate,$endDate)->result();
                 $data = $this->kinerja_model->getSpecificKinerja($name,$startDate,$endDate)->result();
-                $pdf = new Pdf();
+
+                $pdf = new Pdf($status,$name,$dateSigned,$verificators);
                 $pdf->AddPage("L");
 
                 $pdf->SetFont('Times','BU',14);

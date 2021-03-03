@@ -493,43 +493,6 @@ class Kinerja extends CI_Controller{
             $pdf->TabelKinerja($header,$data,[30,15,100,60]);
 
             $pdf->Output();
-            /*
-            if ($status == 'signed') {
-                $data = $this->kinerja_model->getSpecificKinerja($name,$startDate,$endDate)->result();
-                $pdf = new Pdf($status,$name,$dateSigned);
-                $pdf->AddPage("L");
-
-                $pdf->SetFont('Times','BU',14);
-                $pdf->Cell(0,0,'Kinerja PJLP Bidang Pengemudi Alat Berat',0,1,'C');
-                $pdf->ln(5);
-                
-                $pdf->Nama($this->input->post('username'));
-                $pdf->Jabatan('pengemudi alat berat');
-                $pdf->Tanggal($startDate,$endDate);
-                $header = ['Tanggal','Waktu','Kegiatan','Lokasi'];
-                // total width = 205
-                $pdf->TabelKinerja($header,$data,[30,15,100,60]);
-
-                $pdf->Output();
-            } else {
-                $data = $this->kinerja_model->getSpecificKinerja($name,$startDate,$endDate)->result();
-                $pdf = new Pdf();
-                $pdf->AddPage("L");
-
-                $pdf->SetFont('Times','BU',14);
-                $pdf->Cell(0,0,'Kinerja PJLP Bidang Pengemudi Alat Berat',0,1,'C');
-                $pdf->ln(5);
-                
-                $pdf->Nama($this->input->post('username'));
-                $pdf->Jabatan('pengemudi alat berat');
-                $pdf->Tanggal($startDate,$endDate);
-                $header = ['Tanggal','Waktu','Kegiatan','Lokasi'];
-                // total width = 205
-                $pdf->TabelKinerja($header,$data,[30,15,100,60]);
-
-                $pdf->Output();
-            }
-            */
         } else {
             redirect(base_URL('administrator/dashboard'));
         }

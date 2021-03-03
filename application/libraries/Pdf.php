@@ -106,7 +106,6 @@ class Pdf extends Fpdf
                 $this->MultiCell(70,5,'Jakarta, '.$date[0],0,'C');
                 $this->ln(5);
                 $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->pjlp,1,'C');
-                $this->MultiCell(70,5,sizeof($this->verificators),0,'C');
             }
         } else if (sizeof($this->verificators) == 1){
             if ($this->verificators[0]->vfcStatus == 'signed'){
