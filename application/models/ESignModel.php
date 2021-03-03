@@ -5,8 +5,9 @@ class ESignModel extends CI_Model{
     private $table = 'alkal_user_verificator';
     private $tableUser= 'user';
     private $tableSTReq = 'alkal_st_esign_req';
-    private $tableEKOpReq = 'alkal_ekinop_esign_req';
+    private $tableEKReq = 'alkal_ekin_esign_req';
     private $tableST= 'alkal_surat_tugas';
+    private $tableEKVfcLookup = 'alkal_ek_vfc_lookup';
 
     public function getVerificator(){
         $this->db->select("nip,uId,legalName,jobTitle");
@@ -40,7 +41,7 @@ class ESignModel extends CI_Model{
     }
 
     public function setEKReq($data){
-        $this->db->insert($this->tableEKOpReq,$data);
+        $this->db->insert($this->tableEKReq,$data);
     }
 
     public function getSTReqSpecific($nip){
@@ -84,28 +85,88 @@ class ESignModel extends CI_Model{
         $this->db->where('uId',$uId);
         $this->db->where('ekin_start',$start);
         $this->db->where('ekin_end',$end);
-        $this->db->update($this->tableEKOpReq);
+        $this->db->update($this->tableEKReq);
     }
 
     public function getEKReqReqBy($uId) {
-        $this->db->select($this->tableEKOpReq.'.*,'
-                            .$this->tableUser.'.username as reqByName'
+        $this->db->select($this->tableEKReq.'.*,'
+                            .$this->tableUser.'.username as reqByName,'
+                            .$this->tableEKVfcLookup.'.reqToName as vfcName,'
+                            .$this->tableEKVfcLookup.'.signedDate as vfcSignedDate,'
+                            .$this->tableEKVfcLookup.'.status as vfcStatus'
                         );
-        $this->db->from($this->tableEKOpReq);
-        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKOpReq.'.reqBy');
-        $this->db->where($this->tableEKOpReq.'.reqBy = '.$uId);
+        $this->db->from($this->tableEKReq);
+        $this->db->join($this->tableEKVfcLookup,
+            $this->tableEKVfcLookup.'.uId = '.$this->tableEKReq.'.uId and '.
+            $this->tableEKVfcLookup.'.ekin_start = '.$this->tableEKReq.'.ekin_start and '.
+            $this->tableEKVfcLookup.'.ekin_end = '.$this->tableEKReq.'.ekin_end',
+            'left'
+        );
+        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKReq.'.reqBy');
+        $this->db->where($this->tableEKReq.'.reqBy = '.$uId);
+        $this->db->order_by($this->tableEKReq.'.uId');
+        $this->db->order_by($this->tableEKReq.'.ekin_start');
+        $this->db->order_by($this->tableEKReq.'.ekin_end');
         return $this->db->get();
     }
 
     public function getEKReqToOp($uId) {
-        $this->db->select($this->tableEKOpReq.'.*,'
+        $this->db->select($this->tableEKReq.'.*,'
                             .$this->tableUser.'.username as reqByName,'
                             .$this->tableUser.'.job_id'
                         );
-        $this->db->from($this->tableEKOpReq);
-        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKOpReq.'.uId');
-        $this->db->where($this->tableEKOpReq.'.uId = '.$uId);
+        $this->db->from($this->tableEKReq);
+        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKReq.'.uId');
+        $this->db->where($this->tableEKReq.'.uId = '.$uId);
         return $this->db->get();
     }
 
+    public function setBatchEKVfcLookup($data){
+        $this->db->insert_batch($this->tableEKVfcLookup,$data);
+    }
+
+    public function getEKReqSpecific($nip){
+        $this->db->select($this->tableEKReq.'.*,'
+                            .$this->tableUser.'.username as reqByName,'
+                            .$this->tableEKVfcLookup.'.reqTo as vfcNIP,'
+                            .$this->tableEKVfcLookup.'.status as vfcStatus'
+                        );
+        $this->db->from($this->tableEKReq);
+        $this->db->join($this->tableEKVfcLookup,
+            $this->tableEKVfcLookup.'.uId = '.$this->tableEKReq.'.uId and '.
+            $this->tableEKVfcLookup.'.ekin_start = '.$this->tableEKReq.'.ekin_start and '.
+            $this->tableEKVfcLookup.'.ekin_end = '.$this->tableEKReq.'.ekin_end',
+            'left'
+        );
+        $this->db->join($this->tableUser,$this->tableUser.'.id = '.$this->tableEKReq.'.reqBy');
+        $this->db->where($this->tableEKVfcLookup.'.reqTo = '.$nip);
+        $this->db->where($this->tableEKVfcLookup.".status = 'pending'");
+        $this->db->order_by($this->tableEKReq.'.uId');
+        $this->db->order_by($this->tableEKReq.'.ekin_start');
+        $this->db->order_by($this->tableEKReq.'.ekin_end');
+        return $this->db->get();
+    }
+
+    public function getEKReqVfc($uId,$dateStart,$dateEnd){
+        $this->db->select(
+                            $this->tableEKVfcLookup.'.reqTo as vfcNIP,'
+                            .$this->tableEKVfcLookup.'.reqToName as vfcName,'
+                            .$this->tableEKVfcLookup.'.status as vfcStatus,'
+                            .$this->tableEKVfcLookup.'.jobTitle as vfcJobTitle'
+                        );
+        $this->db->from($this->tableEKVfcLookup);
+        $this->db->where($this->tableEKVfcLookup.'.uId = '.$uId);
+        $this->db->where($this->tableEKVfcLookup.'.ekin_start = "'.$dateStart.'"');
+        $this->db->where($this->tableEKVfcLookup.'.ekin_end = "'.$dateEnd.'"');
+        return $this->db->get();
+    }
+
+    public function updateEKReqSpecific($uId,$start,$end,$nip,$data){
+        $this->db->set($data);
+        $this->db->where('uId',$uId);
+        $this->db->where('reqTo',$nip);
+        $this->db->where('ekin_start',$start);
+        $this->db->where('ekin_end',$end);
+        $this->db->update($this->tableEKVfcLookup);
+    }
 }

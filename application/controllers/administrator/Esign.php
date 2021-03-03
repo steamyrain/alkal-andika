@@ -101,4 +101,66 @@ class Esign extends CI_Controller {
 		$this->form_validation->set_rules('id','id','required',['required' => 'Id wajib ada']);
     }
 
+    public function esign_ekinerja(){
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->is_verificator();
+        $ekReq = $this->ESignModel->getEKReqSpecific($this->session->userdata['nip'])->result();
+        $data['eKinerja']=$ekReq;
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/ek_req_esign',$data);
+        $this->load->view('template_administrator/footer');
+    }
+
+    public function confirm_esign_ekinerja(){
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->is_verificator();
+        $this->_req_confirm_esign_ekin_rules();
+        if($this->form_validation->run() === TRUE){
+            $uId = $this->input->post('uId');
+            $nip = $this->session->userdata['nip'];
+            $ekin_start = $this->input->post('dateStart');
+            $ekin_end = $this->input->post('dateEnd');
+            $signedDate = date("Y-m-d H:i:s");
+            $status = 'signed';
+            $data = [
+                'status'=>$status,
+                'signedDate'=>$signedDate
+            ];
+            $this->ESignModel->updateEKReqSpecific($uId,$ekin_start,$ekin_end,$nip,$data);
+            $message = 'ESign E-Kinerja PJLP Berhasil';
+            $this->session->set_flashdata('pesan',
+                '<div 
+                    class=" alert 
+                            alert-success 
+                            dismissible 
+                            fade 
+                            show
+                            " 
+                    role="alert">'.
+                $message.
+                '
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="alert" 
+                    aria-label="Close">
+                <span 
+                    aria-hidden="true">
+                &times;
+                </span>
+                </button>
+                </div>');
+            $this->esign_ekinerja();
+        }
+    }
+
+    public function _req_confirm_esign_ekin_rules() {
+		$this->form_validation->set_rules('uId','uId','required',['required' => 'uId wajib ada']);
+		$this->form_validation->set_rules('dateStart','dateStart','required',['required' => 'tanggal awal wajib ada']);
+		$this->form_validation->set_rules('dateEnd','dateEnd','required',['required' => 'tanggal akhir wajib ada']);
+    }
+
 }

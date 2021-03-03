@@ -8,12 +8,14 @@ class Pdf extends Fpdf
     private string $status;
     private string $pjlp;
     private string $dateSigned;
+    private array $verificators; // to iterate over verificator 
 
-    public function __construct($status='',$pjlp='',$dateSigned=''){
+    public function __construct($status='',$pjlp='',$dateSigned='',$verificators=[]){
         parent::__construct();
         $this->status = $status;
         $this->pjlp = $pjlp;
         $this->dateSigned = $dateSigned;
+        $this->verificators = $verificators;
     }
 
     function Header() {
@@ -88,15 +90,73 @@ class Pdf extends Fpdf
     }
 
     function Footer(){
-        if ($this->status == 'signed'){
-            $this->SetY(-25);
-            $this->SetFont('Times','',12);
-            $this->SetLeftMargin(220);
-            $date;
-            preg_match('/^[0-9]{4}-[0-9][0-9]-[0-9][0-9]/',$this->dateSigned,$date);
-            $this->MultiCell(70,5,'Jakarta, '.$date[0],0,'C');
-            $this->ln(5);
-            $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->pjlp,1,'C');
+        /*
+         * verificator max = 2 (3 total signer - 1 pjlp 2 asn)
+         * if  len verificator == 0 format ?
+         * else if len verificator == 1 format ?
+         * else if len verificator == 2 format ?
+        */
+        if (sizeof($this->verificators) == 0) {
+            if ($this->status == 'signed'){
+                $this->SetY(-25);
+                $this->SetFont('Times','',12);
+                $this->SetLeftMargin(220);
+                $date;
+                preg_match('/^[0-9]{4}-[0-9][0-9]-[0-9][0-9]/',$this->dateSigned,$date);
+                $this->MultiCell(70,5,'Jakarta, '.$date[0],0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->pjlp,1,'C');
+                $this->MultiCell(70,5,sizeof($this->verificators),0,'C');
+            }
+        } else if (sizeof($this->verificators) == 1){
+            if ($this->verificators[0]->vfcStatus == 'signed'){
+                $this->SetY(-25);
+                $this->SetFont('Times','',12);
+                $this->SetLeftMargin(110);
+                $this->MultiCell(70,5,$this->verificators[0]->vfcJobTitle,0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[0]->vfcName,1,'C');
+            }
+            if ($this->status == 'signed'){
+                $this->SetY(-25);
+                $this->SetFont('Times','',12);
+                $this->SetLeftMargin(220);
+                $date;
+                preg_match('/^[0-9]{4}-[0-9][0-9]-[0-9][0-9]/',$this->dateSigned,$date);
+                $this->MultiCell(70,5,'Jakarta, '.$date[0],0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->pjlp,1,'C');
+            } 
+        } else if (sizeof($this->verificators) == 2){
+            if ($this->verificators[0]->vfcStatus == 'signed'){
+                $this->SetLeftMargin((280-270)/2);
+                $this->SetY(-40);
+                $this->SetFont('Times','',12);
+                $this->MultiCell(70,5,$this->verificators[0]->vfcJobTitle,0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[0]->vfcName,'LRT','C');
+                $this->MultiCell(70,5,'NIP. '.$this->verificators[0]->vfcNIP,'LRB','C');
+            }
+            if ($this->verificators[1]->vfcStatus == 'signed'){
+                $this->SetLeftMargin(((280-270)/2)+110);
+                $this->SetY(-40);
+                $this->SetFont('Times','',12);
+                $this->MultiCell(70,5,$this->verificators[1]->vfcJobTitle,0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[1]->vfcName,'LRT','C');
+                $this->MultiCell(70,5,'NIP. '.$this->verificators[1]->vfcNIP,'LRB','C');
+            }
+            if ($this->status == 'signed'){
+                $this->SetLeftMargin(((280-270)/2)+215);
+                $this->SetY(-40);
+                $this->SetFont('Times','',12);
+                $date;
+                preg_match('/^[0-9]{4}-[0-9][0-9]-[0-9][0-9]/',$this->dateSigned,$date);
+                $this->MultiCell(70,5,'Jakarta, '.$date[0],0,'C');
+                $this->MultiCell(70,5,'PJLP Unit Alkal Dinas Bina Marga Provinsi DKI Jakarta',0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->pjlp,1,'C');
+            }
         }
     }
 }

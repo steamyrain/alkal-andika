@@ -48,8 +48,8 @@
             </td>
   			<td><?php echo $st->reqByName?></td>
   			<td><?php echo $st->reqDate?></td>
-            <td style="text-align=center;">
-                <div class="aksi" style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 5px;">
+            <td style="text-align: center;">
+                <div class="aksi" style="text-align: center;">
                 <form 
                     id="<?php echo 'form-confirm-'.$i; ?>" 
                     style="display:grid"
@@ -63,21 +63,6 @@
                         class="btn btn-success btn-sm"
                     >
                         <i class="fa fa-check"></i>
-                    </button>
-                </form>
-                <form 
-                    id="<?php echo 'form-reject-'.$i; ?>" 
-                    style="display:grid"
-                    method="post" 
-                    action="<?php echo base_URL('administrator/esign/reject'); ?>"
-                > 
-                    <input type="text" name="id" style="display: none" value="<?php echo $st->stId; ?>">
-                    <button 
-                        style="display:grid" 
-                        type="submit" 
-                        class="btn btn-danger btn-sm"
-                    >
-                        <i class="fa fa-times"></i>
                     </button>
                 </form>
                 </div>

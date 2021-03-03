@@ -135,7 +135,8 @@
             >
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-                    <a class="collapse-item" href="<?php echo base_URL('administrator/esign')?>">surat tugas</a>
+                    <a class="collapse-item" href="<?php echo base_URL('administrator/esign')?>">Surat Tugas</a>
+                    <a class="collapse-item" href="<?php echo base_URL('administrator/esign/esign_ekinerja')?>">E-Kinerja</a>
                 </div>
             </div>
         </li>

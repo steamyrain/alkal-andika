@@ -40,7 +40,21 @@
             />
 			<?php echo form_error('end_date', '<div class="text-danger small">') ?>
 		</div>
-	
+        <div class="form-group">
+            <label>Penandatangan :</label>
+            <?php foreach($signer as $s) :?>
+                <label
+                    class="form-control"
+                >
+                    <input 
+                        type="checkbox"
+                        name="verificator[]"
+                        value="<?php echo $s->nip; ?>"
+                    />
+                    <?php echo $s->legalName; ?>
+                </label>
+            <?php endforeach ?>
+        </div>	
         <!-- form submit -->
 		<button type="submit" class="btn btn-primary mb-5 mt-3"><span><i class="fas fa-signature"></i>  Request</span></button>
     <?php echo form_close(); ?>

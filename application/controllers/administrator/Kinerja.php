@@ -365,6 +365,7 @@ class Kinerja extends CI_Controller{
         $this->is_loggedIn();
         $this->is_admin();
         $data['operator']= $this->user_model->getOperatorOnly()->result();
+        $data['signer'] = $this->ESignModel->getVerificator()->result();
         $this->load->view('template_administrator/header.php');
         $this->load->view('template_administrator/sidebar.php');
         $this->load->view('administrator/kinerja_req_esign_form',$data);
@@ -383,6 +384,7 @@ class Kinerja extends CI_Controller{
             $uName = $postUsername[1];
             $ekin_start = $this->input->post('starting_date');
             $ekin_end = $this->input->post('end_date');
+            $verificators = $this->input->post('verificator');
             $reqBy = $this->session->userdata['uId'];
             $data = [
                 'uId'=>$uId,
@@ -392,6 +394,25 @@ class Kinerja extends CI_Controller{
                 'reqBy'=>$reqBy
             ];
             $this->ESignModel->SetEKReq($data);
+
+            if(isset($verificators)){
+                $signers = [];
+                foreach($verificators as $v):
+                    $res = $this->ESignModel->getSpecificVerificator($v)->row();
+                    array_push($signers,
+                        [
+                            'uId'=>$uId,
+                            'ekin_start'=>$ekin_start,
+                            'ekin_end'=>$ekin_end,
+                            'reqTo'=>$v,
+                            'reqToName'=>$res->legalName,
+                            'jobTitle'=>$res->jobTitle,
+                        ] 
+                    );
+                endforeach;
+                $this->ESignModel->setBatchEKVfcLookup($signers);
+            }
+
             $message = "Request EKinerja Operator Berhasil Ditambahkan!";
             $this->session->set_flashdata('pesan',
                 '<div 
@@ -440,15 +461,39 @@ class Kinerja extends CI_Controller{
     public function print_dinas_esign() {
         $this->is_loggedIn();
         $this->is_admin();
-        if (($this->input->post('username')!==null) && !empty($this->input->post('username'))){
+        if (
+            (($this->input->post('username') !== null) && !empty($this->input->post('username'))) &&
+            (($this->input->post('uId') !== null) && !empty($this->input->post('uId')))
+
+        ){
             $this->load->library('Pdf');
 
+            $uId = $this->input->post('uId');
             $name = $this->input->post('username');
             $startDate = $this->input->post('date_start');
             $endDate = $this->input->post('date_end');
             $status = $this->input->post('status');
             $dateSigned= $this->input->post('dateSigned');
 
+            $verificators = $this->ESignModel->getEKReqVfc($uId,$startDate,$endDate)->result();
+            $data = $this->kinerja_model->getSpecificKinerja($name,$startDate,$endDate)->result();
+
+            $pdf = new Pdf($status,$name,$dateSigned,$verificators);
+            $pdf->AddPage("L");
+
+            $pdf->SetFont('Times','BU',14);
+            $pdf->Cell(0,0,'Kinerja PJLP Bidang Pengemudi Alat Berat',0,1,'C');
+            $pdf->ln(5);
+            
+            $pdf->Nama($this->input->post('username'));
+            $pdf->Jabatan('pengemudi alat berat');
+            $pdf->Tanggal($startDate,$endDate);
+            $header = ['Tanggal','Waktu','Kegiatan','Lokasi'];
+            // total width = 205
+            $pdf->TabelKinerja($header,$data,[30,15,100,60]);
+
+            $pdf->Output();
+            /*
             if ($status == 'signed') {
                 $data = $this->kinerja_model->getSpecificKinerja($name,$startDate,$endDate)->result();
                 $pdf = new Pdf($status,$name,$dateSigned);
@@ -484,6 +529,7 @@ class Kinerja extends CI_Controller{
 
                 $pdf->Output();
             }
+            */
         } else {
             redirect(base_URL('administrator/dashboard'));
         }

@@ -1,34 +1,22 @@
 <div class="container-fluid">
 
 	 <div class="alert alert-success" role="alert">
-      <i class="fas fa-clipboard"></i> Request ESign Kinerja Operator 
+      <i class="fas fa-clipboard"></i> Request ESign E-Kinerja PJLP 
     </div>
 
     <?php echo $this->session->flashdata('pesan') ?>
-
-    <?php 
-    echo anchor(
-        base_URL('administrator/kinerja/request_esign_form'),
-        '<button class="btn btn-sm btn-primary mb-3">
-            <i class="fas fa-plus fa-sm"></i> 
-            Request Esign 
-        </button>'
-    ) 
-    ?>
 
     <div style="overflow-x: auto;">
   <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
     <thead>
   	<tr>
-        <th class="text-center">Operator</th>
-  		<th class="text-center">Tanggal Awal Kinerja</th>
-  		<th class="text-center">Tanggal Akhir Kinerja</th>
+  		<th class="text-center">PJLP</th>
+  		<th class="text-center">Tanggal Awal</th>
+        <th class="text-center">Tanggal Akhir</th>
+  		<th class="text-center">Dokumen</th>
   		<th class="text-center">Pemohon</th>
   		<th class="text-center">Tanggal Permohonan</th>
-  		<th class="text-center">Dokumen Kinerja</th>
-  		<th class="text-center">Verifikator</th>
-  		<th class="text-center">Status Esign Operator</th>
-  		<th class="text-center">Status Esign Verifikator</th>
+  		<th class="text-center">ESign</th>
     </tr>
     </thead>
     <tbody>
@@ -36,22 +24,17 @@
         <?php $i++; ?>
   		<tr>
             <td><?php echo $ek->uName?></td>
-            <td><?php echo $ek->ekin_start?></td>
+  			<td><?php echo $ek->ekin_start?></td>
   			<td><?php echo $ek->ekin_end?></td>
-  			<td><?php echo $ek->reqByName?></td>
-  			<td><?php echo $ek->reqDate?></td>
             <td style="text-align: center">
                 <form 
                     id="<?php echo 'form-document-'.$i; ?>" 
                     method="post" 
-                    action="<?php echo base_URL('administrator/kinerja/print_dinas_esign')?>"
+                    action="<?php echo base_URL('')?>"
                 > 
                     <input style="display: none" type="text" name="uId" value="<?php echo $ek->uId; ?>">
-                    <input style="display: none" type="text" name="username" value="<?php echo $ek->uName; ?>">
-                    <input style="display: none" type="date" name="date_start" value="<?php echo $ek->ekin_start; ?>">
-                    <input style="display: none" type="date" name="date_end" value="<?php echo $ek->ekin_end; ?>">
-                    <input style="display: none" type="text" name="status" value="<?php echo $ek->status; ?>">
-                    <input style="display: none" type="text" name="dateSigned" value="<?php echo $ek->signedDate; ?>">
+                    <input style="display: none" type="date" name="dateStart" value="<?php echo $ek->ekin_start; ?>">
+                    <input style="display: none" type="date" name="dateEnd" value="<?php echo $ek->ekin_end; ?>">
                     <button 
                         type="submit" 
                         name="submit" 
@@ -65,9 +48,29 @@
                     </button>
                 </form>
             </td>
-  			<td><?php echo $ek->vfcName?></td>
-  			<td><?php echo $ek->status?></td>
-  			<td><?php echo $ek->vfcStatus?></td>
+  			<td><?php echo $ek->reqByName?></td>
+  			<td><?php echo $ek->reqDate?></td>
+           <td style="text-align: center;">
+                <div class="aksi" style="text-align: center;">
+                <form 
+                    id="<?php echo 'form-confirm-'.$i; ?>" 
+                    style="display:grid"
+                    method="post" 
+                    action="<?php echo base_URL('administrator/esign/confirm_esign_ekinerja'); ?>"
+                > 
+                    <input style="display: none" type="text" name="uId" value="<?php echo $ek->uId; ?>">
+                    <input style="display: none" type="date" name="dateStart" value="<?php echo $ek->ekin_start; ?>">
+                    <input style="display: none" type="date" name="dateEnd" value="<?php echo $ek->ekin_end; ?>">
+                    <button 
+                        style="display:grid" 
+                        type="submit" 
+                        class="btn btn-success btn-sm"
+                    >
+                        <i class="fa fa-check"></i>
+                    </button>
+                </form>
+                </div>
+            </td>
   		</tr>
   	<?php endforeach; ?>
     </tbody>
