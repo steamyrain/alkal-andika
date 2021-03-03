@@ -78,6 +78,7 @@ class Esign extends CI_Controller {
         ){
             $this->load->library('Pdf');
 
+            $uId = $this->input->post('uId');
             $name = $this->input->post('username');
             $startDate = $this->input->post('date_start');
             $endDate = $this->input->post('date_end');

@@ -32,6 +32,7 @@
                     method="post" 
                     action="<?php echo base_URL('pegawai/esign/print_dinas')?>"
                 > 
+                    <input style="display: none" type="text" name="uId" value="<?php echo $ek->uId; ?>">
                     <input style="display: none" type="text" name="username" value="<?php echo $ek->uName; ?>">
                     <input style="display: none" type="date" name="date_start" value="<?php echo $ek->ekin_start; ?>">
                     <input style="display: none" type="date" name="date_end" value="<?php echo $ek->ekin_end; ?>">
