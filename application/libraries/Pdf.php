@@ -19,8 +19,10 @@ class Pdf extends Fpdf
     }
 
     function Header() {
-        $this->Image('assets/img/logo-dki.png',10,8,20);
+        $this->SetMargins(10,10,10);
         $this->SetFont('Times','B',13);
+        $this->Image('assets/img/logo-dki.png',10,8,20);
+        $this->Cell(0,0,'',0,1,'C');
         $this->Cell(0,0,'PEMERINTAH PROVINSI DAERAH KHUSUS IBUKOTA JAKARTA',0,1,'C');
         $this->Cell(0,10,'DINAS BINA MARGA',0,1,'C');
         $this->Cell(0,0,'UNIT PERALATAN DAN PERBEKALAN BINA MARGA',0,1,'C');
@@ -55,6 +57,7 @@ class Pdf extends Fpdf
     }
 
     function TabelKinerja($header,$data,$width){
+        $this->SetAutoPageBreak(true,50);
         $this->ln(15);
         $totalWidth = 0;
 
@@ -73,6 +76,7 @@ class Pdf extends Fpdf
 
         $i=0;
         foreach($data as $row){
+            $this->SetLeftMargin((280-$totalWidth)/2);
             foreach($row as $col){
                 if($i == 0){
                     $tanggal;
