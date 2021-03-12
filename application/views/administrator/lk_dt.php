@@ -2,6 +2,7 @@
     <div class="alert alert-success" role="alert">
         <i class="fas fa-clipboard"></i> Laporan Kerja Dump Truck 
     </div>
+    <?php echo $this->session->flashdata('pesan') ?>
     <?php 
         echo anchor(
             base_url('administrator/laporandt/input'),
