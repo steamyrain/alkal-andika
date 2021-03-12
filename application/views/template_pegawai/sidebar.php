@@ -59,7 +59,9 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url('auth/logout') ?>">
+        <form id="form-logout" method="post" action="<?php echo base_URL('auth/logout')?>" style="display: none;">
+        </form>
+        <a class="nav-link" href="#" target="_blank" onclick="event.preventDefault();document.getElementById('form-logout').submit()">
           <i class="fas fa-sign-out-alt" style="color:black;"></i>
           <span style="color:black;">Logout</span>
         </a>

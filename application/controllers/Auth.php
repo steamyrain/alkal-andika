@@ -66,12 +66,24 @@ class Auth extends CI_Controller{
 
 	public function logout()
 	{
-        if($sess_data['level'] == 'admin'){
-            $this->session->sess_destroy();
-            redirect('auth');
-        } else if($sess_data['level'] == 'user') {
-            $this->session->sess_destroy();
-            redirect('auth');
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if($sess_data['level'] == 'admin'){
+                $this->session->sess_destroy();
+                redirect('auth');
+            } else if($sess_data['level'] == 'user') {
+                $this->session->sess_destroy();
+                redirect('auth');
+            } else {
+                $this->session->set_flashdata('pesan','
+                    <div class="alert alert-warning alert-danger dismissible fade show" role="alert">
+                        Anda Belum Melakukan Login!
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                ');
+                redirect('auth');
+            }
         } else {
             $this->session->set_flashdata('pesan','
                 <div class="alert alert-warning alert-danger dismissible fade show" role="alert">
