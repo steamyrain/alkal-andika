@@ -59,9 +59,10 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url('pegawai/auth/logout') ?>">
+        <a class="nav-link" href="<?php echo base_url('auth/logout') ?>">
           <i class="fas fa-sign-out-alt" style="color:black;"></i>
-          <span style="color:black;">Logout</span></a>
+          <span style="color:black;">Logout</span>
+        </a>
       </li>
 
 

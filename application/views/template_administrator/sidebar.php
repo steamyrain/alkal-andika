@@ -170,7 +170,7 @@
 
 
     <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url('administrator/auth/logout') ?>">
+        <a class="nav-link" href="<?php echo base_url('auth/logout') ?>">
             <i class="fas fa-sign-out-alt" style="color:black;"></i>
             <span style="color:black;">Logout</span>
         </a>

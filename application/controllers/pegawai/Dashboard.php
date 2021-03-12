@@ -10,7 +10,7 @@ class Dashboard extends CI_Controller{
                  <span aria-hidden="true">&times;</span>
                  </button>
                 </div>');
-            redirect('pegawai/auth');
+            redirect('auth');
         }
     }
 
@@ -22,7 +22,7 @@ class Dashboard extends CI_Controller{
                  <span aria-hidden="true">&times;</span>
                  </button>
                 </div>');
-            redirect('pegawai/auth');
+            redirect('auth');
         }
     }
 
