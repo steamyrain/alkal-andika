@@ -64,7 +64,9 @@
         }
 
         public function editLKDT($data,$id) {
-            $this->db->delete($this->table,$data,'id='.$id);
+            $this->db->set($data);
+            $this->db->where('id',$id);
+            $this->db->update($this->table);
         }
 
         public function printAllFormat() {

@@ -132,6 +132,7 @@
                 $km_onStart = $this->input->post('lk__km_onStart');
                 $km_onFinish = $this->input->post('lk__km_onFinish');
                 $km_total = $this->input->post('km_total');
+                $created_at = $this->input->post('created_at');
                 $gasoline = 0;
 
                 $data = array(
@@ -141,6 +142,7 @@
                     'km_onStart' => $km_onStart,
                     'km_onFinish' => $km_onFinish,
                     'km_total' => $km_total,
+                    'created_at' => $created_at,
                     'gasoline' => $gasoline
                 );
                 $this->LKDTModel->editLKDT($data,$id);
