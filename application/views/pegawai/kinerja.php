@@ -1,50 +1,45 @@
 <div class="container-fluid">
+    <div class="alert alert-success" role="alert">
+        <i class="fas fa-clipboard"></i> Kinerja PJLP
+    </div>
 
-	 <div class="alert alert-success" role="alert">
-  <i class="fas fa-clipboard"></i> Kinerja Pengemudi Alat Berat
-  </div>
-
-  <?php 
-    echo anchor(
-        'pegawai/kinerja/input',
-        '<button class="btn btn-sm btn-warning mb-3">
-            <i class="fas fa-plus fa-sm"></i> 
-            Tambah Data
-        </button>'
-    ) 
+    <?php 
+        echo $this->session->flashdata('pesan');
     ?>
 
-  <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
-    <thead>
-      <tr>
-      <th>Tanggal Penginputan</th>
-      <th>Tanggal</th>
-      <th>No</th>
-      <th colspan="2">Waktu</th>
-      <th>Nama</th>
-      <th>Bidang</th>
-      <th>Kegiatan</th>
-      <th>Lokasi</th>
-      <th>Dokumentasi</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php $no=1; foreach($kinerja as $k) : ?>
-      <tr>
-        <td><?php echo $k->tanggal ?></td>
-        <td><?php echo $k->tgl ?></td>
-        <td width="20px"><?php echo $no++ ?></td>
-        <td><?php echo $k->waktu ?></td>
-        <td><?php echo $k->pulang ?></td>
-        <td><?php echo $k->nama ?></td>
-        <td><?php echo $k->bidang ?></td>
-        <td><?php echo $k->kegiatan ?></td>
-        <td><?php echo $k->lokasi ?></td>
-            <td>
-                    <img width="60px" src="<?php echo base_url().'assets/upload/'.$k->dokumentasi ?>">    
-                  </td>
-      </tr>
-    <?php endforeach; ?>
-  </table>
-  </tbody>
+    <?php 
+        echo anchor(
+            base_url('pegawai/kinerja/input_form'),
+            '<button class="btn btn-sm btn-primary mb-3">
+                <i class="fas fa-plus fa-sm"></i> 
+                Tambah Data
+            </button>'
+        ) 
+    ?>
+
+    <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th style="text-align: center">Tanggal Kinerja</th>
+                <th style="text-align: center">Bidang</th>
+                <th style="text-align: center" colspan="2">Waktu</th>
+                <th style="text-align: center">Kegiatan</th>
+                <th style="text-align: center">Deskripsi Kegiatan</th>
+                <th style="text-align: center">Status Validasi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach((array) $kinerja as $k) : ?>
+            <tr>
+                <td style="text-align: center"><?php echo $k->job_date ?></td>
+                <td style="text-align: center"><?php echo $k->job_rolename ?></td>
+                <td style="text-align: center"><?php echo $k->job_start ?></td>
+                <td style="text-align: center"><?php echo $k->job_end ?></td>
+                <td style="text-align: center"><?php echo $k->job ?></td>
+                <td style="text-align: center"><?php echo $k->job_desc ?></td>
+                <td style="text-align: center"><?php echo $k->valid_status ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>

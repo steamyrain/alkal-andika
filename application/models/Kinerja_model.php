@@ -1,6 +1,9 @@
 <?php
 
 class Kinerja_model extends CI_Model{
+
+    private $newKinerjaTable = 'alkal_user_kinerja';
+
 	public function tampil_data()
 	{
 		return $this->db->get('kinerja');
@@ -43,5 +46,16 @@ class Kinerja_model extends CI_Model{
         $this->db->like('nama',$name);
         $this->db->order_by('tanggal');
         return $this->db->get();
+    }
+
+    public function getNewKinerjaToday($uid) {
+        $this->db->select('job_rolename,job,job_start,job_end,job_date,valid_status,job_desc');
+        $this->db->from($this->newKinerjaTable);
+        $this->db->where('job_date = CURDATE() and uid = '.$uid);
+        return $this->db->get();
+    }
+
+    public function postNewKinerja($data) {
+        return $this->db->insert($this->newKinerjaTable,$data);
     }
 }

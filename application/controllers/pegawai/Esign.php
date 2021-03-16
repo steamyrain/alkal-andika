@@ -18,7 +18,7 @@ class Esign extends CI_Controller {
 
     public function index() {
         $this->is_loggedIn();
-        $ekReq = $this->ESignModel->getEKReqToOp($this->session->userdata['user_id'])->result();
+        $ekReq = $this->ESignModel->getEKReqToOp($this->session->userdata['uId'])->result();
         $data['eKinerja']=$ekReq;
         $this->load->view('template_pegawai/header');
         $this->load->view('template_pegawai/sidebar');

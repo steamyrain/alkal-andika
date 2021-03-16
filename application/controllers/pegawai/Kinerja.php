@@ -2,9 +2,7 @@
 
 class Kinerja extends CI_Controller{
 
-function __construct(){
-        parent::__construct();
-
+    protected function is_loggedIn() {
         if (!isset($this->session->userdata['username'])){
             $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
                 Anda Belum Login!
@@ -12,87 +10,131 @@ function __construct(){
                  <span aria-hidden="true">&times;</span>
                  </button>
                 </div>');
-            redirect('pegawai/auth');
+            redirect('auth');
+        }
+    }
+
+    protected function is_user() {
+        if($this->session->userdata['level'] !== 'user'){
+            $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
+                Anda tidak terdaftar sebagai user!
+                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+                 </button>
+                </div>');
+            redirect('auth');
         }
     }
 
 	public function index()
 	{
+        /* check if truly a user */
+        $this->is_loggedIn();
+        $this->is_user();
+        /* --------------------- */
+
+
+        /* check if query doesn't return error & populate data*/
+        $data = array();
 		$data['title'] = "data kinerja";
-		$data['kinerja']	= $this->kinerja_model->tampil_data()->result();
+        $kinerja = $this->kinerja_model->getNewKinerjaToday($this->session->userdata['uId'])->result();
+        if (!$kinerja){
+            $error = $this->db->error();
+            $data['kinerja'] = null;
+            $data['error'] = $error;
+        } else {
+            $data['error'] = null;
+            $data['kinerja'] = $kinerja; 
+        }
+        /* --------------------- */
+
+        /* load views */
 		$this->load->view('template_pegawai/header');
 		$this->load->view('template_pegawai/sidebar');
 		$this->load->view('pegawai/kinerja',$data);
 		$this->load->view('template_pegawai/footer');
+        /* --------------------- */
 	}
 
-	public function input()
+	public function input_form()
 	{
+        /* check if truly a user */
+        $this->is_loggedIn();
+        $this->is_user();
+        /* --------------------- */
+
+        $emp_name = $this->session->userdata['username'];
+        $uid = $this->session->userdata['uId'];
+        $jobRole = $this->JobRoleModel->getJobRole($this->session->userdata['uId'])->row();
+        $jobList = array();
+        $anyErrors = false;
+        if(!$jobRole) {
+            $anyErrors = true;
+        } else {
+            $jobList = $this->JobListModel->getJobList($jobRole->job_roleid)->result();
+            if(!$jobList){
+                $anyErrors = true;
+            }
+        }
 		$data = array(
-			'no'  => set_value('no'),
-			'tgl'  => set_value('tgl'),
-            'waktu'  => set_value('waktu'),
-            'pulang'  => set_value('pulang'),
-			'nama'   => set_value('nama'),
-			'bidang'   => set_value('bidang'),
-			'kegiatan'   => set_value('kegiatan'),
-            'lokasi'   => set_value('lokasi'),
-			'dokumentasi'   => set_value('dokumentasi'),
+            'emp_name' => $emp_name,
+            'uid' => $uid,
+            'role_name' => (!$jobRole)?'error: no role':$jobRole->role_name,
+            'role_id' => (!$jobRole)?'error: no role':$jobRole->job_roleid,
+            'job_list'=> (!$jobList)?'error: no job list':$jobList,
+			'job_date'  => set_value('job_date'),
+            'job_start'  => set_value('job_start'),
+            'job_end'  => set_value('job_end'),
+            'anyErrors' => $anyErrors
 		);
 		$this->load->view('template_pegawai/header');
 		$this->load->view('template_pegawai/sidebar');
 		$this->load->view('pegawai/kinerja_form',$data);
 		$this->load->view('template_pegawai/footer');
 	}
+
 	public function input_aksi()
 	{
+        /* check if truly a user */
+        $this->is_loggedIn();
+        $this->is_user();
+        /* --------------------- */
+
         // rules loaded
 		$this->_rules();
 
         // check if form not valid / return FALSE
 		if($this->form_validation->run() == FALSE) {
-            echo validation_errors();
-			$this->input();
+			$this->input_form();
         }
 
         // form is valid
         else 
         {
-            echo "form valid\n";
             // assign form input values to variables
-            $waktu         = $this->input->post('waktu');
-            $tgl         = $this->input->post('tgl');
-            $pulang         = $this->input->post('pulang');
-			$nama 			= $this->input->post('nama');
-			$bidang 		= $this->input->post('bidang');
-			$kegiatan 		= $this->input->post('kegiatan');
-            $lokasi        = $this->input->post('lokasi');
+            $uid = $this->input->post('uid');
+            $emp_name = $this->input->post('emp_name');
+            $job_roleid = $this->input->post('job_roleid');
+            $job_rolename = $this->input->post('job_rolename');
+            $job_date = $this->input->post('job_date');
+            $job_start = $this->input->post('job_start');
+            $job_end = $this->input->post('job_end');
+            $job_desc = $this->input->post('job_desc');
+            $jobs= explode("|",$this->input->post('job'));
+            $jobid = $jobs[0];
+            $job= $jobs[1];
+
+
             // codeigniter's upload config
             $config['upload_path'] = './assets/upload/';
-            $config['allowed_types'] = 'gif|jpg|png';
+            $config['allowed_types'] = 'jpg|png';
             $config['max_size'] = 10000; 
 
             // initialize upload with predefined config
             $this->upload->initialize($config);
 
             // check if upload is successful
-            if(!$this->upload->do_upload('dokumentasi')) {
-                echo "upload gagal";
-                $this->input();
-            }
-            else {
-                $dokumentasi = $this->upload->data('file_name');
-                $data = array(
-                    'nama' => $nama,
-                    'waktu' => $waktu,
-                    'tgl' => $tgl,
-                    'pulang' => $pulang,
-                    'bidang' => $bidang,
-                    'kegiatan' => $kegiatan,
-                    'lokasi' => $lokasi,
-                    'dokumentasi' => $dokumentasi,
-                );
-                $this->kinerja_model->input_data($data);
+            if(!$this->upload->do_upload('documentation')) {
                 $this->session->set_flashdata('pesan',
                     '<div 
                         class=" alert 
@@ -102,8 +144,9 @@ function __construct(){
                                 fade 
                                 show
                                 " 
-                        role="alert">
-                    Data Berhasil Ditambahkan!
+                        role="alert">'.
+                    $this->upload->display_errors().
+                    '
                     <button 
                         type="button" 
                         class="close" 
@@ -115,77 +158,66 @@ function __construct(){
                     </span>
                     </button>
                     </div>');
-                    redirect('pegawai/kinerja');
+                $this->input_form();
+            }
+            else {
+                $documentation = $this->upload->data('file_name');
+                $data = array(
+                    'emp_name' => $emp_name,
+                    'uid' => $uid,
+                    'job_roleid' => $job_roleid,
+                    'job_rolename' => $job_rolename,
+                    'job_date' => $job_date,
+                    'job_start' => $job_start,
+                    'job_end' => $job_end,
+                    'job' => $job,
+                    'jobid' => $jobid,
+                    'job_desc' => $job_desc,
+                    'documentation' => $documentation,
+                );
+                $this->kinerja_model->postNewKinerja($data);
+                $this->session->set_flashdata('pesan',
+                    '<div 
+                        class=" alert 
+                                alert-success
+                                dismissible 
+                                fade 
+                                show
+                                " 
+                        role="alert">
+                    Kinerja Berhasil Diinput
+                    <button 
+                        type="button" 
+                        class="close" 
+                        data-dismiss="alert" 
+                        aria-label="Close">
+                    <span 
+                        aria-hidden="true">
+                    &times;
+                    </span>
+                    </button>
+                    </div>');
+                    redirect(base_URL('pegawai/kinerja'));
             }
 		}
     }
-            /*
-			$dokumentasi 	= $_FILES['dokumentasi'];
-            if($dokumentasi['size'] == 0) { 
-                echo "file empty\n";
-            } 
-            elseif($dokumentasi['error'] > 0) { 
-                if ($dokumentasi['error'] == 1) {
-                    echo "filesize exceeds php maxlimit\n";
-                }
-                elseif ($dokumentasi['error'] == 2) {
-                    echo "filesize exceeds html form maxlimit\n";
-                }
-                elseif ($dokumentasi['error'] == 3) {
-                    echo "file partially uploaded\n";
-                }
-                elseif ($dokumentasi['error'] == 4) {
-                    echo "No file uploaded\n";
-                }
-                elseif ($dokumentasi['error'] == 6) {
-                    echo "Missing temp folder\n";
-                }
-                elseif ($dokumentasi['error'] == 7) {
-                    echo "failed write file to disk\n";
-                }
-                elseif ($dokumentasi['error'] == 8) {
-                    echo "upload process stopped\n";
-                }
-            }
-            else {
-                echo "file not empty and uploaded with success\n";
-                echo $_FILES['dokumentasi']['name']."\n";
-                $config['upload_path'] = './assets/upload/';
-                $config['allowed_types'] = 'gif|jpg|png';
-                $config['max_size'] = 2000; 
-                $this->load->library('upload', $config);
-                if(!$this->upload->do_upload('dokumentasi'))
-                {
-                    echo "Upload Gagal\n"; 
-                } 
-                else {
-                    echo "upload berhasil\n";
-                    $dokumentasi = $this->upload->data('file_name');
-                    $data = array(
-                        'nama'			=> $nama,
-                        'bidang'		=> $bidang,
-                        'kegiatan'		=> $kegiatan,
-                        'dokumentasi'	=> $dokumentasi
-                    );
-                    $this->kinerja_model->input_data($data);
-                }
- 			}	
-             */
-            /*$this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
-                    Data Berhasil Ditambahkan!
-                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                     </button>
-                    </div>');
-             */
-            //redirect('administrator/kinerja');
 	
-	public function _rules()
+	private function _rules()
 	{
-		$this->form_validation->set_rules('nama','nama','required',['required' => 'Nama Wajib Diisi']);
-		$this->form_validation->set_rules('bidang','bidang','required',['required' => 'Bidang Wajib Diisi']);
-		$this->form_validation->set_rules('kegiatan','kegiatan','required',['required' => 'Kegiatan Wajib Diisi']);
-        $this->form_validation->set_rules('lokasi','lokasi','required',['required' => 'Lokasi Wajib Diisi']);
+		$this->form_validation->set_rules('job_date','job_date','required',['required' => 'Tanggal Wajib Diisi']);
+		$this->form_validation->set_rules('job_start','job_start','required',['required' => 'Waktu Awal Wajib Diisi']);
+		$this->form_validation->set_rules('job_end','job_end','required',['required' => 'Waktu Akhir Wajib Diisi']);
+        $this->form_validation->set_rules('job','job','required',['required' => 'Kegiatan Wajib Diisi']);
+        $this->form_validation->set_rules('documentation','documentation','callback___file_selected_test');
 	}
+
+    public function __file_selected_test(){
+        $this->form_validation->set_message('__file_selected_test','Dokumentasi Wajib Diisi');
+        if(empty($_FILES['documentation']['name'])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 }

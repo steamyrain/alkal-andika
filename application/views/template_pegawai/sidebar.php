@@ -7,7 +7,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" style="background:#fff200;color:black;" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo base_url('pegawai/dashboard'); ?>">
         <div class="sidebar-brand-icon">
           <img src="<?php echo base_url() ?>assets/img/ac.png" alt="ac" width="60">
         </div>
@@ -33,13 +33,7 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-            <a class="collapse-item" href="<?php echo base_url('pegawai/kinerja') ?>">Operator</a>
-            <a class="collapse-item" href="<?php echo base_url('pegawai/operator') ?>">Pengemudi</a>
-            <a class="collapse-item" href="<?php echo base_url('pegawai/mekanik') ?>">Mekanik</a>
-            <a class="collapse-item" href="<?php echo base_url('pegawai/pmj') ?>">PMJ</a>
-            <a class="collapse-item" href="<?php echo base_url('pegawai/perbekalan') ?>">Admin Perbekalan</a>
-            <a class="collapse-item" href="<?php echo base_url('pegawai/peralatan') ?>">Admin Peralatan</a>
-            <a class="collapse-item" href="<?php echo base_url('pegawai/tu') ?>">Admin TU</a>
+            <a class="collapse-item" href="<?php echo base_url('pegawai/kinerja') ?>">Kinerja</a>
           </div>
         </div>
       </li>
