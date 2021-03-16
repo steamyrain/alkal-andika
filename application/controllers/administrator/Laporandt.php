@@ -118,7 +118,7 @@
         public function edit_aksi(){
             $this->is_loggedIn();
             $this->is_admin();
-            $this->_rules();
+            $this->_edit_rules();
             if($this->form_validation->run() === FALSE) {
                 $lId = $this->input->post('id');
                 $this->edit($lId);
@@ -205,6 +205,14 @@
         }
 
         public function _rules() {
+            $this->form_validation->set_rules('uId','Username','required',['required'=>'%s wajib diisi']);
+            $this->form_validation->set_rules('plate_number','Nomor Polisi','required',['required'=>'%s wajib diisi']);
+            $this->form_validation->set_rules('project_location','Lokasi kerja','required',['required'=>'%s  wajib diisi']);
+            $this->form_validation->set_rules('lk__km_onStart','KM awal','required',['required'=>'%s wajib diisi']);
+            $this->form_validation->set_rules('lk__km_onFinish','KM akhir','required',['required'=>'%s wajib diisi']);
+        }
+
+        public function _edit_rules() {
             $this->form_validation->set_rules('uId','Username','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('created_at','Tanggal','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('plate_number','Nomor Polisi','required',['required'=>'%s wajib diisi']);
