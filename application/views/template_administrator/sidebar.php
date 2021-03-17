@@ -41,13 +41,10 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header" style="color:black;">Pilihan Kinerja:</h6>
-            <a class="collapse-item" href="<?php echo base_url('administrator/kinerja') ?>">Operator</a>
-            <a class="collapse-item" href="<?php echo base_url('administrator/operator') ?>">Pengemudi</a>
-            <a class="collapse-item" href="<?php echo base_url('administrator/mekanik') ?>">Mekanik</a>
-            <a class="collapse-item" href="<?php echo base_url('administrator/pmj') ?>">PMJ</a>
-            <a class="collapse-item" href="<?php echo base_url('administrator/perbekalan') ?>">Admin Perbekalan</a>
-            <a class="collapse-item" href="<?php echo base_url('administrator/peralatan') ?>">Admin Peralatan</a>
-            <a class="collapse-item" href="<?php echo base_url('administrator/tu') ?>">Admin TU</a>
+            <a class="collapse-item" href="<?php echo base_url('administrator/kinerja') ?>">Kinerja</a>
+            <hr style="width: inherit; height: inherit;">
+            <h6 class="collapse-header" style="color:black;">Validasi Kinerja:</h6>
+            <a class="collapse-item" href="<?php echo base_URL('administrator/kinerja/esign'); ?>">Validasi Kinerja</a>
             <hr style="width: inherit; height: inherit;">
             <h6 class="collapse-header" style="color:black;">Esign Kinerja:</h6>
             <a class="collapse-item" href="<?php echo base_URL('administrator/kinerja/esign'); ?>">Request Esign Operator</a>
@@ -125,7 +122,7 @@
                 aria-controls="collapseESign"
             >
                 <i class="fas fa-signature" style="color:black;"></i>
-                <span style="color:black;">e-sign</span>
+                <span style="color:black;">E-Sign</span>
             </a>
             <div 
                 id="collapseESign"
@@ -137,6 +134,34 @@
                     <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
                     <a class="collapse-item" href="<?php echo base_URL('administrator/esign')?>">Surat Tugas</a>
                     <a class="collapse-item" href="<?php echo base_URL('administrator/esign/esign_ekinerja')?>">E-Kinerja</a>
+                </div>
+            </div>
+        </li>
+    <?php } ?>
+
+    <!-- validasi Collapse Menu -->
+    <?php if(isset($this->session->userdata['nip']) and !empty($this->session->userdata['nip'])) {?>
+        <li class="nav-item">
+            <a 
+                class="nav-link collapsed" 
+                href="#"
+                data-toggle="collapse" 
+                data-target="#collapseValidasi" 
+                aria-expanded="true" 
+                aria-controls="collapseValidasi"
+            >
+                <i class="fas fa-check" style="color:black;"></i>
+                <span style="color:black;">Validasi E-Kinerja</span>
+            </a>
+            <div 
+                id="collapseValidasi"
+                class="collapse" 
+                aria-labelledby="headingPages" 
+                data-parent="#accordionSidebar"
+            >
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
+                    <a class="collapse-item" href="<?php echo base_URL('administrator/validasi')?>">e-kinerja pjlp</a>
                 </div>
             </div>
         </li>

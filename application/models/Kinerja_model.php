@@ -55,6 +55,15 @@ class Kinerja_model extends CI_Model{
         return $this->db->get();
     }
 
+    public function getNewKinerjaForVerificator(string $nip){
+        $this->db->select($this->newKinerjaTable.'.*');
+        $this->db->from($this->newKinerjaTable);
+        $this->db->join('alkal_user_pjlp_verificator_lookup','alkal_user_pjlp_verificator_lookup.uid = '.$this->newKinerjaTable.'.uid');
+        $this->db->join('alkal_user_verificator','alkal_user_pjlp_verificator_lookup.nip = alkal_user_verificator.nip');
+        $this->db->where('alkal_user_verificator.nip = '.$nip);
+        return $this->db->get();
+    }
+
     public function postNewKinerja($data) {
         return $this->db->insert($this->newKinerjaTable,$data);
     }
