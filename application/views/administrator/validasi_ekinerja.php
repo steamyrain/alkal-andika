@@ -7,6 +7,8 @@
         <table id="data-tabel" class="table table-bordered table-striped" style="width: 100%">
             <thead>
                 <tr>
+                    <th style="text-align: center;">uid</th>
+                    <th style="text-align: center;">jobid</th>
                     <th style="text-align: center;">Nama</th>
                     <th style="text-align: center;">Tanggal Input</th>
                     <th style="text-align: center;">Tanggal Kinerja</th>
@@ -18,29 +20,29 @@
                     <th style="text-align: center;">Status Validasi</th>
                 </tr>
             </thead>
-            <tbody>
-            <?php foreach($kinerja as $k) : ?>
-                <tr>
-                    <td><?php echo $k->emp_name; ?></td>
-                    <td><?php echo $k->created_at; ?></td>
-                    <td><?php echo $k->job_date; ?></td>
-                    <td><?php echo $k->job_rolename; ?></td>
-                    <td><?php echo $k->job_start; ?></td>
-                    <td><?php echo $k->job_end; ?></td>
-                    <td><?php echo $k->job; ?></td>
-                    <td><?php echo $k->job_desc; ?></td>
-                    <td><?php echo $k->valid_status; ?></td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
         </table>
     </div>
 </div>
 <script type="text/JavaScript">
+    let table;
+    function getData() {
+        return $.ajax({
+            type: 'GET',
+            url: '<?php echo base_url('administrator/validasi/api') ?>',
+            dataType: 'json',
+            success: function (r){
+                table.clear();
+                table.rows.add(r).draw();
+            }
+        });
+    }
+
     $(document).ready(function() 
     {
+        getData();
+
         // initialize data table & its necessary config
-        var table = $("#data-tabel").DataTable({
+        table = $("#data-tabel").DataTable({
             dom: "Blfrtip",
             select: true,
             buttons: [
@@ -56,7 +58,43 @@
                         table.rows().deselect();
                     }
                 },
+                {
+                    text: 'validasi',
+                    action: function() {
+                        let data = table.rows({selected: true}).data();
+                        let length = table.rows({selected: true}).count();
+                        let response = [];
+                        for(let i=0;i<length;i++){
+                            response.push(data[i]);
+                        }
+                        response = JSON.stringify(response);
+                        $.ajax({
+                            type: 'POST',
+                            url: '<?php echo base_url('administrator/validasi/api') ?>',
+                            data: response,
+                            dataType: 'json',
+                            success: function(xml,textStatus,xhr){
+                                if(xhr.status==='200'){
+                                    console.log('fuck you');
+                                }
+                            }
+                        });
+                    }
+                }
             ],
+            columns: [
+                    {"data":"uid","visible":false},
+                    {"data":"jobid","visible":false},
+                    {"data":"emp_name"},
+                    {"data":"created_at"},
+                    {"data":"job_date"},
+                    {"data":"job_rolename"},
+                    {"data":"job_start"},
+                    {"data":"job_end"},
+                    {"data":"job"},
+                    {"data":"job_desc"},
+                    {"data":"valid_status"}
+            ]
         });
 
         // append data table's button container for button collection
