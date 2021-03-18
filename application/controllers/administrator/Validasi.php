@@ -81,7 +81,11 @@ class Validasi extends CI_Controller{
                 if (sizeof($kinerja)>0){
                     foreach($kinerja as $k){
                         $data = array('uid'=>$k->uid,'jobid'=>$k->jobid,'job_date'=>$k->job_date,'job_start'=>$k->job_start);
-                        $this->kinerja_model->updateNewKinerja(['valid_status'=>'valid'],$data);
+                        if($k->valid_status != 'valid'){
+                            $this->kinerja_model->updateNewKinerja(['valid_status'=>'valid'],$data);
+                        } else if ($k->valid_status != 'rejected'){
+                            $this->kinerja_model->updateNewKinerja(['valid_status'=>'rejected'],$data);
+                        }
                     }
                 } else {
                     $this->output->set_status_header(400);

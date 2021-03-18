@@ -18,6 +18,7 @@
                     <th style="text-align: center;">Kegiatan</th>
                     <th style="text-align: center;">Deskripsi Kegiatan</th>
                     <th style="text-align: center;">Status Validasi</th>
+                    <th style="text-align: center;">Status Validasi</th>
                 </tr>
             </thead>
         </table>
@@ -73,9 +74,32 @@
                             url: '<?php echo base_url('administrator/validasi/api') ?>',
                             data: response,
                             dataType: 'json',
-                            success: function(xml,textStatus,xhr){
-                                if(xhr.status==='200'){
-                                    console.log('fuck you');
+                            statusCode: {
+                                200: function() {
+                                    getData();
+                                }
+                            }
+                        });
+                    }
+                },
+                {
+                    text: 'tolak',
+                    action: function() {
+                        let data = table.rows({selected: true}).data();
+                        let length = table.rows({selected: true}).count();
+                        let response = [];
+                        for(let i=0;i<length;i++){
+                            response.push(data[i]);
+                        }
+                        response = JSON.stringify(response);
+                        $.ajax({
+                            type: 'POST',
+                            url: '<?php echo base_url('administrator/validasi/api') ?>',
+                            data: response,
+                            dataType: 'json',
+                            statusCode: {
+                                200: function() {
+                                    getData();
                                 }
                             }
                         });
@@ -93,7 +117,22 @@
                     {"data":"job_end"},
                     {"data":"job"},
                     {"data":"job_desc"},
-                    {"data":"valid_status"}
+                    {"data":"valid_status","visible":false},
+                    {
+                        "data":"",
+                        "orderable":false,
+                        "searchable":false,
+                        "className":"text-center",
+                        "render":function(data,type,row){
+                            if(row.valid_status === 'valid'){
+                                return '<div class="btn btn-success btn-sm"><i class="fas fa-check"></i></div>';
+                            } else if(row.valid_status === 'valid'){
+                                return '<div class="btn btn-warning btn-sm"><i class="fas fa-exclamation"></i></div>';
+                            } else if(row.valid_status === 'rejected'){
+                                return '<div class="btn btn-danger btn-sm"><i class="fas fa-times"></i></div>';
+                            }
+                        }
+                    }
             ]
         });
 

@@ -1,7 +1,7 @@
 <div class="container-fluid">
 
         <h5 style="text-align: center;">LAPORAN KERJA DUMP TRUCK</h5>
-	    <?php echo form_open('administrator/laporandt/input_aksi'); ?> 
+	    <?php echo form_open(base_URL('administrator/laporandt/input_aksi')); ?> 
 		<div class="form-group">
             <label> Nama :</label>
 			<select name="uId" class="form-control">
@@ -30,6 +30,7 @@
 			placeholder="Masukkan Lokasi Kerja" class="form-control">
 			<?php echo form_error('project_location', '<div class="text-danger small" ml-3>') ?>
 		</div>
+
 		<div class="form-group">
 			<label>km/hm awal :</label>
             <input 
@@ -40,6 +41,7 @@
             >
 			<?php echo form_error('lk__km_onStart', '<div class="text-danger small" ml-3>') ?>
         </div>
+
         <div class="form-group">
             <label>km/hm akhir :</label>
             <input 
@@ -50,14 +52,16 @@
             >
 			<?php echo form_error('lk__km_onFinish', '<div class="text-danger small" ml-3>') ?>
 		</div>
+
 		<div class="form-group">
 			<label>Jarak :</label>
 			<input id="lk__jarak" type="text" name="km_total"
             placeholder="KM Awal - KM Akhir" class="form-control" readonly>
 		</div>
+
 		<div class="form-group" style="display: none;">
 			<label>BBM :</label>
-			<input type="text" name="gasoline"
+			<input type="number" name="gasoline"
 			placeholder="Masukkan BBM" class="form-control">
 			<?php echo form_error('gasoline', '<div class="text-danger small" ml-3>') ?>
 		</div>
