@@ -12,7 +12,7 @@
 	},
 	"require": {
 		"php": ">=5.4.8",
-		"datatables.net/editor-php": "^1.9",
+		"datatables.net/editor-php": "2.*",
 		"fpdf/fpdf": "^1.82"
 	},
 	"suggest": {
