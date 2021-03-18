@@ -1,80 +1,6 @@
 <?php
 
 class Validasi extends CI_Controller{
-    protected $dataTables;
-    protected $editor;
-    public function __construct() {
-        parent::__construct();
-    }
-
-    private function is_loggedIn() {
-        if (!isset($this->session->userdata['username'])){
-            $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
-                Anda Belum Login!
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                 <span aria-hidden="true">&times;</span>
-                 </button>
-                </div>');
-            redirect('administrator/auth');
-        }
-    }
-
-    private function is_admin() {
-        if($this->session->userdata['level'] !== 'admin'){
-            $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
-                Anda Belum Login!
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                 <span aria-hidden="true">&times;</span>
-                 </button>
-                </div>');
-            redirect('administrator/auth');
-        }
-    }
-
-    private function is_verificator() {
-        if(
-            !isset($this->session->userdata['nip']) and 
-            empty($this->session->userdata['nip'])
-        ){
-            $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
-                Anda Belum Login!
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                 <span aria-hidden="true">&times;</span>
-                 </button>
-                </div>');
-            redirect('administrator/auth');
-        }
-    }
-
-    public function api() {
-        $this->is_loggedIn();
-        $this->is_admin();
-        $this->is_verificator();
-        $this->load->library('AlkalDatatables');
-        $this->dataTables = new AlkalDatatables();
-        $this->api = $this->dataTables->api();
-        $this->editor;
-    }
-
-    public function index() {
-        $this->is_loggedIn();
-        $this->is_admin();
-        $this->is_verificator();
-		$this->load->view('template_administrator/header');
-		$this->load->view('template_administrator/sidebar');
-		$this->load->view('administrator/validasi_ekinerja_baru');
-		$this->load->view('template_administrator/footer');
-    }
-
-    /*
-
-    protected $dataTables;
-
-    public function __construct() {
-        parent::__construct();
-        $this->load->library('AlkalDatatables');
-        $this->dataTables = new AlkalDatatables();
-    }
 
     private function is_loggedIn() {
         if (!isset($this->session->userdata['username'])){
@@ -117,12 +43,16 @@ class Validasi extends CI_Controller{
 
 	public function index()
 	{
+        /* check if truly admin and a verificator */
         $this->is_loggedIn();
         $this->is_admin();
         $this->is_verificator();
+        /*-----------------*/
 
+        /* initialize data */
         $nip = $this->session->userdata['nip'];
 		$data['kinerja'] = $this->kinerja_model->getNewKinerjaForVerificator($nip)->result();
+        /*-----------------*/
 
 		$this->load->view('template_administrator/header');
 		$this->load->view('template_administrator/sidebar');
@@ -547,6 +477,5 @@ class Validasi extends CI_Controller{
 		$this->form_validation->set_rules('starting_date','starting_date','required',['required' => 'Tanggal Awal Wajib Diisi']);
 		$this->form_validation->set_rules('end_date','end_date','required',['required' => 'Tanggal Akhir Wajib Diisi']);
     }
-     */
 
 }
