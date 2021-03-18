@@ -60,6 +60,41 @@ class Validasi extends CI_Controller{
 		$this->load->view('template_administrator/footer');
 	}
 
+    public function api() {
+        /* check if truly admin and a verificator */
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->is_verificator();
+        /*-----------------*/
+
+        $nip = $this->session->userdata['nip'];
+        switch($_SERVER["REQUEST_METHOD"]) {
+            case 'GET':
+                $kinerja = $this->kinerja_model->getNewKinerjaForVerificator($nip)->result();
+                header('Content-Type: application/json');
+                echo json_encode($kinerja);
+                break;
+            case 'POST':
+                $json = file_get_contents('php://input');
+                $kinerja = json_decode($json);
+                $data = array();
+                if (sizeof($kinerja)>0){
+                    foreach($kinerja as $k){
+                        $data = array('uid'=>$k->uid,'jobid'=>$k->jobid,'job_date'=>$k->job_date,'job_start'=>$k->job_start);
+                        $this->kinerja_model->updateNewKinerja(['valid_status'=>'valid'],$data);
+                    }
+                } else {
+                    $this->output->set_status_header(400);
+                    break;
+                }
+                $this->output->set_status_header(200);
+                break;
+            default:
+                $this->output->set_status_header(405);
+                break;
+        }
+    }
+
 	public function input()
 	{
 

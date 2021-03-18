@@ -61,10 +61,17 @@ class Kinerja_model extends CI_Model{
         $this->db->join('alkal_user_pjlp_verificator_lookup','alkal_user_pjlp_verificator_lookup.uid = '.$this->newKinerjaTable.'.uid');
         $this->db->join('alkal_user_verificator','alkal_user_pjlp_verificator_lookup.nip = alkal_user_verificator.nip');
         $this->db->where('alkal_user_verificator.nip = '.$nip);
+        $this->db->order_by('emp_name');
+        $this->db->order_by('job_date');
+        $this->db->order_by('job_start');
         return $this->db->get();
     }
 
     public function postNewKinerja($data) {
         return $this->db->insert($this->newKinerjaTable,$data);
+    }
+
+    public function updateNewKinerja($data,$id) {
+        return $this->db->update($this->newKinerjaTable,$data,$id);
     }
 }
