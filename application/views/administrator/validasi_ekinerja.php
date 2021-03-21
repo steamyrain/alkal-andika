@@ -66,6 +66,7 @@
                         let length = table.rows({selected: true}).count();
                         let response = [];
                         for(let i=0;i<length;i++){
+                            data[i].valid_status = 'valid';
                             response.push(data[i]);
                         }
                         response = JSON.stringify(response);
@@ -89,6 +90,7 @@
                         let length = table.rows({selected: true}).count();
                         let response = [];
                         for(let i=0;i<length;i++){
+                            data[i]['valid_status'] = 'rejected';
                             response.push(data[i]);
                         }
                         response = JSON.stringify(response);
