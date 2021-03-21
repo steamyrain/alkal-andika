@@ -48,6 +48,15 @@ class Kinerja_model extends CI_Model{
         return $this->db->get();
     }
 
+    public function getAllNewKinerja(){
+        $this->db->select($this->newKinerjaTable.'.*');
+        $this->db->from($this->newKinerjaTable);
+        $this->db->order_by('emp_name');
+        $this->db->order_by('job_date');
+        $this->db->order_by('job_start');
+        return $this->db->get();
+    }
+
     public function getNewKinerjaToday($uid) {
         $this->db->select('job_rolename,job,job_start,job_end,job_date,valid_status,job_desc');
         $this->db->from($this->newKinerjaTable);

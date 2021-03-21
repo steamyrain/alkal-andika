@@ -42,12 +42,14 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header" style="color:black;">Pilihan Kinerja:</h6>
             <a class="collapse-item" href="<?php echo base_url('administrator/kinerja') ?>">Kinerja</a>
+            <!-- 
             <hr style="width: inherit; height: inherit;">
             <h6 class="collapse-header" style="color:black;">Validasi Kinerja:</h6>
-            <a class="collapse-item" href="<?php echo base_URL('administrator/kinerja/esign'); ?>">Validasi Kinerja</a>
+            <a class="collapse-item" href="">Validasi Kinerja</a>
             <hr style="width: inherit; height: inherit;">
             <h6 class="collapse-header" style="color:black;">Esign Kinerja:</h6>
-            <a class="collapse-item" href="<?php echo base_URL('administrator/kinerja/esign'); ?>">Request Esign Operator</a>
+            <a class="collapse-item" href="">Request Esign Operator</a>
+            -->
           </div>
         </div>
       </li>

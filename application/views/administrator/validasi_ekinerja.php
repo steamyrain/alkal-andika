@@ -126,7 +126,7 @@
                         "render":function(data,type,row){
                             if(row.valid_status === 'valid'){
                                 return '<div class="btn btn-success btn-sm"><i class="fas fa-check"></i></div>';
-                            } else if(row.valid_status === 'valid'){
+                            } else if(row.valid_status === 'pending'){
                                 return '<div class="btn btn-warning btn-sm"><i class="fas fa-exclamation"></i></div>';
                             } else if(row.valid_status === 'rejected'){
                                 return '<div class="btn btn-danger btn-sm"><i class="fas fa-times"></i></div>';
