@@ -189,6 +189,7 @@
                 $km_onFinish = $this->input->post('lk__km_onFinish');
                 $km_total = $this->input->post('km_total');
                 $gasoline = 0;
+                $created_at = $this->input->post('created_at');
 
                 $data = array(
                     'userId' => $userId,
@@ -210,6 +211,7 @@
             $this->form_validation->set_rules('project_location','Lokasi kerja','required',['required'=>'%s  wajib diisi']);
             $this->form_validation->set_rules('lk__km_onStart','KM awal','required',['required'=>'%s wajib diisi']);
             $this->form_validation->set_rules('lk__km_onFinish','KM akhir','required',['required'=>'%s wajib diisi']);
+            $this->form_validation->set_rules('created_at','Tanggal','required',['required'=>'%s wajib diisi']);
         }
 
         public function _edit_rules() {
