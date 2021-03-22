@@ -59,6 +59,16 @@
 			placeholder="Masukkan Lokasi Kerja" class="form-control">
 			<?php echo form_error('project_location', '<div class="text-danger small" ml-3>','</div>') ?>
 		</div>
+
+		<div class="form-group">
+			<label>Tanggal :</label>
+            <input 
+                type="date" name="created_at"
+                placeholder="Masukkan Tanggal Kerja" class="form-control"
+            >
+			<?php echo form_error('created_at', '<div class="text-danger small" ml-3>','</div>') ?>
+		</div>
+
 		<div class="form-group">
 			<label>HM awal :</label>
             <input 
