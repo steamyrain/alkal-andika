@@ -32,7 +32,16 @@
 		</div>
 
 		<div class="form-group">
-			<label>km/hm awal :</label>
+			<label>Tanggal :</label>
+            <input 
+                type="date" name="created_at"
+                placeholder="Masukkan Tanggal Kerja" class="form-control"
+            >
+			<?php echo form_error('created_at', '<div class="text-danger small" ml-3>','</div>') ?>
+		</div>
+
+		<div class="form-group">
+			<label>km awal :</label>
             <input 
                 type="text" 
                 name="lk__km_onStart"
@@ -43,7 +52,7 @@
         </div>
 
         <div class="form-group">
-            <label>km/hm akhir :</label>
+            <label>km akhir :</label>
             <input 
                 type="text" 
                 name="lk__km_onFinish"
