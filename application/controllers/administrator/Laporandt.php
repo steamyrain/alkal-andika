@@ -193,6 +193,7 @@
 
                 $data = array(
                     'userId' => $userId,
+                    'created_at' => $created_at,
                     'plate_number' => $plate_number,
                     'project_location' => $project_location,
                     'km_onStart' => $km_onStart,
