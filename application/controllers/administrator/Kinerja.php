@@ -48,6 +48,33 @@ class Kinerja extends CI_Controller{
         }
     }
 
+    public function printapi(){
+        /* check if truly admin and a verificator */
+        $this->is_loggedIn();
+        $this->is_admin();
+        /*-----------------*/
+
+        switch($_SERVER["REQUEST_METHOD"]) {
+            case 'POST':
+                $uid = $this->input->post('uid');
+                $job_date_start = $this->input->post('job_date_start');
+                $job_date_end = $this->input->post('job_date_end');
+                if(!isset($uid) or empty($uid)){
+                    $this->output->set_status_header(404);
+                } else if (!isset($job_date_start) or empty($job_date_start)){
+                    $this->output->set_status_header(404);
+                } else if (!isset($job_date_end) or empty($job_date_end)){
+                    $this->output->set_status_header(404);
+                } else {
+                    $this->output->set_status_header(200);
+                }
+                break;
+            default:
+                $this->output->set_status_header(405);
+                break;
+        }
+    }
+
     public function index(){
         $this->is_loggedIn();
         $this->is_admin();

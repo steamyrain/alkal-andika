@@ -54,20 +54,24 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="printKinerja">
                     <div class="form-group">
                         <label for="job_roleid" class="col-form-label">Bidang</label>
-                        <select id="job_roleid" class="form-control">
+                        <select id="job_roleid" name="job_roleid" class="form-control">
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="uid" class="col-form-label">PJLP</label>
-                        <select id="uid" class="form-control">
+                        <select id="uid" name="uid" class="form-control">
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="job_date" class="col-form-label">Tanggal Kinerja</label>
-                        <input type="date" id="job_date" class="form-control"/>
+                        <label for="job_date_start" class="col-form-label" aria-required="true" aria-invalid=false>Tanggal Awal Kinerja</label>
+                        <input type="date" name="job_date_start" id="job_date_start" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="job_date_end" class="col-form-label" aria-required="true" aria-invalid=false>Tanggal Akhir Kinerja</label>
+                        <input type="date" name="job_date_end" id="job_date_end" class="form-control"/>
                     </div>
                 </form>
             </div>
@@ -80,8 +84,9 @@
                     Close
                 </button>
                 <button 
-                    type="button" 
+                    type="submit" 
                     class="btn btn-primary"
+                    id="printButton"
                 >
                     Print Kinerja
                 </button>
@@ -90,8 +95,25 @@
     </div>
 </div>
 <script type="text/JavaScript">
+
     let table;
     let user;
+    let form;
+
+    function submitForm(){
+        return $.ajax({
+                type: 'POST',
+                url: '<?php echo base_url('administrator/kinerja/printapi') ?>',
+                cache: false,
+                data: $("form#printKinerja").serialize(),
+                success: function(r){
+                    $("#kinerjaModal").modal('hide');
+                },
+                error: function(r){
+                    $("#kinerjaModal").modal('hide');
+                }
+        });
+    }
 
     function getData() {
         return $.ajax({
@@ -133,6 +155,7 @@
             url: '<?php echo base_url('administrator/user/api') ?>',
             dataType: 'json',
             success: function (r){
+                $("#printButton").prop('disabled',false);
                 const select = $("#job_roleid");
                 const uid = $("#uid");
                 user = r;
@@ -157,6 +180,20 @@
     {
         getData();
 
+        // disable before print button getRoleId called
+        $("#printButton").prop('disabled',true);
+
+        // print button click event handler
+        $("#printButton").on('click',function(){
+            $("form#printKinerja").submit();
+        });
+
+        // form printKinerja submit event handler
+        $("#printKinerja").on('submit',function(e){
+            e.preventDefault();
+            submitForm();
+        });
+
         // initialize data table & its necessary config
         table = $("#data-tabel").DataTable({
             dom: "Blfrtip",
@@ -165,7 +202,6 @@
                 text: 'Print',
                 action: function (e,dt,node,config) {
                     getRoleId();
-                    //getUser();
                     $('#kinerjaModal').modal('show');
                 }
             }
