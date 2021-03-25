@@ -75,6 +75,8 @@ class Pdf extends Fpdf
         $this->ln();
 
         $i=0;
+
+        /*
         foreach($data as $row){
             $this->SetLeftMargin((280-$totalWidth)/2);
             foreach($row as $col){
@@ -91,6 +93,25 @@ class Pdf extends Fpdf
             $i = 0;
             $this->ln();
         }
+         */
+
+        foreach($data as $row){
+            $this->SetLeftMargin((280-$totalWidth)/2);
+            foreach($row as $col){
+                if($i == 0){
+                    $tanggal;
+                    preg_match('/^[0-9]{4}-[0-9][0-9]-[0-9][0-9]/',$col,$tanggal);
+                    $this->Cell($width[$i],7,$tanggal[0],1);
+                    $i++;
+                } else if($i < 5){
+                    $this->Cell($width[$i],7,$col,1);
+                    $i++;
+                }
+            }
+            $i = 0;
+            $this->ln();
+        }
+
     }
 
     function Footer(){

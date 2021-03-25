@@ -27,7 +27,6 @@ class Kinerja extends CI_Controller{
     }
 
     public function api() {
-
         /* check if truly admin and a verificator */
         $this->is_loggedIn();
         $this->is_admin();
@@ -66,13 +65,41 @@ class Kinerja extends CI_Controller{
                 } else if (!isset($job_date_end) or empty($job_date_end)){
                     $this->output->set_status_header(404);
                 } else {
+                    $pdf=$this->print($uid,$job_date_start,$job_date_end);
                     $this->output->set_status_header(200);
+                    $this->output->set_content_type('application/pdf');
+                    $this->output->set_output(base64_encode($pdf));
                 }
                 break;
             default:
                 $this->output->set_status_header(405);
                 break;
         }
+    }
+
+    private function print($uid,$job_date_start,$job_date_end){
+        $this->load->library('Pdf');
+
+        $data = $this->kinerja_model->getNewKinerjaForPrint($uid,$job_date_start,$job_date_end)->result();
+
+        $pdf = new Pdf();
+
+        $pdf->AddPage("L");
+
+        $pdf->SetFont('Times','BU',14);
+        $pdf->Cell(0,0,'Kinerja PJLP',0,1,'C');
+        $pdf->ln(5);
+        
+        $pdf->Nama($data[0]->username);
+        $pdf->Jabatan($data[0]->job_rolename);
+        $pdf->Tanggal($job_date_start,$job_date_end);
+
+        $header = ['Tanggal','Awal','Akhir','Kegiatan','Deskripsi Kegiatan'];
+
+        // total width = 205
+        $pdf->TabelKinerja($header,$data,[30,20,20,75,60]);
+
+        return $pdf->Output("kinerja.pdf","S");
     }
 
     public function index(){

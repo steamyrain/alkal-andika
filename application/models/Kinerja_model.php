@@ -76,6 +76,17 @@ class Kinerja_model extends CI_Model{
         return $this->db->get();
     }
 
+    public function getNewKinerjaForPrint($uid,$job_date_start,$job_date_end){
+        $this->db->select('a.job_date as job_date ,a.job_start as job_start, a.job_end as job_end ,a.job as job,a.job_desc as job_desc,b.username as username,a.job_rolename as job_rolename'); 
+        $this->db->from($this->newKinerjaTable.' a');
+        $this->db->join('user b ','b.id = a.uid','inner');
+        $this->db->where('a.uid = '.$uid);
+        $this->db->where("a.job_date between '".$job_date_start."' and '".$job_date_end."'");
+        $this->db->where("a.valid_status = 'valid'");
+        $this->db->order_by('a.job_date');
+        return $this->db->get();
+    }
+
     public function postNewKinerja($data) {
         return $this->db->insert($this->newKinerjaTable,$data);
     }

@@ -100,6 +100,17 @@
     let user;
     let form;
 
+    function base64ToArrayBuffer(base64){
+        let binaryString = window.atob(base64);
+        let binaryLen = binaryString.length;
+        let bytes = new Uint8Array(binaryLen);
+        for (var i = 0; i < binaryLen; i++) {
+            var ascii = binaryString.charCodeAt(i);
+            bytes[i] = ascii;
+        }
+        return bytes;
+    }
+
     function submitForm(){
         return $.ajax({
                 type: 'POST',
@@ -107,7 +118,16 @@
                 cache: false,
                 data: $("form#printKinerja").serialize(),
                 success: function(r){
+                    let b = base64ToArrayBuffer(r);
+                    let blob = new Blob([b],{type: "application/pdf"})
+                    let link=document.createElement('a');
+                    link.href=window.URL.createObjectURL(blob);
+                    link.download="kinerja.pdf";
+                    link.click();
                     $("#kinerjaModal").modal('hide');
+                    /*
+                    $("#kinerjaModal").modal('hide');
+                     */
                 },
                 error: function(r){
                     $("#kinerjaModal").modal('hide');
