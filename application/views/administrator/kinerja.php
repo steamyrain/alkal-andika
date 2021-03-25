@@ -28,8 +28,71 @@
         </table>
     </div>
 </div>
+<div 
+    class="modal fade" 
+    id="kinerjaModal" 
+    tabindex="-1" 
+    role="dialog"
+    aria-labelledby="kinerjaModalLabel"
+>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"> 
+            <div class="modal-header">
+                <h5 
+                    class="modal-title" 
+                    id="kinerjaModalLabel"
+                >
+                    Print Kinerja 
+                </h5>
+                <button 
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="job_roleid" class="col-form-label">Bidang</label>
+                        <select id="job_roleid" class="form-control">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="uid" class="col-form-label">PJLP</label>
+                        <select id="uid" class="form-control">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="job_date" class="col-form-label">Tanggal Kinerja</label>
+                        <input type="date" id="job_date" class="form-control"/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button 
+                    type="button" 
+                    class="btn btn-secondary" 
+                    data-dismiss="modal"
+                >
+                    Close
+                </button>
+                <button 
+                    type="button" 
+                    class="btn btn-primary"
+                >
+                    Print Kinerja
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/JavaScript">
     let table;
+    let user;
+
     function getData() {
         return $.ajax({
             type: 'GET',
@@ -42,6 +105,54 @@
         });
     }
 
+    function getRoleId(){
+        return $.ajax({
+            type: 'GET',
+            url: '<?php echo base_url('administrator/jobrole/api') ?>',
+            dataType: 'json',
+            success: function (r){
+                const select = $("#job_roleid");
+                const uid = $("#uid");
+                select.empty();
+                uid.empty();
+                for(let i=0;i<Object.keys(r).length;i++){
+                    if(i==0){
+                        select.append("<option value="+r[i].id+" selected>"+r[i].role_name+"</option>")
+                        getUser();
+                    } else {
+                        select.append("<option value="+r[i].id+">"+r[i].role_name+"</option>")
+                    }
+                }
+            }
+        });
+    }
+
+    function getUser(){
+        return $.ajax({
+            type: 'GET',
+            url: '<?php echo base_url('administrator/user/api') ?>',
+            dataType: 'json',
+            success: function (r){
+                const select = $("#job_roleid");
+                const uid = $("#uid");
+                user = r;
+                for(let i=0;i<user.length;i++){
+                    if(user[i].job_roleid === select.val()){
+                        uid.append("<option value="+user[i].id+">"+user[i].username+"</option>")
+                    }
+                }
+                select.change(function() {
+                    uid.empty();
+                    for(let i=0;i<user.length;i++){
+                        if(user[i].job_roleid === select.val()){
+                            uid.append("<option value="+user[i].id+">"+user[i].username+"</option>")
+                        }
+                    }
+                });
+            }
+        });
+    }
+
     $(document).ready(function() 
     {
         getData();
@@ -49,7 +160,16 @@
         // initialize data table & its necessary config
         table = $("#data-tabel").DataTable({
             dom: "Blfrtip",
-            select: true,
+            buttons: [
+            {
+                text: 'Print',
+                action: function (e,dt,node,config) {
+                    getRoleId();
+                    //getUser();
+                    $('#kinerjaModal').modal('show');
+                }
+            }
+            ],
             columns: [
                     {"data":"uid","visible":false},
                     {"data":"jobid","visible":false},

@@ -10,4 +10,10 @@ class JobRoleModel extends CI_Model{
         $this->db->where($this->table.'.uid = '.$uid);
         return $this->db->get();
     }
+
+    public function getAllJobRole() {
+        $this->db->select('id,role_name');
+        $this->db->from('alkal_user_job_role');
+        return $this->db->get();
+    }
 }

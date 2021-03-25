@@ -64,4 +64,14 @@ class user_model extends CI_Model{
         $this->db->order_by("username");
         return $this->db->get();
     }
+
+    public function getUserForKinerja(){
+        $this->db->select("a.id as id,a.username as username,b.job_roleid as job_roleid,c.role_name as role_name");
+        $this->db->from('user a');
+        $this->db->join('alkal_user_job_role_lookup b','b.uid = a.id','inner');
+        $this->db->join('alkal_user_job_role c','c.id = b.job_roleid','inner');
+        $this->db->order_by('b.job_roleid');
+        $this->db->order_by('a.username');
+        return $this->db->get();
+    }
 }

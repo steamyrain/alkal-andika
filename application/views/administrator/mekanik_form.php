@@ -17,10 +17,6 @@
 			<option>Muhammad Hafiz</option>
 			<option>Muhammad Syafi'I</option>
 			<option>Achmad Rizky</option>
-			<option>Ade Adam Hanifianto</option>
-			<option>Agung Permana</option>
-			<option>Agung Pramono</option>
-			<option>Ahmad Baktiar</option>
 			<option>Ahmad Yapie Ta'as</option>
  		    <option></option>
   			</select>
