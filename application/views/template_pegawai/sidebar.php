@@ -38,20 +38,6 @@
         </div>
       </li>
 
-      <!-- esign -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEsign" aria-expanded="true" aria-controls="collapseEsign">
-          <i class="fas fa-signature" style="color:black;"></i>
-          <span style="color:black;">E-Sign</span>
-        </a>
-        <div id="collapseEsign" class="collapse" aria-labelledby="headingEsign" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-            <a class="collapse-item" href="<?php echo base_URL('pegawai/esign')?>">E-Sign Kinerja</a>
-          </div>
-        </div>
-      </li>
-
       <li class="nav-item">
         <form id="form-logout" method="post" action="<?php echo base_URL('auth/logout')?>" style="display: none;">
         </form>
