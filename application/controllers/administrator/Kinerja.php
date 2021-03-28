@@ -81,8 +81,9 @@ class Kinerja extends CI_Controller{
         $this->load->library('Pdf');
 
         $data = $this->kinerja_model->getNewKinerjaForPrint($uid,$job_date_start,$job_date_end)->result();
+        $verificators = $this->kinerja_model->getPJLPVerificatorsForPrint($uid)->result();
 
-        $pdf = new Pdf();
+        $pdf = new Pdf('','',date("d-m-Y"),$verificators);
 
         $pdf->AddPage("L");
 

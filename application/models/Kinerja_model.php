@@ -94,4 +94,13 @@ class Kinerja_model extends CI_Model{
     public function updateNewKinerja($data,$id) {
         return $this->db->update($this->newKinerjaTable,$data,$id);
     }
+
+    public function getPJLPVerificatorsForPrint($uid){
+        $this->db->select('b.nip as vfcNIP, b.jobTitle as vfcJobTitle, b.legalName as vfcName');
+        $this->db->from('alkal_user_pjlp_verificator_lookup a');
+        $this->db->join('alkal_user_verificator b','b.nip = a.nip','inner');
+        $this->db->where('a.uid = '.$uid);
+        $this->db->order_by('b.nip');
+        return $this->db->get();
+    }
 }
