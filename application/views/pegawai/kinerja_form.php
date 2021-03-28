@@ -42,7 +42,7 @@
 		</div>
         <div class="form-group">
             <label> Deskripsi Kegiatan : </label>
-            <textarea maxlength="255" name="job_desc" class="form-control"></textarea>
+            <textarea maxlength="255" name="job_desc" class="form-control" placeholder="Deskripsi membantu penilaian kinerja. Contoh: volume: 10 surat / volume: 5 dumptruck ..."></textarea>
         </div>
         <div class="form-group">
             <label> Dokumentasi Kegiatan : </label>
