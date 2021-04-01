@@ -8,6 +8,10 @@
             <thead>
                 <tr>
                     <th style="text-align: center;">uid</th>
+                    <th style="text-align: center;">Nama</th>
+                    <th style="text-align: center">Bidang</th>
+                    <!-- 
+                    <th style="text-align: center;">uid</th>
                     <th style="text-align: center;">jobid</th>
                     <th style="text-align: center;">Nama</th>
                     <th style="text-align: center;">Tanggal Input</th>
@@ -19,6 +23,7 @@
                     <th style="text-align: center;">Deskripsi Kegiatan</th>
                     <th style="text-align: center;">Status Validasi</th>
                     <th style="text-align: center;">Status Validasi</th>
+                    -->
                 </tr>
             </thead>
         </table>
@@ -29,7 +34,7 @@
     function getData() {
         return $.ajax({
             type: 'GET',
-            url: '<?php echo base_url('administrator/validasi/api') ?>',
+            url: '<?php echo base_url('administrator/validasi/list_pjlp') ?>',
             dataType: 'json',
             success: function (r){
                 table.clear();
@@ -38,6 +43,20 @@
         });
     }
 
+    $(document).ready(function() 
+    {
+        getData();
+
+        table = $("#data-tabel").DataTable({
+            dom: "Blfrtip",
+            select: true,
+            columns: [
+                    {"data":"pjlpUID","visible":false},
+                    {"data":"pjlpName"},
+                    {"data":"pjlpRole"}
+            ]
+        });
+    /*
     $(document).ready(function() 
     {
         getData();
@@ -137,6 +156,7 @@
                     }
             ]
         });
+    */
 
         // append data table's button container for button collection
         table
