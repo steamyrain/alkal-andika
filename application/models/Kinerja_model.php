@@ -76,6 +76,18 @@ class Kinerja_model extends CI_Model{
         return $this->db->get();
     }
 
+    public function getPJLPForVerificator(string $nip){
+        $this->db->select('a.username as pjlpName, c.role_name as pjlpRole, a.id as pjlpUID');
+        $this->db->from('user a');
+        $this->db->join('alkal_user_job_role_lookup b','b.uid = a.id');
+        $this->db->join('alkal_user_job_role c','c.id = b.job_roleid');
+        $this->db->join('alkal_user_pjlp_verificator_lookup d','d.uid = a.id');
+        $this->db->where('d.nip = '.$nip);
+        $this->db->order_by('a.username');
+        $this->db->order_by('b.job_roleid');
+        return $this->db->get();
+    }
+
     public function getNewKinerjaForPrint($uid,$job_date_start,$job_date_end){
         $this->db->select('a.job_date as job_date ,a.job_start as job_start, a.job_end as job_end ,a.job as job,a.job_desc as job_desc,b.username as username,a.job_rolename as job_rolename'); 
         $this->db->from($this->newKinerjaTable.' a');
