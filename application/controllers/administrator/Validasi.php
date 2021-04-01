@@ -60,6 +60,30 @@ class Validasi extends CI_Controller{
 		$this->load->view('template_administrator/footer');
 	}
 
+    public function list_pjlp(){
+        /* check if truly admin and a verificator */
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->is_verificator();
+        /*-----------------*/
+
+        $nip = $this->session->userdata['nip'];
+
+        switch($_SERVER["REQUEST_METHOD"]) {
+            case 'GET':
+                $kinerja = $this->kinerja_model->getPJLPForVerificator($nip)->result();
+                header('Content-Type: application/json');
+                echo json_encode($kinerja);
+                break;
+            case 'POST':
+                //do something
+                break;
+            default:
+                $this->output->set_status_header(405);
+                break;
+        }
+    }
+
     public function api() {
         /* check if truly admin and a verificator */
         $this->is_loggedIn();
