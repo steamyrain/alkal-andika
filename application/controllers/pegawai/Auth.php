@@ -30,6 +30,6 @@ class Auth extends CI_Controller{
 	{
         $this->is_loggedIn();
         $this->is_user();
-        $this->redirect(base_url('auth'));
+        redirect('auth');
 	}
 }
