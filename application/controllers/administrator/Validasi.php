@@ -50,10 +50,26 @@ class Validasi extends CI_Controller{
         /*-----------------*/
 
         /* initialize data */
-        $nip = $this->session->userdata['nip'];
-		$data['kinerja'] = $this->kinerja_model->getNewKinerjaForVerificator($nip)->result();
+
+		$this->load->view('template_administrator/header');
+		$this->load->view('template_administrator/sidebar');
+		$this->load->view('administrator/list_pjlp');
+		$this->load->view('template_administrator/footer');
+	}
+
+	public function validasi_kinerja()
+	{
+        /* check if truly admin and a verificator */
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->is_verificator();
+        $uid = $this->input->get('uid',true);
+        $data = [
+            "uid"=>$uid
+        ];
         /*-----------------*/
 
+        /* initialize data */
 		$this->load->view('template_administrator/header');
 		$this->load->view('template_administrator/sidebar');
 		$this->load->view('administrator/validasi_ekinerja',$data);
@@ -94,7 +110,8 @@ class Validasi extends CI_Controller{
         $nip = $this->session->userdata['nip'];
         switch($_SERVER["REQUEST_METHOD"]) {
             case 'GET':
-                $kinerja = $this->kinerja_model->getNewKinerjaForVerificator($nip)->result();
+                $uid = $this->input->get('uid',true);
+                $kinerja = $this->kinerja_model->getNewKinerjaForVerificator($nip,$uid)->result();
                 header('Content-Type: application/json');
                 echo json_encode($kinerja);
                 break;
