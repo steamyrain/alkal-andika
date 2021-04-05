@@ -133,7 +133,45 @@ class Kinerja extends CI_Controller{
             // initialize upload with predefined config
             $this->upload->initialize($config);
 
+            $documentation = $this->upload->data('file_name');
+            $data = array(
+                'emp_name' => $emp_name,
+                'uid' => $uid,
+                'job_roleid' => $job_roleid,
+                'job_rolename' => $job_rolename,
+                'job_date' => $job_date,
+                'job_start' => $job_start,
+                'job_end' => $job_end,
+                'job' => $job,
+                'jobid' => $jobid,
+                'job_desc' => $job_desc,
+                'documentation' => $documentation,
+            );
+            $this->kinerja_model->postNewKinerja($data);
+            $this->session->set_flashdata('pesan',
+                '<div 
+                    class=" alert 
+                            alert-success
+                            dismissible 
+                            fade 
+                            show
+                            " 
+                    role="alert">
+                Kinerja Berhasil Diinput
+                <button 
+                    type="button" 
+                    class="close" 
+                    data-dismiss="alert" 
+                    aria-label="Close">
+                <span 
+                    aria-hidden="true">
+                &times;
+                </span>
+                </button>
+                </div>');
+                redirect(base_URL('pegawai/kinerja'));
             // check if upload is successful
+            /*
             if(!$this->upload->do_upload('documentation')) {
                 $this->session->set_flashdata('pesan',
                     '<div 
@@ -199,6 +237,7 @@ class Kinerja extends CI_Controller{
                     </div>');
                     redirect(base_URL('pegawai/kinerja'));
             }
+             */
 		}
     }
 	
@@ -208,7 +247,8 @@ class Kinerja extends CI_Controller{
 		$this->form_validation->set_rules('job_start','job_start','required',['required' => 'Waktu Awal Wajib Diisi']);
 		$this->form_validation->set_rules('job_end','job_end','required',['required' => 'Waktu Akhir Wajib Diisi']);
         $this->form_validation->set_rules('job','job','required',['required' => 'Kegiatan Wajib Diisi']);
-        $this->form_validation->set_rules('documentation','documentation','callback___file_selected_test');
+        /* documentation now optional */
+        //$this->form_validation->set_rules('documentation','documentation','callback___file_selected_test');
 	}
 
     public function __file_selected_test(){

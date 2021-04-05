@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="alert alert-success" role="alert">
-        <i class="fas fa-clipboard"></i> Kinerja PJLP
+        <i class="fas fa-clipboard"></i> Kinerja PJLP Hari Ini
     </div>
 
     <?php 
