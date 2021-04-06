@@ -209,7 +209,7 @@ class Pdf extends Fpdf
          * else if len verificator == 2 format ?
         */
         if (sizeof($this->verificators) == 1){
-            $this->SetY(-40);
+            $this->SetY(-45);
             $this->SetFont('Times','',12);
             $this->SetLeftMargin(220);
             $this->MultiCell(70,5,'Jakarta, '.$this->dateSigned,0,'C');
@@ -218,47 +218,182 @@ class Pdf extends Fpdf
             $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[0]->vfcName,'LRT','C');
             $this->MultiCell(70,5,'NIP. '.$this->verificators[0]->vfcNIP,'LRB','C');
         } else if (sizeof($this->verificators) == 2){
-            $this->SetY(-40);
-            $this->SetFont('Times','',12);
-            $this->SetLeftMargin(110);
-            $this->MultiCell(70,5,$this->verificators[1]->vfcJobTitle,0,'C');
-            $this->ln(5);
-            $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[1]->vfcName,'LRT','C');
-            $this->MultiCell(70,5,'NIP. '.$this->verificators[1]->vfcNIP,'LRB','C');
+            if($this->verificators[1]->vfcOOI > $this->verificators[0]->vfcOOI){
+                $this->SetY(-45);
+                $this->SetFont('Times','',12);
+                $this->SetLeftMargin(110);
+                $this->MultiCell(70,5,$this->verificators[1]->vfcJobTitle,0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[1]->vfcName,'LRT','C');
+                $this->MultiCell(70,5,'NIP. '.$this->verificators[1]->vfcNIP,'LRB','C');
+                $this->SetY(-45);
+                $this->SetFont('Times','',12);
+                $this->SetLeftMargin(220);
+                $this->MultiCell(70,5,'Jakarta, '.$this->dateSigned,0,'C');
+                $this->MultiCell(70,5,$this->verificators[0]->vfcJobTitle,0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[0]->vfcName,'LRT','C');
+                $this->MultiCell(70,5,'NIP. '.$this->verificators[0]->vfcNIP,'LRB','C');
+            } else {
+                $this->SetY(-45);
+                $this->SetFont('Times','',12);
+                $this->SetLeftMargin(110);
+                $this->MultiCell(70,5,$this->verificators[0]->vfcJobTitle,0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[0]->vfcName,'LRT','C');
+                $this->MultiCell(70,5,'NIP. '.$this->verificators[0]->vfcNIP,'LRB','C');
+                $this->SetY(-45);
+                $this->SetFont('Times','',12);
+                $this->SetLeftMargin(220);
+                $this->MultiCell(70,5,'Jakarta, '.$this->dateSigned,0,'C');
+                $this->MultiCell(70,5,$this->verificators[1]->vfcJobTitle,0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[1]->vfcName,'LRT','C');
+                $this->MultiCell(70,5,'NIP. '.$this->verificators[1]->vfcNIP,'LRB','C');
+            }
 
-            $this->SetY(-40);
-            $this->SetFont('Times','',12);
-            $this->SetLeftMargin(220);
-            $this->MultiCell(70,5,'Jakarta, '.$this->dateSigned,0,'C');
-            $this->MultiCell(70,5,$this->verificators[0]->vfcJobTitle,0,'C');
-            $this->ln(5);
-            $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[0]->vfcName,'LRT','C');
-            $this->MultiCell(70,5,'NIP. '.$this->verificators[0]->vfcNIP,'LRB','C');
         } else if (sizeof($this->verificators) == 3){
-            $this->SetLeftMargin((280-270)/2);
-            $this->SetY(-40);
-            $this->SetFont('Times','',12);
-            $this->MultiCell(70,5,$this->verificators[2]->vfcJobTitle,0,'C');
-            $this->ln(5);
-            $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[2]->vfcName,'LRT','C');
-            $this->MultiCell(70,5,'NIP. '.$this->verificators[2]->vfcNIP,'LRB','C');
+            if(($this->verificators[2]->vfcOOI > $this->verificators[1]->vfcOOI) &&
+                ($this->verificators[2]->vfcOOI > $this->verificators[0]->vfcOOI)) {
 
-            $this->SetLeftMargin(((280-270)/2)+110);
-            $this->SetY(-40);
-            $this->SetFont('Times','',12);
-            $this->MultiCell(70,5,$this->verificators[1]->vfcJobTitle,0,'C');
-            $this->ln(5);
-            $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[1]->vfcName,'LRT','C');
-            $this->MultiCell(70,5,'NIP. '.$this->verificators[1]->vfcNIP,'LRB','C');
+                $this->SetLeftMargin((280-270)/2);
+                $this->SetY(-45);
+                $this->SetFont('Times','',12);
+                $this->MultiCell(70,5,$this->verificators[2]->vfcJobTitle,0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[2]->vfcName,'LRT','C');
+                $this->MultiCell(70,5,'NIP. '.$this->verificators[2]->vfcNIP,'LRB','C');
 
-            $this->SetLeftMargin(((280-270)/2)+215);
-            $this->SetY(-40);
-            $this->SetFont('Times','',12);
-            $this->MultiCell(70,5,'Jakarta, '.$this->dateSigned,0,'C');
-            $this->MultiCell(70,5,$this->verificators[0]->vfcJobTitle,0,'C');
-            $this->ln(5);
-            $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[0]->vfcName,'LRT','C');
-            $this->MultiCell(70,5,'NIP. '.$this->verificators[0]->vfcNIP,'LRB','C');
+                if($this->verificators[1]->vfcOOI > $this->verificators[0]->vfcOOI){
+                    $this->SetLeftMargin(((280-270)/2)+110);
+                    $this->SetY(-45);
+                    $this->SetFont('Times','',12);
+                    $this->MultiCell(70,5,$this->verificators[1]->vfcJobTitle,0,'C');
+                    $this->ln(5);
+                    $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[1]->vfcName,'LRT','C');
+                    $this->MultiCell(70,5,'NIP. '.$this->verificators[1]->vfcNIP,'LRB','C');
+
+                    $this->SetLeftMargin(((280-270)/2)+215);
+                    $this->SetY(-45);
+                    $this->SetFont('Times','',12);
+                    $this->MultiCell(70,5,'Jakarta, '.$this->dateSigned,0,'C');
+                    $this->MultiCell(70,5,$this->verificators[0]->vfcJobTitle,0,'C');
+                    $this->ln(5);
+                    $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[0]->vfcName,'LRT','C');
+                    $this->MultiCell(70,5,'NIP. '.$this->verificators[0]->vfcNIP,'LRB','C');
+                } else {
+                    $this->SetLeftMargin(((280-270)/2)+110);
+                    $this->SetY(-45);
+                    $this->SetFont('Times','',12);
+                    $this->MultiCell(70,5,$this->verificators[0]->vfcJobTitle,0,'C');
+                    $this->ln(5);
+                    $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[0]->vfcName,'LRT','C');
+                    $this->MultiCell(70,5,'NIP. '.$this->verificators[0]->vfcNIP,'LRB','C');
+
+                    $this->SetLeftMargin(((280-270)/2)+215);
+                    $this->SetY(-45);
+                    $this->SetFont('Times','',12);
+                    $this->MultiCell(70,5,'Jakarta, '.$this->dateSigned,0,'C');
+                    $this->MultiCell(70,5,$this->verificators[1]->vfcJobTitle,0,'C');
+                    $this->ln(5);
+                    $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[1]->vfcName,'LRT','C');
+                    $this->MultiCell(70,5,'NIP. '.$this->verificators[1]->vfcNIP,'LRB','C');
+                }
+            }
+            if(($this->verificators[1]->vfcOOI > $this->verificators[2]->vfcOOI) &&
+                ($this->verificators[1]->vfcOOI > $this->verificators[0]->vfcOOI)) {
+
+                $this->SetLeftMargin((280-270)/2);
+                $this->SetY(-45);
+                $this->SetFont('Times','',12);
+                $this->MultiCell(70,5,$this->verificators[1]->vfcJobTitle,0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[1]->vfcName,'LRT','C');
+                $this->MultiCell(70,5,'NIP. '.$this->verificators[1]->vfcNIP,'LRB','C');
+
+                if($this->verificators[2]->vfcOOI > $this->verificators[0]->vfcOOI){
+                    $this->SetLeftMargin(((280-270)/2)+110);
+                    $this->SetY(-45);
+                    $this->SetFont('Times','',12);
+                    $this->MultiCell(70,5,$this->verificators[2]->vfcJobTitle,0,'C');
+                    $this->ln(5);
+                    $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[2]->vfcName,'LRT','C');
+                    $this->MultiCell(70,5,'NIP. '.$this->verificators[2]->vfcNIP,'LRB','C');
+
+                    $this->SetLeftMargin(((280-270)/2)+215);
+                    $this->SetY(-45);
+                    $this->SetFont('Times','',12);
+                    $this->MultiCell(70,5,'Jakarta, '.$this->dateSigned,0,'C');
+                    $this->MultiCell(70,5,$this->verificators[0]->vfcJobTitle,0,'C');
+                    $this->ln(5);
+                    $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[0]->vfcName,'LRT','C');
+                    $this->MultiCell(70,5,'NIP. '.$this->verificators[0]->vfcNIP,'LRB','C');
+                } else {
+                    $this->SetLeftMargin(((280-270)/2)+110);
+                    $this->SetY(-45);
+                    $this->SetFont('Times','',12);
+                    $this->MultiCell(70,5,$this->verificators[0]->vfcJobTitle,0,'C');
+                    $this->ln(5);
+                    $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[0]->vfcName,'LRT','C');
+                    $this->MultiCell(70,5,'NIP. '.$this->verificators[0]->vfcNIP,'LRB','C');
+
+                    $this->SetLeftMargin(((280-270)/2)+215);
+                    $this->SetY(-45);
+                    $this->SetFont('Times','',12);
+                    $this->MultiCell(70,5,'Jakarta, '.$this->dateSigned,0,'C');
+                    $this->MultiCell(70,5,$this->verificators[2]->vfcJobTitle,0,'C');
+                    $this->ln(5);
+                    $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[2]->vfcName,'LRT','C');
+                    $this->MultiCell(70,5,'NIP. '.$this->verificators[2]->vfcNIP,'LRB','C');
+                }
+            }
+            if(($this->verificators[0]->vfcOOI > $this->verificators[2]->vfcOOI) &&
+                ($this->verificators[0]->vfcOOI > $this->verificators[1]->vfcOOI)) {
+
+                $this->SetLeftMargin((280-270)/2);
+                $this->SetY(-45);
+                $this->SetFont('Times','',12);
+                $this->MultiCell(70,5,$this->verificators[0]->vfcJobTitle,0,'C');
+                $this->ln(5);
+                $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[0]->vfcName,'LRT','C');
+                $this->MultiCell(70,5,'NIP. '.$this->verificators[0]->vfcNIP,'LRB','C');
+
+                if($this->verificators[1]->vfcOOI > $this->verificators[2]->vfcOOI){
+                    $this->SetLeftMargin(((280-270)/2)+110);
+                    $this->SetY(-45);
+                    $this->SetFont('Times','',12);
+                    $this->MultiCell(70,5,$this->verificators[1]->vfcJobTitle,0,'C');
+                    $this->ln(5);
+                    $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[1]->vfcName,'LRT','C');
+                    $this->MultiCell(70,5,'NIP. '.$this->verificators[1]->vfcNIP,'LRB','C');
+
+                    $this->SetLeftMargin(((280-270)/2)+215);
+                    $this->SetY(-45);
+                    $this->SetFont('Times','',12);
+                    $this->MultiCell(70,5,'Jakarta, '.$this->dateSigned,0,'C');
+                    $this->MultiCell(70,5,$this->verificators[2]->vfcJobTitle,0,'C');
+                    $this->ln(5);
+                    $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[2]->vfcName,'LRT','C');
+                    $this->MultiCell(70,5,'NIP. '.$this->verificators[2]->vfcNIP,'LRB','C');
+                } else {
+                    $this->SetLeftMargin(((280-270)/2)+110);
+                    $this->SetY(-45);
+                    $this->SetFont('Times','',12);
+                    $this->MultiCell(70,5,$this->verificators[2]->vfcJobTitle,0,'C');
+                    $this->ln(5);
+                    $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[2]->vfcName,'LRT','C');
+                    $this->MultiCell(70,5,'NIP. '.$this->verificators[2]->vfcNIP,'LRB','C');
+
+                    $this->SetLeftMargin(((280-270)/2)+215);
+                    $this->SetY(-45);
+                    $this->SetFont('Times','',12);
+                    $this->MultiCell(70,5,'Jakarta, '.$this->dateSigned,0,'C');
+                    $this->MultiCell(70,5,$this->verificators[1]->vfcJobTitle,0,'C');
+                    $this->ln(5);
+                    $this->MultiCell(70,5,'Telah ditandatangani secara digital oleh '.$this->verificators[1]->vfcName,'LRT','C');
+                    $this->MultiCell(70,5,'NIP. '.$this->verificators[1]->vfcNIP,'LRB','C');
+                }
+            }
         }
     }
 }
