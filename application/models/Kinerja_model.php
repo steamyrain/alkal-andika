@@ -109,7 +109,7 @@ class Kinerja_model extends CI_Model{
     }
 
     public function getPJLPVerificatorsForPrint($uid){
-        $this->db->select('b.nip as vfcNIP, b.jobTitle as vfcJobTitle, b.legalName as vfcName');
+        $this->db->select('b.nip as vfcNIP, b.jobTitle as vfcJobTitle, b.legalName as vfcName,b.ooi as vfcOOI');
         $this->db->from('alkal_user_pjlp_verificator_lookup a');
         $this->db->join('alkal_user_verificator b','b.nip = a.nip','inner');
         $this->db->where('a.uid = '.$uid);
