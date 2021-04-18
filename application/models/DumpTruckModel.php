@@ -51,4 +51,11 @@ class DumpTruckModel extends CI_Model {
         $this->db->order_by('plate_number','asc');
         return $this->db->get();
     }
+
+    public function getDT(...$cols){
+        $col_query = join(",",$cols);
+        $this->db->select($col_query);
+        $this->db->from($this->table);
+        return $this->db->get();
+    }
 }
