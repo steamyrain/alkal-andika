@@ -17,6 +17,7 @@
                     <th style="text-align: center;">Waktu Akhir</th>
                     <th style="text-align: center;">Kegiatan</th>
                     <th style="text-align: center;">Deskripsi Kegiatan</th>
+                    <th style="text-align: center;">Dokumentasi Kegiatan</th>
                     <th style="text-align: center;">Status Validasi</th>
                     <th style="text-align: center;">Status Validasi</th>
                 </tr>
@@ -119,6 +120,18 @@
                     {"data":"job_end"},
                     {"data":"job"},
                     {"data":"job_desc"},
+                    {
+                        "data":"documentation",
+                        "orderable":false,
+                        "searchable":false,
+                        "render":function(data,type,row){
+                            if(data != 'NULL'){
+                                return "<a href='<?php echo base_URL()?>assets/upload/"+data+"'>img</a>";
+                            } else {
+                                return "<i>no image</i>";
+                            }
+                        }
+                    },
                     {"data":"valid_status","visible":false},
                     {
                         "data":"",
