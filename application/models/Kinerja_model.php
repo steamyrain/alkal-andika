@@ -77,16 +77,30 @@ class Kinerja_model extends CI_Model{
         return $this->db->get();
     }
 
-    public function getPJLPForVerificator(string $nip){
-        $this->db->select('a.username as pjlpName, c.role_name as pjlpRole, a.id as pjlpUID');
-        $this->db->from('user a');
-        $this->db->join('alkal_user_job_role_lookup b','b.uid = a.id');
-        $this->db->join('alkal_user_job_role c','c.id = b.job_roleid');
-        $this->db->join('alkal_user_pjlp_verificator_lookup d','d.uid = a.id');
-        $this->db->where('d.nip = '.$nip);
-        $this->db->order_by('a.username');
-        $this->db->order_by('b.job_roleid');
-        return $this->db->get();
+    public function getPJLPForVerificator(string $nip,bool $status=false){
+        if(!$status){
+            $this->db->select('a.username as pjlpName, c.role_name as pjlpRole, a.id as pjlpUID');
+            $this->db->from('user a');
+            $this->db->join('alkal_user_job_role_lookup b','b.uid = a.id');
+            $this->db->join('alkal_user_job_role c','c.id = b.job_roleid');
+            $this->db->join('alkal_user_pjlp_verificator_lookup d','d.uid = a.id');
+            $this->db->where('d.nip = '.$nip);
+            $this->db->order_by('a.username');
+            $this->db->order_by('b.job_roleid');
+            return $this->db->get();
+        } else {
+            $this->db->select("a.username as pjlpName, c.role_name as pjlpRole, a.id as pjlpUID, count(e.uid) as kinerja, sum(case when e.valid_status like 'pending' then 1 else 0 end) as pending, sum(case when e.valid_status like 'valid' then 1 else 0 end) as valid, sum(case when e.valid_status like 'rejected' then 1 else 0 end) as rejected");
+            $this->db->from('user a');
+            $this->db->join('alkal_user_job_role_lookup b','b.uid = a.id');
+            $this->db->join('alkal_user_job_role c','c.id = b.job_roleid');
+            $this->db->join('alkal_user_pjlp_verificator_lookup d','d.uid = a.id');
+            $this->db->join('alkal_user_kinerja e','e.uid = a.id','left');
+            $this->db->group_by('a.id');
+            $this->db->where('d.nip = '.$nip);
+            $this->db->order_by('a.username');
+            $this->db->order_by('b.job_roleid');
+            return $this->db->get();
+        }
     }
 
     public function getNewKinerjaForPrint($uid,$job_date_start,$job_date_end){

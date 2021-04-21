@@ -87,7 +87,7 @@ class Validasi extends CI_Controller{
 
         switch($_SERVER["REQUEST_METHOD"]) {
             case 'GET':
-                $kinerja = $this->kinerja_model->getPJLPForVerificator($nip)->result();
+                $kinerja = $this->kinerja_model->getPJLPForVerificator($nip,true)->result();
                 header('Content-Type: application/json');
                 echo json_encode($kinerja);
                 break;

@@ -10,6 +10,10 @@
                     <th style="text-align: center;">uid</th>
                     <th style="text-align: center;">Nama</th>
                     <th style="text-align: center">Bidang</th>
+                    <th style="text-align: center">Kinerja</th>
+                    <th style="text-align: center">Pending</th>
+                    <th style="text-align: center">Valid</th>
+                    <th style="text-align: center">Rejected</th>
                     <th style="text-align: center">Detail</th>
                 </tr>
             </thead>
@@ -35,13 +39,17 @@
         getData();
 
         table = $("#data-tabel").DataTable({
-            "dom": "Blfrtip",
+            "dom": "lfrtip",
             "responsive": true,
             "select": true,
             "columns": [
                     {"data":"pjlpUID","visible":false},
                     {"data":"pjlpName"},
                     {"data":"pjlpRole"},
+                    {"data":"kinerja"},
+                    {"data":"pending"},
+                    {"data":"valid"},
+                    {"data":"rejected"},
                     {"data": null}
             ],
             "columnDefs": [{
