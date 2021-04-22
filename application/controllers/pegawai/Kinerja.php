@@ -124,7 +124,6 @@ class Kinerja extends CI_Controller{
             $jobid = $jobs[0];
             $job= $jobs[1];
 
-
             // codeigniter's upload config
             $config['upload_path'] = './assets/upload/';
             $config['allowed_types'] = 'jpg|png';
@@ -132,44 +131,47 @@ class Kinerja extends CI_Controller{
 
             // initialize upload with predefined config
             $this->upload->initialize($config);
+            if($this->upload->do_upload('documentation')){
 
-            $documentation = $this->upload->data('file_name');
-            $data = array(
-                'emp_name' => $emp_name,
-                'uid' => $uid,
-                'job_roleid' => $job_roleid,
-                'job_rolename' => $job_rolename,
-                'job_date' => $job_date,
-                'job_start' => $job_start,
-                'job_end' => $job_end,
-                'job' => $job,
-                'jobid' => $jobid,
-                'job_desc' => $job_desc,
-                'documentation' => $documentation,
-            );
-            $this->kinerja_model->postNewKinerja($data);
-            $this->session->set_flashdata('pesan',
-                '<div 
-                    class=" alert 
-                            alert-success
-                            dismissible 
-                            fade 
-                            show
-                            " 
-                    role="alert">
-                Kinerja Berhasil Diinput
-                <button 
-                    type="button" 
-                    class="close" 
-                    data-dismiss="alert" 
-                    aria-label="Close">
-                <span 
-                    aria-hidden="true">
-                &times;
-                </span>
-                </button>
-                </div>');
-                redirect(base_URL('pegawai/kinerja'));
+                $documentation = $this->upload->data('file_name');
+
+                $data = array(
+                    'emp_name' => $emp_name,
+                    'uid' => $uid,
+                    'job_roleid' => $job_roleid,
+                    'job_rolename' => $job_rolename,
+                    'job_date' => $job_date,
+                    'job_start' => $job_start,
+                    'job_end' => $job_end,
+                    'job' => $job,
+                    'jobid' => $jobid,
+                    'job_desc' => $job_desc,
+                    'documentation' => $documentation,
+                );
+                $this->kinerja_model->postNewKinerja($data);
+                $this->session->set_flashdata('pesan',
+                    '<div 
+                        class=" alert 
+                                alert-success
+                                dismissible 
+                                fade 
+                                show
+                                " 
+                        role="alert">
+                    Kinerja Berhasil Diinput
+                    <button 
+                        type="button" 
+                        class="close" 
+                        data-dismiss="alert" 
+                        aria-label="Close">
+                    <span 
+                        aria-hidden="true">
+                    &times;
+                    </span>
+                    </button>
+                    </div>');
+                    redirect(base_URL('pegawai/kinerja'));
+            }
             // check if upload is successful
             /*
             if(!$this->upload->do_upload('documentation')) {

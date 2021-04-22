@@ -51,6 +51,7 @@
         <div class="form-group">
         <button 
             type="submit" 
+            value="upload" 
             name="submit"
             class="btn btn-primary mb-5 mt-3"
             <?php echo ($anyErrors)?'disabled':''?>

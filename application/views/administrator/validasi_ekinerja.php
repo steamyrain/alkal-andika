@@ -125,7 +125,8 @@
                         "orderable":false,
                         "searchable":false,
                         "render":function(data,type,row){
-                            if(data != 'NULL'){
+                            if((data !== "NULL") && (data !== "")){
+                                console.log(data);
                                 return "<a href='<?php echo base_URL()?>assets/upload/"+data+"'>img</a>";
                             } else {
                                 return "<i>no image</i>";
