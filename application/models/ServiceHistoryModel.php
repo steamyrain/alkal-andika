@@ -15,13 +15,14 @@ class ServiceHistoryModel extends CI_Model {
     }
 
     public function getDTServiceList($id){
-        if (isset($id) && !($id)){
-            $this->db->select('a.id as id, a.service_name as service_name');
+        if (isset($id)){
+            $this->db->select('a.id as id, a.service_name as service_name, b.id as subservice_id, b.subservice_name as subservice_name');
             $this->db->from('alkal_service_list_dt a');
-            $this->db->join('alkal_service_dt_lookup b','b.service_id = a.id');
-            $this->db->join('alkal_category_dt_service_lookup c','c.category_service_id = b.category_service_id');
-            $this->db->join('alkal_dump_truck d','d.catId = c.category_id');
-            $this->db->where('d.id = '.$id);
+            $this->db->join('alkal_service_sublist_dt b','b.service_id = a.id');
+            $this->db->join('alkal_service_dt_lookup c','c.service_id = a.id');
+            $this->db->join('alkal_category_dt_service_lookup d','d.category_service_id = c.category_service_id');
+            $this->db->join('alkal_dump_truck e','e.catId = d.category_id');
+            $this->db->where('e.id = '.$id);
             return $this->db->get();
         } else {
             $this->db->select('a.id as id, a.service_name as service_name');
