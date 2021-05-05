@@ -69,7 +69,8 @@ class Dtservicehistory extends CI_Controller {
                 echo json_encode($service);
                 break;
             case 'POST':
-                //do something
+                $serviceInput = json_decode($this->security->xss_clean($this->input->raw_input_stream),true);
+                $this->ServiceHistoryModel->setDTServiceHistory($serviceInput);
                 break;
             default:
                 $this->output->set_status_header(405);
@@ -78,6 +79,10 @@ class Dtservicehistory extends CI_Controller {
     }
 
     public function input() {
+        /* check if truly admin and a verificator */
+        $this->is_loggedIn();
+        $this->is_admin();
+        /*-----------------*/
         $dt = $this->DumpTruckModel->getDT("id,plate_number")->result();
         $data = [
             "dt"=>$dt

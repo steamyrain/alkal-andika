@@ -3,7 +3,7 @@ class ServiceHistoryModel extends CI_Model {
 
     public function getDTServiceHistories($nopol=true){
         if($nopol){
-            $this->db->select('b.plate_number as plate_number,a.dt_id as dt_id,a.service_id as service_id,a.serviced_by as serviced_by,c.service_name as service_name,a.service_date as service_date');
+            $this->db->select('b.plate_number as plate_number,a.dt_id as dt_id,a.service_id as service_id,a.service_desc as serviced_by,c.service_name as service_name,a.service_date as service_date');
             $this->db->from('alkal_service_history_dt a');
             $this->db->join('alkal_dump_truck b','b.id = a.dt_id');
             $this->db->join('alkal_service_list_dt c','a.service_id = c.id');
@@ -32,6 +32,6 @@ class ServiceHistoryModel extends CI_Model {
     }
 
     public function setDTServiceHistory($data) {
-        $this->db->insert('alkal_service_history_dt',$data);
+        $this->db->insert_batch('alkal_service_history_dt',$data);
     }
 }

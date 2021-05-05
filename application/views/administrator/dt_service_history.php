@@ -24,7 +24,7 @@
                 <th style="text-align: center;">service_id</th>
                 <th style="text-align: center;">Tanggal Servis</th>
                 <th style="text-align: center;">Jenis Servis</th>
-                <th style="text-align: center;">Servis Oleh</th>
+                <th style="text-align: center;">Keterangan Servis</th>
             </tr>
         </thead>
     </table>
@@ -53,8 +53,8 @@
                     {"data":"plate_number"},
                     {"data":"dt_id","visible":false},
                     {"data":"service_id","visible":false},
-                    {"data":"service_name"},
                     {"data":"service_date"},
+                    {"data":"service_name"},
                     {"data":"serviced_by"}
             ]
         });
