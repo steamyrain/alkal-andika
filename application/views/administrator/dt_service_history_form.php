@@ -13,6 +13,7 @@
 
         <div id="service-list-dt">
             <div 
+            id="service-dt-0"
             style="
                 border: 2px solid rgba(211,211,211,.5); 
                 -webkit-background-clip: padding-box;
@@ -25,7 +26,7 @@
                 <div class="form-group">
                     <div style="
                         display: grid;
-                        grid-template-rows: auto auto 1fr;
+                        grid-template-rows: auto auto 1fr auto;
                         grid-gap: 0.75vw;
                     ">
                         <div>
@@ -52,7 +53,7 @@
                                 </select>
                             </div>
                         </div>
-                            <div>
+                        <div>
                             <label>Unit Servis / Harga Per-unit / Jumlah Unit :</label>
                             <div style="
                                 display: grid;
@@ -108,6 +109,16 @@
                         <div>
                             <label for="service-desc-0" class="col-form-label">Keterangan</label>
                             <input name="service-desc-0" id="service-desc-0" class="form-control"/>
+                        </div>
+                        <div>
+                            <button 
+                                id="service-btn-delete-0" 
+                                type="button" 
+                                onclick="event.preventDefault()"
+                                class="btn btn-block btn-danger"
+                            >
+                                    <i class="fa fa-trash"></i> Hapus
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -230,6 +241,7 @@
         serviceInput[visId]={"dt_id":dt_id,"service_id":service_id,"subservice_id":subservice_id,"service_date":service_date,"unit_total":unit_total,"unit_price":unit_price,"service_desc":service_desc};
         clearSubServiceList(visId);
         populateSubServiceList(visId);
+        onDeleteService(visId);
     }
 
     /* for populating service form element with add button*/
@@ -280,8 +292,15 @@
         }
     }
 
-    /* on change form elements */
+    /* delete button */
+    function onDeleteService(visId){
+        $("#service-btn-delete-"+visId.toString()).click(function(){
+            $("#service-dt-"+visId.toString()).remove();
+            serviceInput[visId] = {};
+        })
+    }
 
+    /* on change form elements */
     function onServiceIdChange(visId){
         $("#service-id-"+visId.toString()).change(function(){
             const service_id = $('#service-id-'+visId.toString()).val();
@@ -355,7 +374,7 @@
     function addServiceBtn(){
         const item = 
             [
-                "<div style='border: 2px solid rgba(211,211,211,.5); -webkit-background-clip: padding-box; background-clip: padding-box; border-radius: 0.5rem; padding: 0.5vw; margin-top: 1rem;'>",
+                "<div id='service-dt-"+serviceCounter+"'style='border: 2px solid rgba(211,211,211,.5); -webkit-background-clip: padding-box; background-clip: padding-box; border-radius: 0.5rem; padding: 0.5vw; margin-top: 1rem;'>",
                 "<div class='form-group'>",
                 "<div style='display: grid; grid-template-rows: auto auto 1fr; grid-gap: 0.75vw;'>",
                 "<div><label>Tanggal Servis / Kategori Servis :</label><div style='display: grid; grid-template-columns: min(150px,20%) auto; grid-gap: 0.75vw;'>",
@@ -380,6 +399,11 @@
                 "<div>",
                 "<label for='service-desc-"+serviceCounter+"' class='col-form-label'>Keterangan</label>",
                 "<input name='service-desc-"+serviceCounter+"' id='service-desc-"+serviceCounter+"' class='form-control'/>",
+                "</div>",
+                "<div>",
+                "<button id='service-btn-delete-"+serviceCounter+"' type='button' onclick='event.preventDefault()' class='btn btn-block btn-danger'>",
+                "<i class='fa fa-trash'></i> Hapus",
+                "</button>",
                 "</div>",
                 "</div>",
                 "</div>",
@@ -407,6 +431,7 @@
         onPriceUnitChange(serviceCounter);
         onTotalUnitChange(serviceCounter);
         onServiceDescChange(serviceCounter);
+        onDeleteService(serviceCounter);
         /* subscribe for changes */
         subject.objectSubscribe(psl);
         /* add counter */

@@ -33,6 +33,14 @@ class ServiceHistoryModel extends CI_Model {
     }
 
     public function setDTServiceHistory($data) {
-        $this->db->insert_batch('alkal_service_history_dt',$data);
+        $validData = [];
+        foreach($data as $dat){
+            if(!empty($dat)){
+                array_push($validData,$dat);
+            }
+        }
+        if(count($validData)>0){
+            $this->db->insert_batch('alkal_service_history_dt',$validData);
+        }
     }
 }
