@@ -3,7 +3,7 @@
     <form id="form-service-dt">
         <div class="form-group">
             <label for="dt-id" class="col-form-label" aria-required="true" aria-invalid="false">Nomer Polisi</label>
-            <select id="dt-id" name="dt-id" class="form-control">
+            <select id="dt-id" name="dt-id" class="form-control" required>
             <?php foreach($dt as $d):?>
                 <option value=<?php echo $d->id?>><?php echo $d->plate_number ?></option>
             <?php endforeach; ?>
@@ -40,11 +40,13 @@
                                     name="service-date-0" 
                                     id="service-date-0" 
                                     class="form-control"
+                                    required
                                 />
                                 <select 
                                     id="service-id-0" 
                                     name="service-id-0" 
                                     class="form-control" 
+                                    required 
                                     disabled
                                 >
                                 </select>
@@ -57,27 +59,50 @@
                                 grid-template-columns: auto min(150px,20%) min(150px,20%);
                                 grid-gap: 0.75vw;
                             ">
-                                <select 
-                                    id="subservice-id-0" 
-                                    name="subservice-id-0" 
-                                    class="form-control" 
-                                    disabled
-                                >
-                                </select>
-                                <input 
-                                    type="number" 
-                                    step=0.001 
-                                    name="service-price-unit-0" 
-                                    id="service-price-unit-0" 
-                                    class="form-control"
-                                />
-                                <input 
-                                    type="number" 
-                                    step=0.001 
-                                    name="service-total-unit-0" 
-                                    id="service-total-unit-0" 
-                                    class="form-control"
-                                />
+                                <div>
+                                    <select 
+                                        id="subservice-id-0" 
+                                        name="subservice-id-0" 
+                                        class="form-control" 
+                                        required 
+                                        disabled
+                                    >
+                                    </select>
+                                </div>
+                                <div style="
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items:center;"
+                                > 
+                                    <label>Rp</label>
+                                    <input 
+                                        type="number" 
+                                        step=0.001 
+                                        name="service-price-unit-0" 
+                                        id="service-price-unit-0" 
+                                        class="form-control-inline" 
+                                        style="min-width:50px;"
+                                        required 
+                                    />
+                                </div>
+                                <div style="
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items:center;"
+                                > 
+                                    <input 
+                                        type="number" 
+                                        step=0.001 
+                                        name="service-total-unit-0" 
+                                        id="service-total-unit-0" 
+                                        class="form-control-inline"
+                                        style="min-width:50px";
+                                        required 
+                                    />
+                                    <label id="service-unit-0">
+                                        pcs
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div>
@@ -271,6 +296,12 @@
         $(subservice_visId).change(function(){
             const subservice_id = $(this).val();
             serviceInput[visId].subservice_id = subservice_id;
+            const unit_unit = serviceList.filter(service => {
+                if(service["subservice_id"] === subservice_id){
+                    return service.unit;
+                }
+            });
+            $("#service-unit-"+visId.toString()).html(unit_unit[0].unit);
         })
     }
 
@@ -328,16 +359,22 @@
                 "<div class='form-group'>",
                 "<div style='display: grid; grid-template-rows: auto auto 1fr; grid-gap: 0.75vw;'>",
                 "<div><label>Tanggal Servis / Kategori Servis :</label><div style='display: grid; grid-template-columns: min(150px,20%) auto; grid-gap: 0.75vw;'>",
-                "<input type='date' name='service-date-"+serviceCounter+"' id='service-date-"+serviceCounter+"' class='form-control'/>",
-                "<select id='service-id-"+serviceCounter+"' name='service-id-"+serviceCounter+"' class='form-control' disabled></select>",
+                "<input type='date' name='service-date-"+serviceCounter+"' id='service-date-"+serviceCounter+"' class='form-control' required/>",
+                "<select id='service-id-"+serviceCounter+"' name='service-id-"+serviceCounter+"' class='form-control' required disabled></select>",
                 "</div>",
                 "</div>",
                 "<div>",
                 "<label>Unit Servis/ Harga Per-unit / Jumlah Unit :</label>",
                 "<div style='display: grid; grid-template-columns: auto min(150px,20%) min(150px,20%); grid-gap: 0.75vw;'>",
-                "<select id='subservice-id-"+serviceCounter+"' name='subservice-id-"+serviceCounter+"' class='form-control' disabled></select>",
-                "<input type='number' step=0.001 name='service-price-unit-"+serviceCounter+"' id='service-price-unit-"+serviceCounter+"' class='form-control' />",
-                "<input type='number' step=0.001 name='service-total-unit-"+serviceCounter+"' id='service-total-unit-"+serviceCounter+"' class='form-control' />",
+                "<select id='subservice-id-"+serviceCounter+"' name='subservice-id-"+serviceCounter+"' class='form-control' required disabled></select>",
+                "<div style='display: flex; justify-content: center; align-items: center;'>",
+                "<label>Rp</label>",
+                "<input type='number' step=0.001 name='service-price-unit-"+serviceCounter+"' id='service-price-unit-"+serviceCounter+"' class='form-control-inline' style='min-width:50px' required/>",
+                "</div>",
+                "<div style='display: flex; justify-content: center; align-items: center;'>",
+                "<input type='number' step=0.001 name='service-total-unit-"+serviceCounter+"' id='service-total-unit-"+serviceCounter+"' class='form-control-inline' style='min-width:50px' required/>",
+                "<label id='service-unit-"+serviceCounter+"'>pcs</label>",
+                "</div>",
                 "</div>",
                 "</div>",
                 "<div>",
@@ -426,7 +463,15 @@
         subject.subscribe(enableAddServiceBtn);
         $('#form-service-dt').submit(function(event){
             event.preventDefault();
-            $.post('<?php echo base_url('administrator/dtservicehistory/servicelistapi') ?>',JSON.stringify(serviceInput));
+            $.post(
+                '<?php 
+                    echo base_url('administrator/dtservicehistory/servicelistapi') 
+                ?>',
+                JSON.stringify(serviceInput),
+                function(){
+                    window.location.replace("<?php echo base_url('administrator/dtservicehistory') ?>")
+                }
+            );
         }) 
     });
 </script>
