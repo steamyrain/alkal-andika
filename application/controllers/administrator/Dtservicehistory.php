@@ -30,7 +30,40 @@ class Dtservicehistory extends CI_Controller {
         $this->is_admin();
 		$this->load->view('template_administrator/header');
 		$this->load->view('template_administrator/sidebar');
-        $this->load->view('administrator/dt_service_history');
+        $this->load->view('administrator/dt_service_history_selections');
+		$this->load->view('template_administrator/footer');
+    }
+
+    public function selectcategory(){
+        $this->is_loggedIn();
+        $this->is_admin();
+        $dt_id = $this->input->get('dt_id',true);
+        $serviceList= $this->ServiceHistoryModel->getDTServiceListSel($dt_id)->result();
+        $data = [
+            "service"=>$serviceList
+        ];
+
+        /* initialize data */
+		$this->load->view('template_administrator/header');
+		$this->load->view('template_administrator/sidebar');
+		$this->load->view('administrator/dt_service_history_selections_cat',$data);
+		$this->load->view('template_administrator/footer');
+    }
+
+    public function serviceunit(){
+        $this->is_loggedIn();
+        $this->is_admin();
+        $dt_id = $this->input->get('dt_id',true);
+        $service_id = $this->input->get('service_id',true);
+        $data = [
+            "dt_id"=>$dt_id,
+            "service_id"=>$service_id
+        ];
+
+        /* initialize data */
+		$this->load->view('template_administrator/header');
+		$this->load->view('template_administrator/sidebar');
+		$this->load->view('administrator/dt_service_history',$data);
 		$this->load->view('template_administrator/footer');
     }
 
@@ -42,7 +75,9 @@ class Dtservicehistory extends CI_Controller {
 
         switch($_SERVER["REQUEST_METHOD"]) {
             case 'GET':
-                $service = $this->ServiceHistoryModel->getDTServiceHistories()->result();
+                $dt_id = $this->input->get('dt_id',true);
+                $service_id = $this->input->get('service_id',true);
+                $service = $this->ServiceHistoryModel->getDTServiceHistories(true,$dt_id,$service_id)->result();
                 header('Content-Type: application/json');
                 echo json_encode($service);
                 break;
@@ -76,7 +111,7 @@ class Dtservicehistory extends CI_Controller {
                 $this->output->set_status_header(405);
                 break;
         }
-    }
+    } 
 
     public function input() {
         /* check if truly admin and a verificator */

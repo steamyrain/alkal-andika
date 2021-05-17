@@ -230,6 +230,27 @@ class Dumptruck extends CI_Controller {
             </div>');
         redirect(base_URL('administrator/dumptruck'),'refresh');
     }
+
+    public function api() {
+        /* check if truly admin and a verificator */
+        $this->is_loggedIn();
+        $this->is_admin();
+        /*-----------------*/
+
+        switch($_SERVER["REQUEST_METHOD"]) {
+            case 'GET':
+                $dtList = $this->DumpTruckModel->getDTBrandCategory()->result();
+                header('Content-Type: application/json');
+                echo json_encode($dtList);
+                break;
+            case 'POST':
+                //do something
+                break;
+            default:
+                $this->output->set_status_header(405);
+                break;
+        }
+    }
     
     // _rules function is a set of dt_form specific 
     // validation rules

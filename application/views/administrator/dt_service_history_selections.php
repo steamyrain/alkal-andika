@@ -21,15 +21,9 @@
             <thead>
                 <tr>
                     <th style="text-align: center;">dt_id</th>
-                    <th style="text-align: center;">service_id</th>
-                    <th style="text-align: center;">subservice_id</th>
                     <th style="text-align: center;">Identitas Kendaraan</th>
-                    <th style="text-align: center;">Tanggal Servis</th>
+                    <th style="text-align: center;">Kategori Kendaraan</th>
                     <th style="text-align: center;">Kategori Servis</th>
-                    <th style="text-align: center;">Unit Servis</th>
-                    <th style="text-align: center;">Harga unit</th>
-                    <th style="text-align: center;">Jumlah Unit</th>
-                    <th style="text-align: center;">Keterangan Servis</th>
                 </tr>
             </thead>
         </table>
@@ -42,7 +36,7 @@
     function getDTServiceHistories() {
         return $.ajax({
             type: 'GET',
-            url: '<?php echo base_url('administrator/dtservicehistory/api')."?dt_id=$dt_id"."&service_id=$service_id" ?>',
+            url: '<?php echo base_url('administrator/dumptruck/api') ?>',
             dataType: 'json',
             success: function (r){
                 table.clear();
@@ -57,17 +51,22 @@
             responsive: true,
             dom: "lfrtip",
             columns: [
-                    {"data":"dt_id","visible":false},
-                    {"data":"service_id","visible":false},
-                    {"data":"subservice_id","visible":false},
+                    {"data":"id","visible":false},
                     {"data":"plate_number"},
-                    {"data":"service_date"},
-                    {"data":"service_name"},
-                    {"data":"subservice_name"},
-                    {"data":"unit_price"},
-                    {"data":"unit_total"},
-                    {"data":"service_desc"}
+                    {"data":"category"},
+                    {
+                        "data":"",
+                        "orderable": false,
+                        "searchable": false,
+                        "render": function(data,type,row){
+                            return "<button class='btn btn-primary btn-sm'>Kategori</button>"
+                        }
+                    }
             ]
+        });
+        $("#data-tabel tbody").on('click','button',function(){
+            const data = table.row($(this).parents('tr')).data();
+            location.assign("<?php echo base_url('administrator/dtservicehistory/selectcategory') ?>"+"?dt_id="+data["id"]);
         });
     });
 </script>
