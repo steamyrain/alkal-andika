@@ -2,14 +2,91 @@
     <?php echo $this->session->flashdata('pesan') ?>
     <form id="form-service-ab">
         <div class="form-group">
-            <label for="ab-id" class="col-form-label" aria-required="true" aria-invalid="false">Nomer Polisi</label>
+            <label for="ab-id" class="col-form-label" aria-required="true" aria-invalid="false">Nomer Identitas</label>
             <select id="ab-id" name="ab-id" class="form-control" required>
-            <?php foreach($ab as $d):?>
+            <?php $buffCat=$ab[0]->catId; $i = 0; foreach($ab as $d):?>
+                <?php if($i == 0) { ?>
+                    <optgroup label="<?php switch($buffCat) {
+                        case 1:
+                            echo "excavator";
+                            break;
+                        case 2:
+                            echo "bulldozer";
+                            break;
+                        case 3:
+                            echo "roller";
+                            break;
+                        case 4:
+                            echo "crane";
+                            break;
+                        case 5:
+                            echo "asphalt finisher";
+                            break;
+                        case 6:
+                            echo "cold milling";
+                            break;
+                        case 7:
+                            echo "loader";
+                            break;
+                        case 8:
+                            echo "combi";
+                            break;
+                        case 9:
+                            echo "jetting";
+                            break;
+                    }?>"> 
                 <?php if(isset($d->plate_number) && !empty($d->plate_number)) {?>
                     <option value=<?php echo $d->id?>><?php echo $d->plate_number ?></option>
                 <?php } else { ?>
                     <option value=<?php echo $d->id?>><?php echo $d->serial_number ?></option>
                 <?php } ?>
+                <?php } else { ?>
+                    <?php if($buffCat != $d->catId ) { ?>
+                        <?php $buffCat = $d->catId; ?>
+                            </optgroup>
+                            <optgroup label="<?php switch($buffCat) {
+                                case 1:
+                                    echo "excavator";
+                                    break;
+                                case 2:
+                                    echo "bulldozer";
+                                    break;
+                                case 3:
+                                    echo "roller";
+                                    break;
+                                case 4:
+                                    echo "crane";
+                                    break;
+                                case 5:
+                                    echo "asphalt finisher";
+                                    break;
+                                case 6:
+                                    echo "cold milling";
+                                    break;
+                                case 7:
+                                    echo "loader";
+                                    break;
+                                case 8:
+                                    echo "combi";
+                                    break;
+                                case 9:
+                                    echo "jetting";
+                                    break;
+                            }?>"> 
+                        <?php if(isset($d->plate_number) && !empty($d->plate_number)) {?>
+                            <option value=<?php echo $d->id?>><?php echo $d->plate_number ?></option>
+                        <?php } else { ?>
+                            <option value=<?php echo $d->id?>><?php echo $d->serial_number ?></option>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <?php if(isset($d->plate_number) && !empty($d->plate_number)) {?>
+                            <option value=<?php echo $d->id?>><?php echo $d->plate_number ?></option>
+                        <?php } else { ?>
+                            <option value=<?php echo $d->id?>><?php echo $d->serial_number ?></option>
+                        <?php } ?>
+                    <?php } ?>
+                <?php } ?>
+                <?php $i++; ?>
             <?php endforeach; ?>
             </select>
         </div>
@@ -476,7 +553,7 @@
 
     /* client code after dom is ready */
     $(document).ready( function () {
-        initDTId();
+        initABId();
         onDTIdChange();
         subject.subscribe(initClearServiceList);
         subject.subscribe(initPopulateServiceList);

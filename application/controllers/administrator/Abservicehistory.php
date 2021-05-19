@@ -98,7 +98,7 @@ class Abservicehistory extends CI_Controller {
 
         switch($_SERVER["REQUEST_METHOD"]) {
             case 'GET':
-                $dt_id = $this->input->get('dt_id',TRUE);
+                $dt_id = $this->input->get('ab_id',TRUE);
                 $service = $this->ServiceHistoryModel->getDTServiceList($dt_id)->result();
                 header('Content-Type: application/json');
                 echo json_encode($service);
@@ -118,13 +118,13 @@ class Abservicehistory extends CI_Controller {
         $this->is_loggedIn();
         $this->is_admin();
         /*-----------------*/
-        $dt = $this->DumpTruckModel->getDT("id,plate_number")->result();
+        $ab = $this->AlatBeratModel->getAB("id,plate_number,serial_number,catId,type")->result();
         $data = [
-            "dt"=>$dt
+            "ab"=>$ab
         ];
         $this->load->view('template_administrator/header');
         $this->load->view('template_administrator/sidebar');
-        $this->load->view('administrator/dt_service_history_form',$data);
+        $this->load->view('administrator/ab_service_history_form',$data);
         $this->load->view('template_administrator/footer');
     }
 

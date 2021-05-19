@@ -5,7 +5,7 @@
     <?php echo $this->session->flashdata('pesan'); ?>
     <?php 
         echo anchor(
-        'administrator/dtservicehistory/input',
+        'administrator/abservicehistory/input',
         '<button class="btn btn-sm btn-primary mb-3">
             <i class="fas fa-plus fa-sm"></i> 
             Tambah Data

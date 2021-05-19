@@ -63,4 +63,12 @@ class AlatBeratModel extends CI_Model {
         $this->db->order_by('sub_category','asc');
         return $this->db->get();
     }
+
+    public function getAB(...$cols){
+        $col_query = join(",",$cols);
+        $this->db->select($col_query);
+        $this->db->from($this->table);
+        $this->db->order_by($this->table.'.catId');
+        return $this->db->get();
+    }
 }
