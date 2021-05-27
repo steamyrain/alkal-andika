@@ -12,6 +12,15 @@
         </button>'
         ) 
     ?>
+    <?php 
+        echo anchor(
+        'administrator/dtservicehistory/rekap',
+        '<button class="btn btn-sm btn-primary mb-3">
+            <i class="fas fa-book fa-sm"></i> 
+            Rekap Data
+        </button>'
+        ) 
+    ?>
     <div style="overflow-x: auto;">
         <table 
             id="data-tabel" 

@@ -128,6 +128,8 @@ class Dtservicehistory extends CI_Controller {
         $this->load->view('template_administrator/footer');
     }
 
+    /* to be deleted */
+    /*
     public function input_aksi() {
         $this->is_loggedIn();
         $this->is_admin();
@@ -169,6 +171,55 @@ class Dtservicehistory extends CI_Controller {
                 </button>
                 </div>');
             redirect(base_URL('administrator/dtservicehistory'));
+        }
+    }
+     */
+
+    public function rekap() {
+        /* check if truly admin and a verificator */
+        $this->is_loggedIn();
+        $this->is_admin();
+        /*-----------------*/
+        $dt = $this->DumpTruckModel->getDT("id,plate_number")->result();
+        $data = [
+            "dt"=>$dt
+        ];
+        $this->load->view('template_administrator/header'); 
+        $this->load->view('template_administrator/sidebar'); 
+        $this->load->view('administrator/dt_service_history_rekap',$data);
+        $this->load->view('template_administrator/footer');
+    }
+
+    public function rekapapi() {
+        /* check if truly admin and a verificator */
+        $this->is_loggedIn();
+        $this->is_admin();
+        /*-----------------*/
+        switch($_SERVER["REQUEST_METHOD"]) {
+            case 'GET':
+                try{
+                    $dt_id = $this->input->get('dt_id',true);
+                    $rekap_start = $this->input->get('rekap_start',true);
+                    $rekap_end = $this->input->get('rekap_end',true);
+                    $rekapInput = [
+                        "dt_id"=>$dt_id,
+                        "rekap_start"=>$rekap_start,
+                        "rekap_end"=>$rekap_end
+                    ];
+                    $res = $this->ServiceHistoryModel->getDTServiceHistoryRekap($rekapInput)->result();
+                } catch(Exception $e) {
+                    $this->output->set_status_header(500);
+                } finally{
+                    header('Content-Type: application/json');
+                    echo json_encode($res);
+                }
+                break;
+            case 'POST':
+                // do nothing
+                break;
+            default:
+                $this->output->set_status_header(405);
+                break;
         }
     }
 

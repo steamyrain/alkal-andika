@@ -12,6 +12,15 @@
         </button>'
         ) 
     ?>
+    <?php 
+        echo anchor(
+        'administrator/dtservicehistory/input',
+        '<button class="btn btn-sm btn-primary mb-3">
+            <i class="fas fa-plus fa-sm"></i> 
+            Rekap Data
+        </button>'
+        ) 
+    ?>
     <div style="overflow-x: auto;">
         <table 
             id="data-tabel" 
