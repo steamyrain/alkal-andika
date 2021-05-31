@@ -15,12 +15,11 @@
     >
         <thead>
             <tr>
-                <th style="text-align: center;">dt_id</th>
                 <th style="text-align: center;">Identitas Kendaraan</th>
-                <th style="text-align: center;">Tahun Servis</th>
-                <th style="text-align: center;">service_id</th>
                 <th style="text-align: center;">Kategori Servis</th>
+                <th style="text-align: center;">Tanggal Servis</th>
                 <th style="text-align: center;">Part yang diservis</th>
+                <th style="text-align: center;">Jumlah Part</th>
             </tr>
         </thead>
     </table>
@@ -101,12 +100,11 @@
             responsive: true,
             dom: "Blfrtip",
             columns: [
-                {"data":"dt_id","visible":false,"orderable":false,"searchable":false},
                 {"data":"plate_number"},
-                {"data":"service_year"},
-                {"data":"service_id","visible":false,"orderable":false,"searchable":false},
                 {"data":"service_name"},
-                {"data":"service_unit"}
+                {"data":"service_date"},
+                {"data":"service_unit"},
+                {"data":"unit_total"}
             ],
             buttons: [
                 {

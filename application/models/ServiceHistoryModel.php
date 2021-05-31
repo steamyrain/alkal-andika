@@ -59,9 +59,16 @@ class ServiceHistoryModel extends CI_Model {
     }
 
     public function getDTServiceHistoryRekap($data){
-        $this->db->select('*');
-        $this->db->from('(select a.id dt_id,a.plate_number plate_number,year(e.service_date) service_year ,c.service_id service_id, d.service_name service_name, count(e.id) service_unit from alkal_dump_truck a join alkal_category_dt_service_lookup b on b.category_id = a.catId join alkal_service_dt_lookup c on c.category_service_id = b.category_service_id join alkal_service_list_dt d on d.id = c.service_id left join alkal_service_history_dt e on e.dt_id = a.id and e.service_id = c.service_id where a.id=3 group by year(e.service_date),c.service_id order by year(e.service_date) desc) AS T');
-        $this->db->where("service_year between '".$data['rekap_start']."' and '".$data['rekap_end']."' or service_year IS NULL");
+        $this->db->select('a.plate_number plate_number,e.service_name service_name,d.service_date service_date,f.subservice_name as service_unit,d.unit_total as unit_total');
+        $this->db->from('alkal_dump_truck a');
+        $this->db->join('alkal_category_dt_service_lookup b','b.category_id = a.catId');
+        $this->db->join('alkal_service_dt_lookup c','c.category_service_id = b.category_service_id');
+        $this->db->join('alkal_service_history_dt d','d.service_id = c.service_id','left'); 
+        $this->db->join('alkal_service_list_dt e','e.id = c.service_id'); 
+        $this->db->join('alkal_service_sublist_dt f','f.id = d.subservice_id'); 
+        $this->db->where('a.id = '.$data['dt_id']);
+        $this->db->where("year(d.service_date) between '".$data['rekap_start']."' and '".$data['rekap_end']."'");
+        $this->db->order_by("e.service_name,d.service_date desc");
         return $this->db->get();
     }
 }
