@@ -42,9 +42,13 @@
                                 <input type="text" name="id" value="<?php echo $dt->id; ?>">
                             </form>
                             <a 
-                            onclick="document.getElementById('form-hapus-<?php echo $dt->id; ?>').submit()"
+                                onclick="
+                                    if(confirm('Yakin Hapus?')){
+                                        document.getElementById('form-hapus-<?php echo $dt->id; ?>').submit()
+                                    }
+                                "
                             >
-                                <div class="btn btn-danger btn-sm" onclick="javascript: return confirm('Yakin Hapus?')">
+                                <div class="btn btn-danger btn-sm">
                                     <i class="fa fa-trash"></i>
                                 </div>
                             </a>

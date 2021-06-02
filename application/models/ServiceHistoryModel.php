@@ -71,4 +71,8 @@ class ServiceHistoryModel extends CI_Model {
         $this->db->order_by("e.service_name,d.service_date desc");
         return $this->db->get();
     }
+
+    public function deleteDTServiceHistory($sh_id){
+        $this->db->delete('alkal_service_history_dt',array('id'=>$sh_id));
+    }
 }

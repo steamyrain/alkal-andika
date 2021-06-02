@@ -81,8 +81,34 @@ class Dtservicehistory extends CI_Controller {
                 header('Content-Type: application/json');
                 echo json_encode($service);
                 break;
+            case 'DELETE':
+                $this->session->set_flashdata('pesan',
+                    '<div 
+                        class=" alert 
+                                alert-success 
+                                dismissible 
+                                fade 
+                                show
+                                " 
+                        role="alert">
+                    Data Berhasil Dihapus!
+                    <button 
+                        type="button" 
+                        class="close" 
+                        data-dismiss="alert" 
+                        aria-label="Close">
+                    <span 
+                        aria-hidden="true">
+                    &times;
+                    </span>
+                    </button>
+                    </div>');
+                $sh_id = $this->input->get('sh_id',true);
+                $this->ServiceHistoryModel->deleteDTServiceHistory($sh_id);
+                break;
             case 'POST':
                 //do something
+                $this->output->set_status_header(405);
                 break;
             default:
                 $this->output->set_status_header(405);
@@ -100,12 +126,33 @@ class Dtservicehistory extends CI_Controller {
             case 'GET':
                 $dt_id = $this->input->get('dt_id',TRUE);
                 $service = $this->ServiceHistoryModel->getDTServiceList($dt_id)->result();
-                header('Content-Type: application/json');
                 echo json_encode($service);
                 break;
             case 'POST':
                 $serviceInput = json_decode($this->security->xss_clean($this->input->raw_input_stream),true);
                 $this->ServiceHistoryModel->setDTServiceHistory($serviceInput);
+                $this->session->set_flashdata('pesan',
+                    '<div 
+                        class=" alert 
+                                alert-success 
+                                dismissible 
+                                fade 
+                                show
+                                " 
+                        role="alert">
+                    Data Berhasil Ditambahkan!
+                    <button 
+                        type="button" 
+                        class="close" 
+                        data-dismiss="alert" 
+                        aria-label="Close">
+                    <span 
+                        aria-hidden="true">
+                    &times;
+                    </span>
+                    </button>
+                    </div>');
+                $this->output->set_status_header(200);
                 break;
             default:
                 $this->output->set_status_header(405);

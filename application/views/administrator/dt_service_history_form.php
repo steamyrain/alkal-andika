@@ -494,7 +494,7 @@
                 ?>',
                 JSON.stringify(serviceInput),
                 function(){
-                    window.location.replace("<?php echo base_url('administrator/dtservicehistory') ?>")
+                    window.location.href = "<?php echo base_url('administrator/dtservicehistory') ?>";
                 }
             );
         }) 
