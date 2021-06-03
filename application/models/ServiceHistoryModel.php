@@ -3,7 +3,7 @@ class ServiceHistoryModel extends CI_Model {
 
     public function getDTServiceHistories($nopol=true,$dt_id,$service_id){
         if((($nopol) && isset($dt_id)) && isset($service_id)){
-            $this->db->select('b.plate_number as plate_number,a.dt_id as dt_id,a.service_id as service_id,a.service_desc as service_desc,c.service_name as service_name,a.service_date as service_date,d.subservice_name as subservice_name,a.unit_price as unit_price,a.unit_total as unit_total,a.id as dt_service_history_id,a.subservice_id as subservice_id');
+            $this->db->select('b.plate_number as plate_number,a.dt_id as dt_id,a.service_id as service_id,a.service_desc as service_desc,c.service_name as service_name,a.service_date as service_date,d.subservice_name as subservice_name,a.unit_price as unit_price,a.unit_total as unit_total,a.id as dt_service_history_id,a.subservice_id as subservice_id,d.unit as unit_unit');
             $this->db->from('alkal_service_history_dt a');
             $this->db->join('alkal_dump_truck b','b.id = a.dt_id');
             $this->db->join('alkal_service_list_dt c','a.service_id = c.id');
@@ -26,6 +26,7 @@ class ServiceHistoryModel extends CI_Model {
             $this->db->join('alkal_category_dt_service_lookup d','d.category_service_id = c.category_service_id');
             $this->db->join('alkal_dump_truck e','e.catId = d.category_id');
             $this->db->where('e.id = '.$id);
+            $this->db->order_by('b.id');
             return $this->db->get();
         } else {
             $this->db->select('a.id as id, a.service_name as service_name');
@@ -74,5 +75,9 @@ class ServiceHistoryModel extends CI_Model {
 
     public function deleteDTServiceHistory($sh_id){
         $this->db->delete('alkal_service_history_dt',array('id'=>$sh_id));
+    }
+
+    public function updateDTServiceHistory($data){
+        $this->db->replace('alkal_service_history_dt',$data);
     }
 }

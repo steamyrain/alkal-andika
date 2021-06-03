@@ -110,6 +110,58 @@ class Dtservicehistory extends CI_Controller {
                 //do something
                 $this->output->set_status_header(405);
                 break;
+            case 'PUT':
+                $serviceInput = json_decode($this->security->xss_clean($this->input->raw_input_stream),true);
+                try{
+                    $this->ServiceHistoryModel->updateDTServiceHistory($serviceInput);
+                } catch(Exception $e){
+                    $this->session->set_flashdata('pesan',
+                        '<div 
+                            class=" alert 
+                                    alert-success 
+                                    dismissible 
+                                    fade 
+                                    show
+                                    " 
+                            role="alert">
+                        Data Gagal Diubah!
+                        <button 
+                            type="button" 
+                            class="close" 
+                            data-dismiss="alert" 
+                            aria-label="Close">
+                        <span 
+                            aria-hidden="true">
+                        &times;
+                        </span>
+                        </button>
+                        </div>');
+                    $this->output->set_status_header(500);
+                } finally{
+                    $this->session->set_flashdata('pesan',
+                        '<div 
+                            class=" alert 
+                                    alert-success 
+                                    dismissible 
+                                    fade 
+                                    show
+                                    " 
+                            role="alert">
+                        Data Berhasil Diubah!
+                        <button 
+                            type="button" 
+                            class="close" 
+                            data-dismiss="alert" 
+                            aria-label="Close">
+                        <span 
+                            aria-hidden="true">
+                        &times;
+                        </span>
+                        </button>
+                        </div>');
+                    $this->output->set_status_header(200);
+                }
+                break;
             default:
                 $this->output->set_status_header(405);
                 break;
