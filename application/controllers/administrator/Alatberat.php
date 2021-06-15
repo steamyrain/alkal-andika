@@ -242,4 +242,26 @@ class Alatberat extends CI_Controller {
             return true;
         }
     }
+
+    public function api() {
+        /* check if truly admin and a verificator */
+        $this->is_loggedIn();
+        $this->is_admin();
+        /*-----------------*/
+
+        switch($_SERVER["REQUEST_METHOD"]) {
+            case 'GET':
+                $abList = $this->AlatBeratModel->getABBrandCategory()->result();
+                header('Content-Type: application/json');
+                echo json_encode($abList);
+                break;
+            case 'POST':
+                //do something
+                $this->output->set_status_header(405);
+                break;
+            default:
+                $this->output->set_status_header(405);
+                break;
+        }
+    }
 }

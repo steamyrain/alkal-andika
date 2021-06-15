@@ -51,6 +51,13 @@ class Pdf extends Fpdf
         $this->ln(5);
     }
 
+    function IdentitasKendaraan($data) {
+        $this->SetFont('Times','',12);
+        $this->Cell(40,10,'Identitas Kendaraan',0);
+        $this->Cell(10,10,': '.$data,0);
+        $this->ln(5);
+    }
+
     function Tanggal($awal,$akhir) {
         $this->SetFont('Times','',12);
         $this->Cell(40,10,'Tanggal',0);
@@ -147,6 +154,29 @@ class Pdf extends Fpdf
                 $i++;
         }
         return $nl;
+    }
+
+    function TabelServis($header,$data,$width){
+        $this->SetAutoPageBreak(true,50);
+        $this->ln(15);
+        $totalWidth = 0;
+
+        foreach($width as $w){
+            $totalWidth = $totalWidth + $w;
+        }
+        $this->widths = $width;
+        $this->SetLeftMargin((210-$totalWidth)/2);
+        $i=0;
+        foreach($header as $col){
+            $this->Cell($width[$i],7,$col,1,0,'C');
+            $i++;
+        }
+        $this->ln();
+
+        foreach($data as $d){
+            $unit_total = $d->unit_total." ".$d->unit_unit;
+            $this->row([$d->service_date,$d->service_name,$d->service_unit,$unit_total],(210-$totalWidth)/2);
+        }
     }
 
     function TabelKinerja($header,$data,$width){

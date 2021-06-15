@@ -245,6 +245,7 @@ class Dumptruck extends CI_Controller {
                 break;
             case 'POST':
                 //do something
+                $this->output->set_status_header(405);
                 break;
             default:
                 $this->output->set_status_header(405);

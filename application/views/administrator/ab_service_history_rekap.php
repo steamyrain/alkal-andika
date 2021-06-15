@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <?php 
         echo anchor(
-        'administrator/dtservicehistory/input',
+        'administrator/abservicehistory/input',
         '<button class="btn btn-sm btn-primary mb-3">
             <i class="fas fa-plus fa-sm"></i> 
             Tambah Data
@@ -19,6 +19,8 @@
     >
         <thead>
             <tr>
+                <th style="text-align: center;">plate_number</th>
+                <th style="text-align: center;">serial_number</th>
                 <th style="text-align: center;">Identitas Kendaraan</th>
                 <th style="text-align: center;">Kategori Servis</th>
                 <th style="text-align: center;">Tanggal Servis</th>
@@ -42,7 +44,7 @@
                     class="modal-title" 
                     id="rekapModalLabel"
                 >
-                    Rekap Data Servis DT 
+                    Rekap Data Servis Alat Berat 
                 </h5>
                 <button 
                     type="button"
@@ -54,14 +56,33 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="rekapDT">
+                <form id="rekapAB">
                     <div class="form-group">
-                        <label for="dt_id" class="col-form-label">Nomor Identitas</label>
-                        <select id="dt_id" name="dt_id" class="form-control" required>
+                        <label for="ab_id" class="col-form-label">Nomor Identitas</label>
+                        <select id="ab_id" name="ab_id" class="form-control" required>
                         <?php 
-                        foreach($dt as $d){
-                            echo "<option value=".$d->id.">".$d->plate_number."</option>";
-                        }
+                            $category = "";
+                            $subcategory = "";
+                            foreach($ab as $d){
+                                if($d->category != $category){
+                                    $category = $d->category;
+                                }
+                                if ($d->sub_category != $subcategory){
+                                    $subcategory = $d->sub_category;
+                                    if($category == $subcategory){
+                                        echo '<optgroup label="'.$category.'">';
+                                        echo '</optgroup>';
+                                    } else {
+                                        echo '<optgroup label="'.$category.' '.$subcategory.'">';
+                                        echo '</optgroup>';
+                                    }
+                                }
+                                if($d->plate_number){
+                                    echo "<option value=".$d->id.">".$d->plate_number."</option>";
+                                } else {
+                                    echo "<option value=".$d->id.">".$d->serial_number."</option>";
+                                }
+                            }
                         ?>
                         </select>
                     </div>
@@ -96,7 +117,7 @@
 </div>
 <script>
     let table;
-    let dt_id;
+    let ab_id;
     let rekap_start;
     let rekap_end;
 
@@ -112,13 +133,21 @@
     }
 
     $(document).ready(function(){
-        //define form modal's behaviour on submit
+
         //define data table
         table = $("#tableRekap").DataTable({
             responsive: true,
             dom: "Blfrtip",
             columns: [
-                {"data":"plate_number"},
+                {"data":"plate_number","searchable":false,"visible":false},
+                {"data":"serial_number","searchable":false,"visible":false},
+                {
+                    "data":"",
+                    "render": function(data,type,row){
+                        if(row.serial_number) return row.serial_number;
+                        return row.plate_number;
+                    }
+                },
                 {"data":"service_name"},
                 {"data":"service_date"},
                 {"data":"service_unit"},
@@ -127,16 +156,16 @@
             buttons: [
                 {
                     text: 'Rekap',
-                    action: function (e,dt,node,config) {
+                    action: function (e,ab,node,config) {
                         $('#rekapModal').modal('show');
                         $('#previewButton').click(function(){
-                            dt_id = $("#dt_id").val();
+                            ab_id = $("#ab_id").val();
                             rekap_start = $("#rekap_start").val();
                             rekap_end = $("#rekap_end").val();
                             $.ajax({
                                 dataType: 'json',
-                                url: '<?php echo base_url('administrator/dtservicehistory/rekapapi') ?>',
-                                data: $('form#rekapDT').serialize(),
+                                url: '<?php echo base_url('administrator/abservicehistory/rekapapi') ?>',
+                                data: $('form#rekapAB').serialize(),
                                 statusCode: {
                                     200: function(r) {
                                         $('#rekapModal').modal('hide');
@@ -151,16 +180,16 @@
             ]
         });
         $('#printBtn').on('click',function(){
-            if(dt_id !== undefined && rekap_start !== undefined && rekap_end !== undefined){
+            if(ab_id !== undefined && rekap_start !== undefined && rekap_end !== undefined){
                 $.ajax({
-                    url: '<?php echo base_url('administrator/dtservicehistory/printapi') ?>'+`?dt_id=${dt_id}&rekap_start=${rekap_start}&rekap_end=${rekap_end}`,
+                    url: '<?php echo base_url('administrator/abservicehistory/printapi') ?>'+`?ab_id=${ab_id}&rekap_start=${rekap_start}&rekap_end=${rekap_end}`,
                     statusCode: {
                         200: function(r) {
                             let b = base64ToArrayBuffer(r);
                             let blob = new Blob([b],{type: "application/pdf"})
                             let link=document.createElement('a');
                             link.href=window.URL.createObjectURL(blob);
-                            link.download=`service-dt-${dt_id}-${rekap_start}-${rekap_end}.pdf`;
+                            link.download=`service-ab-${ab_id}-${rekap_start}-${rekap_end}.pdf`;
                             link.click();
                         }
                     }

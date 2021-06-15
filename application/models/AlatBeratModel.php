@@ -68,7 +68,16 @@ class AlatBeratModel extends CI_Model {
         $col_query = join(",",$cols);
         $this->db->select($col_query);
         $this->db->from($this->table);
+        $this->db->join('alkal_category_alat_berat','alkal_category_alat_berat.id = alkal_alat_berat.catId');
         $this->db->order_by($this->table.'.catId');
+        return $this->db->get();
+    }
+
+    public function getABBrandCategory() {
+        $this->db->select($this->table.'.*,'.'alkal_brand.brand, alkal_category_alat_berat.category');
+        $this->db->from($this->table);
+        $this->db->join('alkal_brand','alkal_brand.id='.$this->table.'.brandId');
+        $this->db->join('alkal_category_alat_berat','alkal_category_alat_berat.id='.$this->table.'.catId');
         return $this->db->get();
     }
 }

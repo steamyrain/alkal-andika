@@ -1,97 +1,38 @@
 <div class="container-fluid">
     <?php echo $this->session->flashdata('pesan') ?>
     <form id="form-service-ab">
+        <!-- Select Vehicle -->
         <div class="form-group">
-            <label for="ab-id" class="col-form-label" aria-required="true" aria-invalid="false">Nomer Identitas</label>
+            <label for="ab-id" class="col-form-label" aria-required="true" aria-invalid="false">Identitas Kendaraan</label>
             <select id="ab-id" name="ab-id" class="form-control" required>
-            <?php $buffCat=$ab[0]->catId; $i = 0; foreach($ab as $d):?>
-                <?php if($i == 0) { ?>
-                    <optgroup label="<?php switch($buffCat) {
-                        case 1:
-                            echo "excavator";
-                            break;
-                        case 2:
-                            echo "bulldozer";
-                            break;
-                        case 3:
-                            echo "roller";
-                            break;
-                        case 4:
-                            echo "crane";
-                            break;
-                        case 5:
-                            echo "asphalt finisher";
-                            break;
-                        case 6:
-                            echo "cold milling";
-                            break;
-                        case 7:
-                            echo "loader";
-                            break;
-                        case 8:
-                            echo "combi";
-                            break;
-                        case 9:
-                            echo "jetting";
-                            break;
-                    }?>"> 
-                <?php if(isset($d->plate_number) && !empty($d->plate_number)) {?>
-                    <option value=<?php echo $d->id?>><?php echo $d->plate_number ?></option>
-                <?php } else { ?>
-                    <option value=<?php echo $d->id?>><?php echo $d->serial_number ?></option>
-                <?php } ?>
-                <?php } else { ?>
-                    <?php if($buffCat != $d->catId ) { ?>
-                        <?php $buffCat = $d->catId; ?>
-                            </optgroup>
-                            <optgroup label="<?php switch($buffCat) {
-                                case 1:
-                                    echo "excavator";
-                                    break;
-                                case 2:
-                                    echo "bulldozer";
-                                    break;
-                                case 3:
-                                    echo "roller";
-                                    break;
-                                case 4:
-                                    echo "crane";
-                                    break;
-                                case 5:
-                                    echo "asphalt finisher";
-                                    break;
-                                case 6:
-                                    echo "cold milling";
-                                    break;
-                                case 7:
-                                    echo "loader";
-                                    break;
-                                case 8:
-                                    echo "combi";
-                                    break;
-                                case 9:
-                                    echo "jetting";
-                                    break;
-                            }?>"> 
-                        <?php if(isset($d->plate_number) && !empty($d->plate_number)) {?>
-                            <option value=<?php echo $d->id?>><?php echo $d->plate_number ?></option>
-                        <?php } else { ?>
-                            <option value=<?php echo $d->id?>><?php echo $d->serial_number ?></option>
-                        <?php } ?>
-                    <?php } else { ?>
-                        <?php if(isset($d->plate_number) && !empty($d->plate_number)) {?>
-                            <option value=<?php echo $d->id?>><?php echo $d->plate_number ?></option>
-                        <?php } else { ?>
-                            <option value=<?php echo $d->id?>><?php echo $d->serial_number ?></option>
-                        <?php } ?>
-                    <?php } ?>
-                <?php } ?>
-                <?php $i++; ?>
-            <?php endforeach; ?>
+            <?php 
+                $category = "";
+                $subcategory = "";
+                foreach($ab as $d){
+                    if($d->category != $category){
+                        $category = $d->category;
+                    }
+                    if ($d->sub_category != $subcategory){
+                        $subcategory = $d->sub_category;
+                        if($category == $subcategory){
+                            echo '<optgroup label="'.$category.'">';
+                            echo '</optgroup>';
+                        } else {
+                            echo '<optgroup label="'.$category.' '.$subcategory.'">';
+                            echo '</optgroup>';
+                        }
+                    }
+                    if($d->plate_number){
+                        echo "<option value=".$d->id.">".$d->plate_number."</option>";
+                    } else {
+                        echo "<option value=".$d->id.">".$d->serial_number."</option>";
+                    }
+                }
+            ?>
             </select>
         </div>
-
-        <div id="service-list-ab">
+        <!-- Services -->
+        <div id="service-groups">
             <div 
             id="service-ab-0"
             style="
@@ -220,7 +161,7 @@
             </button>
         </div>
 
-        <!-- Input -->
+        <!-- Submit -->
         <button type="submit" 
             name="submit" 
             value="upload" 
@@ -229,354 +170,429 @@
     </form>
 </div>
 <script>
-    "use strict";
-
-    let serviceList;
-    let serviceCounter = 1;
+    // keeping track of total number of service form groups
+    let totalServices = 1;
+    let serviceBuffer = [];
     let serviceInput = [];
 
-    function ServiceSubject() {
-        this.observers = [];
-        this.objectObservers = [];
+    function searchSubServiceId(subservice_id,services){
+        /*
+        let left = 0;
+        let right = services.length - 1;
+        let mid = Math.floor((right+left)/2);
+        for(;right>=left;){
+            if(subservice_id < parseInt(services[mid].subservice_id)){
+                right = mid-1;
+                mid = Math.floor((right+left)/2);
+                console.log(mid)
+            } else if (subservice_id > parseInt(services[mid].subservice_id)){
+                left = mid+1;
+                mid = Math.floor((right+left)/2);
+                console.log(mid)
+            }
+            if(subservice_id === parseInt(services[mid].subservice_id)){
+                console.log(mid)
+                return mid;
+            }
+        }
+        return -1;
+         */
+        let found = services.filter(function(e,i){
+            if(parseInt(e.subservice_id) == subservice_id){
+                return e;
+            }
+        })
+        return found;
+    }
+
+    // service subject
+    function ServiceSubject(){
+        this.serviceObservers = [];
     }
 
     ServiceSubject.prototype = {
-        subscribe: function(fn){
-            this.observers.push(fn);
+        subscribe: function(cb){
+            this.serviceObservers.push(cb);
         },
-        objectSubscribe: function(o){
-            this.objectObservers.push(o);
-        },
-        unsubscribe: function(fn){
-            this.observers = this.observers.filter(
-                itemFunction => {
-                    if(itemFunction !== fn){
-                        return itemFunction;
+        unsubscribe: function(cb){
+            this.serviceObservers = this.serviceObservers.filter(
+                function(item){
+                    if(item !== cb){
+                        return item;
                     }
                 }
-            );
+            )
         },
-        notify: function(fn){
-            this.observers.forEach(fn => {
-                fn.call();
-            })
-            this.objectObservers.forEach(o => {
-                o.clearIt();
-                o.doIt();
-            })
+        notify: function(o){
+
+            this.serviceObservers.forEach(
+                function(serviceObserver){
+                    serviceObserver.populateSelectService(o);
+                }
+            )
         }
     }
 
-    // global variable
-    let subject = new ServiceSubject();
-
-    /* for initial service form element */
-    function initABId() {
-        const ab_id = $('#ab-id').val();
-        $.ajax({
-            type: 'GET',
-            url: '<?php echo base_url('administrator/abservicehistory/servicelistapi') ?>'+'?ab_id='+ab_id,
-            dataType: 'json',
-            success: function (r){
-                serviceList = r;
-                subject.notify();
-            }
-        });
+    // service group
+    function ServiceGroup(visId){
+        this.visId = visId;
     }
 
-    function initClearServiceList(){
-        $("#service-id-0").prop('disabled',false);
-        $("#service-id-0").empty();
-    }
-
-    function initPopulateServiceList(){
-        // visual id or # of the service input visually
-        const visId = 0;
-        let buffer = serviceList[0].id;
-        $("#service-id-0")
-        .append(
-            "<option value="+buffer+" selected>"+
-                serviceList[0].service_name+
-            "</option>"
-        );
-        serviceList.forEach(service => {
-            if(buffer !== service.id){
-                buffer = service.id;
-                $("#service-id-0")
-                .append(
-                    "<option value="+service.id+">"+
-                        service.service_name+
-                    "</option>"
-                );
-            }
-        })
-        // init 
-        const ab_id = $('#ab-id').val();
-        const service_id = $('#service-id-'+visId.toString()).val();
-        const subservice_id = $('#subservice-id-'+visId.toString()).val();
-        const service_date = $('#service-date-'+visId.toString()).val();
-        const unit_total = $('#service-total-unit-'+visId.toString()).val();
-        const unit_price = $('#service-price-unit-'+visId.toString()).val();
-        const service_desc = $('#service-desc-'+visId.toString()).val();
-        serviceInput[visId]={"ab_id":ab_id,"service_id":service_id,"subservice_id":subservice_id,"service_date":service_date,"unit_total":unit_total,"unit_price":unit_price,"service_desc":service_desc};
-        clearSubServiceList(visId);
-        populateSubServiceList(visId);
-        onDeleteService(visId);
-    }
-
-    /* for populating service form element with add button*/
-    function clearServiceList(visId){
-        $("#service-id-"+visId.toString()).prop('disabled',false);
-        $("#service-id-"+visId.toString()).empty();
-    }
-
-    function PopulateServiceList(id){
-        // visual id or # of the service input visually
-        this.visId = id;
-    }
-
-    PopulateServiceList.prototype = {
-        clearIt: function() {
-            $("#service-id-"+this.visId.toString()).prop('disabled',false);
-            $("#service-id-"+this.visId.toString()).empty();
+    ServiceGroup.prototype = {
+        emptySelectService: function(){
+            $(`select#service-id-${this.visId}`).empty();
         },
-        doIt: function() {
-            let buffer = serviceList[0].id;
-            $("#service-id-"+this.visId.toString())
-            .append(
-                "<option value="+buffer+" selected>"+
-                    serviceList[0].service_name+
-                "</option>"
-            );
-            serviceList.forEach(service => {
-                if(buffer !== service.id){
-                    buffer = service.id;
-                    $("#service-id-"+this.visId.toString())
-                    .append(
-                        "<option value="+service.id+">"+
-                            service.service_name+
-                        "</option>"
-                    );
-                }
-            })
-            const dt_id = $('#dt-id').val();
-            const service_id = $('#service-id-'+this.visId.toString()).val();
-            const subservice_id = $('#subservice-id-'+this.visId.toString()).val();
-            const service_date = $('#service-date-'+this.visId.toString()).val();
-            const unit_total = $('#service-total-unit-'+this.visId.toString()).val();
-            const unit_price = $('#service-price-unit-'+this.visId.toString()).val();
-            const service_desc = $('#service-desc-'+this.visId.toString()).val();
-            serviceInput[this.visId]={"dt_id":dt_id,"service_id":service_id,"subservice_id":subservice_id,"service_date":service_date,"unit_total":unit_total,"unit_price":unit_price,"service_desc":service_desc};
-            clearSubServiceList(this.visId);
-            populateSubServiceList(this.visId);
-        }
-    }
+        enableSelectService: function(){
+            $(`select#service-id-${this.visId}`).prop("disabled",false);
+        },
+        prepSelectService: function(){
+            this.emptySelectService();
+            this.enableSelectService();
+        },
+        populateInput: function(input) {
+            let abid = $('#ab-id').val()
+            let seid = $('#service-id-'+this.visId).val();
+            let suid = $('#subservice-id-'+this.visId).val();
+            let sdate = $('#service-date-'+this.visId).val();
+            let sprice = $('#service-price-unit-'+this.visId).val();
+            let sunit = $('#service-total-unit-'+this.visId).val();
+            let sdesc = $('#service-desc-'+this.visId).val();
+            input[this.visId]={
+                "ab_id":abid,
+                "service_id":seid,
+                "subservice_id":suid,
+                "service_date":sdate,
+                "service_desc":sdesc,
+                "unit_price":sprice,
+                "unit_total":sunit
 
-    /* delete button */
-    function onDeleteService(visId){
-        $("#service-btn-delete-"+visId.toString()).click(function(){
-            $("#service-dt-"+visId.toString()).remove();
-            serviceInput[visId] = {};
-        })
-    }
-
-    /* on change form elements */
-    function onServiceIdChange(visId){
-        $("#service-id-"+visId.toString()).change(function(){
-            const service_id = $('#service-id-'+visId.toString()).val();
-            serviceInput[visId].service_id = service_id;
-            clearSubServiceList(visId);
-            populateSubServiceList(visId);
-        })
-    }
-
-    function onSubServiceIdChange(visId){
-        const subservice_visId = ["#subservice-id-",visId.toString()].join("");
-        $(subservice_visId).change(function(){
-            const subservice_id = $(this).val();
-            serviceInput[visId].subservice_id = subservice_id;
-            const unit_unit = serviceList.filter(service => {
-                if(service["subservice_id"] === subservice_id){
-                    return service.unit;
-                }
-            });
-            $("#service-unit-"+visId.toString()).html(unit_unit[0].unit);
-        })
-    }
-
-    function onDTIdChange(){
-        $("#dt-id").change(function() {
-            const dt_id = $(this).val();
-            $.ajax({
-                type: 'GET',
-                url: '<?php echo base_url('administrator/abservicehistory/servicelistapi') ?>'+'?dt_id='+dt_id,
-                dataType: 'json',
-                success: function (r){
-                    serviceList = r;
-                    subject.notify();
-                }
-            });
-        })
-    }
-    
-    function onServiceDateChange(visId){
-        $('#service-date-'+visId.toString()).change(function(){
-            serviceInput[visId].service_date = $(this).val();
-        })
-    }
-
-    function onPriceUnitChange(visId){
-        $('#service-price-unit-'+visId.toString()).change(function(){
-            serviceInput[visId].unit_price = $(this).val();
-        })
-    }
-
-    function onTotalUnitChange(visId){
-        $('#service-total-unit-'+visId.toString()).change(function(){
-            serviceInput[visId].unit_total = $(this).val();
-        })
-    }
-
-    function onServiceDescChange(visId){
-        $('#service-desc-'+visId.toString()).on('input',function(){
-            serviceInput[visId].service_desc = $(this).val();
-            console.log('changed');
-        })
-    }
-
-    /* add service form elements */
-
-    function enableAddServiceBtn(){
-        $("#add-service-btn").prop('disabled',false);
-        $("#add-service-btn").click(fn=>{addServiceBtn.call()})
-    }
-
-    function addServiceBtn(){
-        const item = 
-            [
-                "<div id='service-dt-"+serviceCounter+"'style='border: 2px solid rgba(211,211,211,.5); -webkit-background-clip: padding-box; background-clip: padding-box; border-radius: 0.5rem; padding: 0.5vw; margin-top: 1rem;'>",
-                "<div class='form-group'>",
-                "<div style='display: grid; grid-template-rows: auto auto 1fr; grid-gap: 0.75vw;'>",
-                "<div><label>Tanggal Servis / Kategori Servis :</label><div style='display: grid; grid-template-columns: min(150px,20%) auto; grid-gap: 0.75vw;'>",
-                "<input type='date' name='service-date-"+serviceCounter+"' id='service-date-"+serviceCounter+"' class='form-control' required/>",
-                "<select id='service-id-"+serviceCounter+"' name='service-id-"+serviceCounter+"' class='form-control' required disabled></select>",
-                "</div>",
-                "</div>",
-                "<div>",
-                "<label>Unit Servis/ Harga Per-unit / Jumlah Unit :</label>",
-                "<div style='display: grid; grid-template-columns: auto min(150px,20%) min(150px,20%); grid-gap: 0.75vw;'>",
-                "<select id='subservice-id-"+serviceCounter+"' name='subservice-id-"+serviceCounter+"' class='form-control' required disabled></select>",
-                "<div style='display: flex; justify-content: center; align-items: center;'>",
-                "<label>Rp</label>",
-                "<input type='number' step=0.001 name='service-price-unit-"+serviceCounter+"' id='service-price-unit-"+serviceCounter+"' class='form-control-inline' style='min-width:50px' required/>",
-                "</div>",
-                "<div style='display: flex; justify-content: center; align-items: center;'>",
-                "<input type='number' step=0.001 name='service-total-unit-"+serviceCounter+"' id='service-total-unit-"+serviceCounter+"' class='form-control-inline' style='min-width:50px' required/>",
-                "<label id='service-unit-"+serviceCounter+"'>pcs</label>",
-                "</div>",
-                "</div>",
-                "</div>",
-                "<div>",
-                "<label for='service-desc-"+serviceCounter+"' class='col-form-label'>Keterangan</label>",
-                "<input name='service-desc-"+serviceCounter+"' id='service-desc-"+serviceCounter+"' class='form-control'/>",
-                "</div>",
-                "<div>",
-                "<button id='service-btn-delete-"+serviceCounter+"' type='button' onclick='event.preventDefault()' class='btn btn-block btn-danger'>",
-                "<i class='fa fa-trash'></i> Hapus",
-                "</button>",
-                "</div>",
-                "</div>",
-                "</div>",
-                "</div>",
-                "</div>"
-            ].join('');
-        /* append the service form box to dt form */
-        $("#service-list-dt").append(
-            item
-        );
-        /* populate the service select options */
-        clearServiceList(serviceCounter);
-        let psl = new PopulateServiceList(serviceCounter);
-        psl.doIt();
-        /* init object for serviceList */
-        const dt_id = $('#dt-id').val();
-        const service_id = $('#service-id-'+serviceCounter.toString()).val();
-        const subservice_id = $('#subservice-id-'+serviceCounter.toString()).val();
-        const service_date = $('#service-date-'+serviceCounter.toString()).val();
-        serviceInput[serviceCounter]={"dt_id":dt_id,"service_id":service_id,"subservice_id":subservice_id,"service_date":service_date};
-        /* event listeners */
-        onServiceIdChange(serviceCounter);
-        onSubServiceIdChange(serviceCounter);
-        onServiceDateChange(serviceCounter);
-        onPriceUnitChange(serviceCounter);
-        onTotalUnitChange(serviceCounter);
-        onServiceDescChange(serviceCounter);
-        onDeleteService(serviceCounter);
-        /* subscribe for changes */
-        subject.objectSubscribe(psl);
-        /* add counter */
-        serviceCounter++;
-    }
-
-    /* for populating subservice form elements */
-    function clearSubServiceList(visId){
-        $("#subservice-id-"+visId.toString()).prop('disabled',false);
-        $("#subservice-id-"+visId.toString()).empty();
-    }
-
-    function populateSubServiceList(visId){
-        const subservice_visId = ["#subservice-id-",visId.toString()].join("");
-        const service_id = $(["#service-id-",visId.toString()].join("")).val();
-        let first = true;
-        serviceList.forEach(service => {
-            if(service_id == service.id){
+            }
+        },
+        populateSelectService: function(services){
+            this.prepSelectService();
+            let first = true;
+            let buffer;
+            const selector = `select#service-id-${this.visId}`
+            services.forEach(function(service){
                 if(first){
-                    $(subservice_visId)
-                    .append(
-                        "<option value="+service.subservice_id+">"+
-                            service.subservice_name+
-                        "</option>"
-                    );
-                    $(subservice_visId).val(service.subservice_id).change();
                     first = false;
-                } else {
-                    $(subservice_visId)
-                    .append(
-                        "<option value="+service.subservice_id+">"+
-                            service.subservice_name+
-                        "</option>"
-                    );
+                    $(selector).append(
+                        `<option value="${service.service_id}" selected>
+                            ${service.service_name}
+                        </option>`
+                    )
+                    buffer = service.service_id;
+                } else if (service.service_id !== buffer){
+                    $(selector).append(
+                        `<option value="${service.service_id}">
+                            ${service.service_name}
+                        </option>`
+                    )
+                    buffer = service.service_id;
                 }
+            })
+            this.populateInput(serviceInput)
+            $(selector).trigger('change')
+            this.populateSelectSubService($(selector).val(),services);
+        },
+        emptySelectSubService: function(){
+            $(`select#subservice-id-${this.visId}`).empty();
+        },
+        enableSelectSubService: function(){
+            $(`select#subservice-id-${this.visId}`).prop("disabled",false);
+        },
+        prepSelectSubService: function(){
+            this.emptySelectSubService();
+            this.enableSelectSubService();
+        },
+        populateSelectSubService: function(service_id,services){
+            this.prepSelectSubService();
+            let first = true;
+            const selector = `select#subservice-id-${this.visId}`
+            // change serviceInput subservice_id
+            services.forEach(function(service){
+                if(first && (service.service_id === service_id)){
+                    first = false;
+
+                    //populate select
+                    $(selector).append(
+                        `<option value="${service.subservice_id}" selected>
+                            ${service.subservice_name}
+                        </option>`
+                    )
+
+                    //populate label unit faster without searching
+                    const labelUnit = `label#service-unit-${this.visId}`
+                    $(labelUnit).html(service.unit_unit)
+                } else if(service.service_id === service_id){
+                    $(selector).append(
+                        `<option value="${service.subservice_id}">
+                            ${service.subservice_name}
+                        </option>`
+                    )
+                }
+            })
+            serviceInput[this.visId].subservice_id = $(selector).val();
+            $(selector).trigger('change')
+            //populate label unit faster without searching
+            const labelUnit = `label#service-unit-${this.visId}`
+            $(labelUnit).html()
+        },
+        populateLabelUnit: function(subservice_id,services){
+            const selector = `label#service-unit-${this.visId}`
+            let found = searchSubServiceId(subservice_id,services)
+            $(selector).html(found[0].unit_unit);
+        },
+    }
+
+    let serviceSub = new ServiceSubject();
+    
+    // initial fetch services and subservices based on selected heavy duty vehicle
+    function initGetServicesAndSubservices(){
+        let ab_id = $("#ab-id").val();
+        getServicesAndSubservices(ab_id);
+    }
+
+
+    // fetch services and subservices based on selected heavy duty vehicle
+    function getServicesAndSubservices(ab_id){
+        let services = [];
+        $.ajax({
+            type:'GET',
+            url:'<?php echo base_url('administrator/abservicehistory/servicelistapi')?>'+'?ab_id='+ab_id,
+            dataType: 'json',
+            success: function(r){
+                services = r;
+                serviceBuffer = r;
+                serviceSub.notify(services);
+
+                //add-service-btn event listener
+                $("#add-service-btn").prop("disabled",false)
+                $("#add-service-btn").unbind("click",addServiceBtn)
+                $("#add-service-btn").on("click",addServiceBtn)
             }
         })
     }
 
-    /* client code after dom is ready */
-    $(document).ready( function () {
-        initABId();
-        onDTIdChange();
-        subject.subscribe(initClearServiceList);
-        subject.subscribe(initPopulateServiceList);
-        // onChange for initService
-        onServiceIdChange(0);
-        onSubServiceIdChange(0);
-        onServiceDateChange(0)
-        onPriceUnitChange(0);
-        onTotalUnitChange(0);
-        onServiceDescChange(0);
-        //
-        subject.subscribe(enableAddServiceBtn);
-        $('#form-service-dt').submit(function(event){
+
+    // event listener for add button
+    // add button will add more service form groups
+    function addServiceBtn(){
+        let child = 
+            `<div 
+                style="
+                    border: 2px solid rgba(211,211,211,.5); 
+                    -webkit-background-clip: padding-box;
+                    bakground-clip: padding-box;
+                    border-radius: 0.5rem; 
+                    padding: 0.5vw;
+                    margin-top: 1rem;
+                "
+                id="service-ab-${totalServices}">
+                <div class="form-group">
+                    <div style="
+                        display: grid;
+                        grid-template-rows: auto auto 1fr auto;
+                        grid-gap: 0.75vw;
+                    ">
+                        <div>
+                            <label>Tanggal Servis / Kategori Servis :</label>
+                            <div style="
+                                display: grid;
+                                grid-template-columns: min(150px,20%) auto;
+                                grid-gap: 0.75vw;
+                            ">
+                                <input 
+                                    type="date" 
+                                    name="service-date-${totalServices}" 
+                                    id="service-date-${totalServices}" 
+                                    class="form-control"
+                                    required
+                                />
+                                <select 
+                                    id="service-id-${totalServices}" 
+                                    name="service-id-${totalServices}" 
+                                    class="form-control" 
+                                    required 
+                                    
+                                >
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label>Unit Servis / Harga Per-unit / Jumlah Unit :</label>
+                            <div style="
+                                display: grid;
+                                grid-template-columns: auto min(150px,20%) min(150px,20%);
+                                grid-gap: 0.75vw;
+                            ">
+                                <div>
+                                    <select 
+                                        id="subservice-id-${totalServices}" 
+                                        name="subservice-id-${totalServices}" 
+                                        class="form-control" 
+                                        required 
+                                        
+                                    >
+                                    </select>
+                                </div>
+                                <div style="
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items:center;"
+                                > 
+                                    <label>Rp</label>
+                                    <input 
+                                        type="number" 
+                                        step=0.001 
+                                        name="service-price-unit-${totalServices}" 
+                                        id="service-price-unit-${totalServices}" 
+                                        class="form-control-inline" 
+                                        style="min-width:50px;"
+                                        required 
+                                    />
+                                </div>
+                                <div style="
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items:center;"
+                                > 
+                                    <input 
+                                        type="number" 
+                                        step=0.001 
+                                        name="service-total-unit-${totalServices}" 
+                                        id="service-total-unit-${totalServices}" 
+                                        class="form-control-inline"
+                                        style="min-width:50px";
+                                        required 
+                                    />
+                                    <label id="service-unit-${totalServices}">
+                                        pcs
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="service-desc-${totalServices}" class="col-form-label">Keterangan</label>
+                            <input name="service-desc-${totalServices}" id="service-desc-${totalServices}" class="form-control"/>
+                        </div>
+                        <div>
+                            <button 
+                                id="service-btn-delete-${totalServices}" 
+                                type="button" 
+                                onclick="event.preventDefault()"
+                                class="btn btn-block btn-danger"
+                            >
+                                    <i class="fa fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        $("#service-groups").append(child);
+
+        let serviceGroup = new ServiceGroup(totalServices);
+        serviceGroup.populateSelectService(serviceBuffer);
+        serviceSub.subscribe(serviceGroup);
+
+        //onchange
+        $("#service-id-"+totalServices).on("change",{serviceGroup: serviceGroup},onServiceChange);
+        $("#subservice-id-"+totalServices).on("change",{serviceGroup: serviceGroup},onSubServiceChange)
+        $("#service-date-"+totalServices).on("change",{serviceGroup: serviceGroup},onServiceDateChange)
+        $("#service-desc-"+totalServices).on("change",{serviceGroup: serviceGroup},onServiceDescChange)
+        $("#service-price-unit-"+totalServices).on("change",{serviceGroup: serviceGroup},onUnitPriceChange)
+        $("#service-total-unit-"+totalServices).on("change",{serviceGroup: serviceGroup},onUnitTotalChange)
+        $("#service-btn-delete-"+totalServices).on("click",{serviceGroup: serviceGroup},onDelete)
+
+        totalServices++;
+    }
+
+    // event listener for select heavy duty vehicle
+    // select heavy duty vehicle will fetch services and subservices list
+    // for its selected vehicle
+    function onABIdChange(){
+        let ab_id = $(this).val();
+        getServicesAndSubservices(ab_id);
+    }
+
+
+    // event listener for select service 
+    function onServiceChange(event){
+        let service_id = $(this).val();
+        event.data.serviceGroup.populateSelectSubService(service_id,serviceBuffer);
+        serviceInput[event.data.serviceGroup.visId].service_id = service_id;
+    }
+
+    // event listener for select subservice 
+    function onSubServiceChange(event){
+        let subservice_id = $(this).val();
+        event.data.serviceGroup.populateLabelUnit(subservice_id,serviceBuffer);
+        serviceInput[event.data.serviceGroup.visId].subservice_id = subservice_id;
+    }
+
+    // event listener for unit total
+    function onUnitTotalChange(event){
+        let unitTotal = $(this).val()
+        serviceInput[event.data.serviceGroup.visId].unit_total = unitTotal;
+    }
+
+    // event listener for unit price
+    function onUnitPriceChange(event){
+        let unitPrice = $(this).val()
+        serviceInput[event.data.serviceGroup.visId].unit_price = unitPrice;
+    }
+
+    // event listener for service desc 
+    function onServiceDescChange(event){
+        let serviceDesc = $(this).val()
+        serviceInput[event.data.serviceGroup.visId].service_desc = serviceDesc;
+    }
+
+    // event listener for service date 
+    function onServiceDateChange(event){
+        let serviceDate = $(this).val()
+        serviceInput[event.data.serviceGroup.visId].service_date = serviceDate;
+    }
+
+    function onDelete(event){
+        $("#service-ab-"+event.data.serviceGroup.visId).remove();
+        serviceInput[event.data.serviceGroup.visId] = {};
+        serviceSub.unsubscribe(event.data.serviceGroup)
+    }
+
+    $(document).ready(function() {
+
+        let firstServiceGroup = new ServiceGroup(0);
+        serviceSub.subscribe(firstServiceGroup);
+         
+        //ab-id event listener
+        initGetServicesAndSubservices();
+        $("#ab-id").on("change",onABIdChange);
+
+        //onchange
+        $("#service-id-0").on("change",{serviceGroup: firstServiceGroup},onServiceChange);
+        $("#subservice-id-0").on("change",{serviceGroup: firstServiceGroup},onSubServiceChange)
+        $("#service-date-0").on("change",{serviceGroup: firstServiceGroup},onServiceDateChange)
+        $("#service-desc-0").on("change",{serviceGroup: firstServiceGroup},onServiceDescChange)
+        $("#service-price-unit-0").on("change",{serviceGroup: firstServiceGroup},onUnitPriceChange)
+
+        $("#service-total-unit-0").on("change",{serviceGroup: firstServiceGroup},onUnitTotalChange)
+        $("#service-btn-delete-0").on("click",{serviceGroup: firstServiceGroup},onDelete)
+
+        //onsubmit
+        $("#form-service-ab").on("submit",function(event){
             event.preventDefault();
             $.post(
                 '<?php 
-                    echo base_url('administrator/abservicehistory/servicelistapi') 
+                    echo base_url('administrator/abservicehistory/api') 
                 ?>',
                 JSON.stringify(serviceInput),
                 function(){
-                    window.location.replace("<?php echo base_url('administrator/abservicehistory') ?>")
+                    window.location.href = "<?php echo base_url('administrator/abservicehistory') ?>";
                 }
             );
-        }) 
-    });
+        })
+
+    })
+
 </script>

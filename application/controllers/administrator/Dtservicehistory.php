@@ -1,6 +1,7 @@
 <?php 
     
 class Dtservicehistory extends CI_Controller {
+    private $rekapData;
     private function is_loggedIn() {
         if (!isset($this->session->userdata['username'])){
             $this->session->set_flashdata('pesan','<div class="alert alert-warning alert-danger dismissible fade show" role="alert">
@@ -227,53 +228,6 @@ class Dtservicehistory extends CI_Controller {
         $this->load->view('template_administrator/footer');
     }
 
-    /* to be deleted */
-    /*
-    public function input_aksi() {
-        $this->is_loggedIn();
-        $this->is_admin();
-        $this->_rules();
-        if ($this->form_validation->run() == FALSE) {
-            $this->input();
-        }
-        else {
-            $dt_id=$this->input->post('dt_id');
-            $service_id = $this->input->post('service_id');
-            $service_date = $this->input->post('service_date');
-            $serviced_by = $this->input->post('serviced_by');
-            $data = [
-                'dt_id'=>$dt_id,
-                'service_id'=>$service_id,
-                'service_date'=>$service_date,
-                'serviced_by'=>$serviced_by
-            ];
-            $this->ServiceHistoryModel->setDTServiceHistory($data);
-            $this->session->set_flashdata('pesan',
-                '<div 
-                    class=" alert 
-                            alert-success 
-                            dismissible 
-                            fade 
-                            show
-                            " 
-                    role="alert">
-                Data Berhasil Ditambahkan!
-                <button 
-                    type="button" 
-                    class="close" 
-                    data-dismiss="alert" 
-                    aria-label="Close">
-                <span 
-                    aria-hidden="true">
-                &times;
-                </span>
-                </button>
-                </div>');
-            redirect(base_URL('administrator/dtservicehistory'));
-        }
-    }
-     */
-
     public function rekap() {
         /* check if truly admin and a verificator */
         $this->is_loggedIn();
@@ -326,5 +280,54 @@ class Dtservicehistory extends CI_Controller {
 		$this->form_validation->set_rules('dt_id','Nomer Polisi','required',['required' => '%s Wajib Diisi']);
 		$this->form_validation->set_rules('service_id','Jenis Servis','required',['required' => '%s Wajib Diisi']);
 		$this->form_validation->set_rules('service_date','Tanggal Servis','required',['required' => '%s Wajib Diisi']);
+    }
+
+    public function printapi(){
+        /* check if truly admin and a verificator */
+        $this->is_loggedIn();
+        $this->is_admin();
+        /*-----------------*/
+        switch ($_SERVER['REQUEST_METHOD']){
+            case 'GET':
+                    $dt_id = $this->input->get('dt_id',true);
+                    $rekap_start = $this->input->get('rekap_start',true);
+                    $rekap_end = $this->input->get('rekap_end',true);
+                    $pdf = $this->printRekap($dt_id,$rekap_start,$rekap_end);
+                    $this->output->set_content_type('application/pdf');
+                    $this->output->set_output(base64_encode($pdf));
+                    $this->output->set_status_header(200);
+                break;
+            Default:
+                $this->output->set_status_header(500);
+                break;
+        }
+    }
+
+    private function printRekap($dt_id,$rekap_start,$rekap_end){
+        $rekapInput = [
+            "dt_id"=>$dt_id,
+            "rekap_start"=>$rekap_start,
+            "rekap_end"=>$rekap_end
+        ];
+        $rekapData = $this->ServiceHistoryModel->getDTServiceHistoryRekap($rekapInput)->result();
+        $this->load->library('Pdf');
+
+        $pdf = new Pdf('','',date("d-m-Y"),[]);
+
+        $pdf->AddPage("");
+
+        $pdf->SetFont('Times','BU',14);
+        $pdf->Cell(0,0,'Rekap Data Servis Dump Truck',0,1,'C');
+        $pdf->ln(5);
+        
+        $pdf->IdentitasKendaraan($rekapData[0]->plate_number);
+        $pdf->Tanggal($rekap_start,$rekap_end);
+
+        $header = ['Tanggal','Kategori','Unit','Total'];
+
+        // total width = 205
+        $pdf->TabelServis($header,$rekapData,[30,40,40,40]);
+
+        return $pdf->Output("rekap.pdf","S");
     }
 }

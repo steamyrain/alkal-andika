@@ -60,11 +60,11 @@ class ServiceHistoryModel extends CI_Model {
     }
 
     public function getDTServiceHistoryRekap($data){
-        $this->db->select('a.plate_number plate_number,e.service_name service_name,d.service_date service_date,f.subservice_name as service_unit,d.unit_total as unit_total');
+        $this->db->select('a.plate_number plate_number,e.service_name service_name,d.service_date service_date,f.subservice_name as service_unit,d.unit_total as unit_total,f.unit as unit_unit');
         $this->db->from('alkal_dump_truck a');
         $this->db->join('alkal_category_dt_service_lookup b','b.category_id = a.catId');
         $this->db->join('alkal_service_dt_lookup c','c.category_service_id = b.category_service_id');
-        $this->db->join('alkal_service_history_dt d','d.service_id = c.service_id','left'); 
+        $this->db->join('alkal_service_history_dt d','d.service_id = c.service_id and d.ab_id = a.id','left'); 
         $this->db->join('alkal_service_list_dt e','e.id = c.service_id'); 
         $this->db->join('alkal_service_sublist_dt f','f.id = d.subservice_id'); 
         $this->db->where('a.id = '.$data['dt_id']);

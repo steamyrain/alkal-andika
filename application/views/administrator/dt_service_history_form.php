@@ -360,7 +360,6 @@
     function onServiceDescChange(visId){
         $('#service-desc-'+visId.toString()).on('input',function(){
             serviceInput[visId].service_desc = $(this).val();
-            console.log('changed');
         })
     }
 
@@ -368,6 +367,7 @@
 
     function enableAddServiceBtn(){
         $("#add-service-btn").prop('disabled',false);
+        $("#add-service-btn").unbind("click")
         $("#add-service-btn").click(fn=>{addServiceBtn.call()})
     }
 
