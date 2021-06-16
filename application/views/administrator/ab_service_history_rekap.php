@@ -133,6 +133,24 @@
     }
 
     $(document).ready(function(){
+        //declare outside so it wont get added as new event listener
+        $('#previewButton').click(function(){
+            ab_id = $("#ab_id").val();
+            rekap_start = $("#rekap_start").val();
+            rekap_end = $("#rekap_end").val();
+            $.ajax({
+                dataType: 'json',
+                url: '<?php echo base_url('administrator/abservicehistory/rekapapi') ?>',
+                data: $('form#rekapAB').serialize(),
+                statusCode: {
+                    200: function(r) {
+                        $('#rekapModal').modal('hide');
+                        table.clear();
+                        table.rows.add(r).draw();
+                    }
+                }
+            });
+        })
 
         //define data table
         table = $("#tableRekap").DataTable({
@@ -158,27 +176,11 @@
                     text: 'Rekap',
                     action: function (e,ab,node,config) {
                         $('#rekapModal').modal('show');
-                        $('#previewButton').click(function(){
-                            ab_id = $("#ab_id").val();
-                            rekap_start = $("#rekap_start").val();
-                            rekap_end = $("#rekap_end").val();
-                            $.ajax({
-                                dataType: 'json',
-                                url: '<?php echo base_url('administrator/abservicehistory/rekapapi') ?>',
-                                data: $('form#rekapAB').serialize(),
-                                statusCode: {
-                                    200: function(r) {
-                                        $('#rekapModal').modal('hide');
-                                        table.clear();
-                                        table.rows.add(r).draw();
-                                    }
-                                }
-                            });
-                        })
                     }
                 }
             ]
         });
+
         $('#printBtn').on('click',function(){
             if(ab_id !== undefined && rekap_start !== undefined && rekap_end !== undefined){
                 $.ajax({

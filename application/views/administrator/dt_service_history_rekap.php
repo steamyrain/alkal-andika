@@ -112,7 +112,25 @@
     }
 
     $(document).ready(function(){
-        //define form modal's behaviour on submit
+        //declare outside so it wont be added as new event listener everytime
+        $('#previewButton').click(function(){
+            dt_id = $("#dt_id").val();
+            rekap_start = $("#rekap_start").val();
+            rekap_end = $("#rekap_end").val();
+            $.ajax({
+                dataType: 'json',
+                url: '<?php echo base_url('administrator/dtservicehistory/rekapapi') ?>',
+                data: $('form#rekapDT').serialize(),
+                statusCode: {
+                    200: function(r) {
+                        $('#rekapModal').modal('hide');
+                        table.clear();
+                        table.rows.add(r).draw();
+                    }
+                }
+            });
+        })
+
         //define data table
         table = $("#tableRekap").DataTable({
             responsive: true,
@@ -129,27 +147,11 @@
                     text: 'Rekap',
                     action: function (e,dt,node,config) {
                         $('#rekapModal').modal('show');
-                        $('#previewButton').click(function(){
-                            dt_id = $("#dt_id").val();
-                            rekap_start = $("#rekap_start").val();
-                            rekap_end = $("#rekap_end").val();
-                            $.ajax({
-                                dataType: 'json',
-                                url: '<?php echo base_url('administrator/dtservicehistory/rekapapi') ?>',
-                                data: $('form#rekapDT').serialize(),
-                                statusCode: {
-                                    200: function(r) {
-                                        $('#rekapModal').modal('hide');
-                                        table.clear();
-                                        table.rows.add(r).draw();
-                                    }
-                                }
-                            });
-                        })
                     }
                 }
             ]
         });
+
         $('#printBtn').on('click',function(){
             if(dt_id !== undefined && rekap_start !== undefined && rekap_end !== undefined){
                 $.ajax({
