@@ -31,7 +31,7 @@
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">45 Alat Berat</div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-tools fa-2x text-gray-300"></i>
+                                            <i class="fas fa-snowplow fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -67,7 +67,7 @@
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                            <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -118,8 +118,13 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save changes</button>
+       </div>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
       </div>
-    </div>
-  </div>
-</div>
-</div>

@@ -77,6 +77,7 @@
             <a class="collapse-item" href="<?php echo base_url('administrator/laporan') ?>">Laporan Kerja Alat Berat</a>
             <a class="collapse-item" href="<?php echo base_url('administrator/laporandt') ?>">Laporan Kerja Dump Truck</a>
             <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas'); ?>">Surat Tugas</a>
+            <a class="collapse-item" href="<?php echo base_URL('administrator/perencanaan'); ?>">Perencanaan & <br> Pelaksanaan</a>
             <h6 class="collapse-header" style="color:black;">Esign Daily Task:</h6>
             <a class="collapse-item" href="<?php echo base_URL('administrator/surattugas/esign'); ?>">Request Esign Surat Tugas</a>
           </div>
