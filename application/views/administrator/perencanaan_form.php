@@ -39,13 +39,14 @@
                         <?php foreach ($dump_truck as $d) : ?>
                         <option value="Dump Truck <?php echo $d->category ?>"> Dump Truck <?php echo $d->category ?>
                         </option>
+                         <?php endforeach; ?>
                         
                          <option value="">--- KDOL ---</strong></option>
                          <option value="Panther">Panther</option>
                          <option value="Pregio">Pregio</option>
                          <option value="Strada">Strada</option>
 
-                        <?php endforeach; ?>
+                       
                         
                         
                     </select>

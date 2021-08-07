@@ -92,12 +92,24 @@
           <td><?php echo $pr->operator_baru ?></td>
           <td><input style="width:100px " type="number" value="<?=$pr->pk_bbm?>" id="idx-<?=$pr->id_pr?>" onchange="updatePr('<?=$pr->id_pr?>')" /></td>
           
-           <td style="vertical-align:middle">
-            <?php if($pr->status == 1) { ?>
-            <a href="<?=base_url();?>administrator/perencanaan/status/0/<?=$pr->id_pr;?>" class="btn btn-success"><i class="fas fa-check"></i></a>
-            <?php } else { ?>
-            <a href="<?=base_url();?>administrator/perencanaan/status/1/<?=$pr->id_pr;?>" class="btn btn-danger"><i class="fas fa-times"></i></a>
-            <?php } ?>
+           <!--<td style="vertical-align:middle">-->
+           <!-- <?php if($pr->status == 1) { ?>-->
+           <!-- <a href="<?=base_url();?>administrator/perencanaan/status/0/<?=$pr->id_pr;?>" class="btn btn-success"><i class="fas fa-check"></i></a>-->
+           <!-- <?php } else { ?>-->
+           <!-- <a href="<?=base_url();?>administrator/perencanaan/status/1/<?=$pr->id_pr;?>" class="btn btn-danger"><i class="fas fa-times"></i></a>-->
+           <!-- <?php } ?>-->
+           <!-- </td>-->
+           
+           
+             <td>
+              <select onchange="editstatus(this.value,'<?=$pr->id_pr;?>')" type="text" name="status">
+              <option <?=$pr->status==0? 'selected' :'' ;?> value="0">Belum</option>
+
+
+
+
+              <option <?=$pr->status==1? 'selected' :'' ;?> value="1">Sudah</option>
+            </select>
             </td>
 
           <td><?php echo $pr->keterangan ?></td> 
@@ -241,6 +253,20 @@
 <script src="https://cdn.datatables.net/buttons/1.7.0/css/buttons.bootstrap4.min.css"></script>
 
 
+<!--<script type="text/JavaScript">-->
+<!--  $(document).ready(function() {-->
+<!--    var table = $('#data-tabel').DataTable( {-->
+        
+<!--         buttons: [ 'colvis' ]-->
+        
+        
+<!--    } );-->
+ 
+<!--    table.buttons().container()-->
+<!--        .appendTo( '#data-tabel_wrapper .col-md-6:eq(0)' );-->
+<!--} );-->
+<!--</script>-->
+
 <script type="text/JavaScript">
   $(document).ready(function() {
     var table = $('#data-tabel').DataTable( {
@@ -252,5 +278,18 @@
  
     table.buttons().container()
         .appendTo( '#data-tabel_wrapper .col-md-6:eq(0)' );
-} );
+  });
+
+
+  function editstatus(value,id){
+   $.ajax({
+    url:"<?=base_url();?>administrator/perencanaan/status/"+value+"/"+id,
+    type:"get",
+    success:function(res){
+      console.log(res)
+    },error:function(err){
+       console.log(err)
+    }
+   })
+  }
 </script>

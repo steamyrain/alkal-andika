@@ -776,21 +776,47 @@ class Perencanaan extends CI_Controller {
 
       
 
-    public function status()
+    // public function status()
+    //         {
+    //         if (!is_numeric($this->uri->segment(4)) || !is_numeric($this->uri->segment(5)))
+    //         {
+    //         redirect('administrator/perencanaan');
+    //         }
+    //         // $this->perencanaanModel->update('alkal_perencanaan', ['status' => $this->uri->segment(3)], ['id_pr' => $this->uri->segment(4)]);
+    //         // redirect('administrator/perencanaan');
+
+
+    //         $data['status'] = $this->uri->segment(4);
+    //             $cond = array('id_pr' => $this->uri->segment(5));
+
+    //             $this->perencanaanModel->update('alkal_perencanaan', $data, $cond);
+    //             redirect('administrator/perencanaan');
+    //         }
+    
+    
+    
+     public function status($status,$id)
             {
-            if (!is_numeric($this->uri->segment(4)) || !is_numeric($this->uri->segment(5)))
-            {
-            redirect('administrator/perencanaan');
-            }
+            // if (!is_numeric($this->uri->segment(4)) || !is_numeric($this->uri->segment(5)))
+            // {
+            // redirect('administrator/perencanaan');
+            // }
             // $this->perencanaanModel->update('alkal_perencanaan', ['status' => $this->uri->segment(3)], ['id_pr' => $this->uri->segment(4)]);
             // redirect('administrator/perencanaan');
 
 
-            $data['status'] = $this->uri->segment(4);
-                $cond = array('id_pr' => $this->uri->segment(5));
+                $data = array('status'=>$status);
+                $cond = array('id_pr' => $id);
 
-                $this->perencanaanModel->update('alkal_perencanaan', $data, $cond);
-                redirect('administrator/perencanaan');
+                $update =  $this->perencanaanModel->update('alkal_perencanaan', $data, $cond);
+                
+                if ($update) {
+                    echo 1;
+                }else{
+                    echo 0;
+                }
+
+                // redirect('administrator/perencanaan');
             }
 
 

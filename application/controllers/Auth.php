@@ -33,12 +33,15 @@ class Auth extends CI_Controller{
 					$sess_data['email'] = $ck->email;
 					$sess_data['level'] = $ck->level;
                     $sess_data['nip'] = $ck->nip;
+                    $sess_data['job_id'] = $ck->job_id;
 					$this->session->set_userdata($sess_data);
 				}
 				if($sess_data['level'] == 'admin'){
                     redirect('administrator/dashboard');
                 } else if($sess_data['level'] == 'user'){
                     redirect('pegawai/dashboard');
+                } else if($sess_data['level'] == 'mekanik'){
+                    redirect('mekanik/dashboard');
                 } else {
                     $this->session->set_flashdata('pesan','
                         <div class="alert alert-warning alert-danger dismissible fade show" role="alert">
