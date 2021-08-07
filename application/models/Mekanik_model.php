@@ -14,6 +14,12 @@ class Mekanik_model extends CI_Model{
 	public function hapus_data($data){
 		$this->db->delete('mekanik',$data);
 	}
+	
+	public function ambil_data($id)
+	{
+		$this->db->where('username', $id);
+		return $this->db->get('user')->row();
+	}
 
 	public function get_keyword($keyword){
 		$this->db->select('*');

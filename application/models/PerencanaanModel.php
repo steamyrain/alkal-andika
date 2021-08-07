@@ -113,8 +113,8 @@ class PerencanaanModel extends CI_Model{
         $this->db->select('alkal_alat_berat.id as id,plate_number,serial_number,category,sub_category,type');
         $this->db->from("alkal_alat_berat");
         $this->db->join('alkal_category_alat_berat','alkal_category_alat_berat.id = .alkal_alat_berat.catId');
-        $this->db->order_by('category','asc');
-        $this->db->order_by('type','asc');
+        $this->db->group_by('category','asc');
+        $this->db->group_by('type','asc');
         return $this->db->get();
     }
    
@@ -174,11 +174,21 @@ class PerencanaanModel extends CI_Model{
         
     }
     
-     public   function update($table = null, $data = null, $where = null)
-    {
-        $this->db->update($table, $data, $where);
-    }
+    //  public   function update($table = null, $data = null, $where = null)
+    // {
+    //     $this->db->update($table, $data, $where);
+    // }
    
+    function update_status($table = null, $data = null, $where = null)
+        {
+        return $this->db->update($table, $data, $where);
+        }
+
+
+        function update($table = null, $data = null, $where = null)
+    {
+        return $this->db->update($table, $data, $where);
+    }
 
 
 }
