@@ -141,7 +141,7 @@
                        let val = $('#idy-'+id).val();
                        let data = {id: id,keterangan: val} 
                        $.ajax({
-                        url:"<?php echo base_url('/administrator/perencanaan/updatepy/') ?>"
+                        url:"<?php echo base_url('/administrator/perencanaan/updatepy/') ?>",
                         type:"post",
                         data: data,
                         dataType: "json", 
