@@ -26,7 +26,7 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed" href="<?php echo base_url('mekanik/ceklist') ?>" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-check-double" style="color:black;"></i>
          
           <span style="color:black;">E-Ceklist</span>
@@ -34,7 +34,7 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
-            <a class="collapse-item" href="<?php echo base_url('mekanik/ceklist') ?>">Ceklist Kendaraan</a>
+            <a class="collapse-item" href="<?php echo base_url('mekanik/ceklist') ?>">Kendaraan & Peralatan</a>
            <!--  <a class="collapse-item" href="<?php echo base_url('mekanik/ceklist_dumptruck') ?>">Dump Truck</a>
             <a class="collapse-item" href="<?php echo base_url('mekanik/ceklist_kdo') ?>">KDO</a> -->
           </div>

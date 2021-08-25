@@ -733,6 +733,35 @@ class Perencanaan extends CI_Controller {
         $update = $this->db->update('alkal_perencanaan',array('pk_bbm'=>$val));
         echo 1;
       }
+      
+       public function updatepz(){
+        $data = json_decode(file_get_contents("php://input"));
+           $this->cart->update([
+            "rowid"=>$data->rowid,
+             "options"=>array(
+                    "id_pr"=>$data->options->id_pr,
+                    "tanggal"=>date('Y-m-d'),
+                    "lokasi"=>$data->options->lokasi,
+                    "kendaraan"=>$data->options->kendaraan,
+                    "serial"=>$data->options->serial,
+                    "operator"=>$data->options->operator,
+                    "pr_bbm"=>$data->options->pr_bbm,
+                    "status"=>$data->options->status,
+                    "lokasi_baru"=>$data->options->lokasi_baru,
+                    "operator_baru"=>$data->options->operator_baru,
+                    "pr_bbm"=>$data->options->pr_bbm,
+                    "keterangan"=>$data->options->keterangan,
+                    "edited"=>true
+                    )
+           ]);
+           echo 1;
+        }
+
+       public function updatepy($id,$val){
+        $this->db->where('id_pr',$id);
+        $update = $this->db->update('alkal_perencanaan',array('keterangan'=>$val));
+        echo 1;
+      }
 
       public function get_user(){
         $response = $this->perencanaanModel->getUsers($this->input->post('searchTerm'));

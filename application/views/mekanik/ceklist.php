@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-lg-12">
      <div class="alert alert-success" role="alert">
-      <i class="fas fa-clipboard"></i> E-Ceklist (Alat Berat)
+      <i class="fas fa-clipboard"></i> E-Ceklist (Kendaraan & Peralatan)
     </div>
 
     
@@ -29,7 +29,9 @@
 
       <div class="form-group">
         <label >Tanggal</label>
-        <input type="text" readonly class="form-control mb-2" id="tanggal" value="<?php echo date("Y-m-d"); ?>">
+        <input type="text" readonly class="form-control mb-2" id="tanggal" value="<?php echo date("Y-m-d");  ?>">
+        <input type="hidden" readonly class="form-control mb-2" id="waktu" <?php date_default_timezone_set('Asia/Jakarta'); ?> value="<?php echo date("H:s");  ?>">
+        
       </div>
 
     </div>
@@ -37,8 +39,8 @@
 
 
      <div class="form-group">
-      <label for="exampleFormControlSelect1">Alat / Kendaraan</label>
-      <select class="form-control" id="kendaraan" name="kendaraan">
+      <label for="exampleFormControlSelect1">Kendaraan & Peralatan</label>
+      <select class="form-control select2" id="kendaraan" name="kendaraan">
         <option value="">Pilih</option>
         <?php foreach ($kendaraan as $k) : ?>
           <option value="<?php echo $k->category ?> <?php echo $k->type ?>"><?php echo $k->category ?>
@@ -50,7 +52,7 @@
 
   <div class="form-group">
     <label for="exampleFormControlSelect1">Nomer Identitas</label>
-    <select class="form-control" id="serial" name="serial">
+    <select class="form-control select2" id="serial" name="serial">
      <option value="">Pilih No</option>
      <?php foreach ($serial as $s) : ?>
 
@@ -80,7 +82,7 @@
 <div class="row">
   <div class="col-lg-12">
    <div class="alert alert-success" role="alert" style="background: yellow; color: black;">
-     <i class="fas fa-check-double" style="color:black;"></i> Table Ceklis
+     <i class="fas fa-check-double" style="color:black;"></i> Table Ceklist
    </div>
 
    <label>Alat / Kendaraan : <span id="alatnya"></span></label><br>
@@ -116,17 +118,34 @@
 </div>
 </div>
 </div>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script> -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+<!-- 
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+ -->
 <script>
+
+
   $(document).ready(function() {
+
+      // $('.select2').select2();
     // $('input').attr('required', true);   
     // $('input').prop('required', true); 
+
+
     $("#serial").change(function() {
+
+
+      
       let ser = $('#serial').val();
       let ken = $('#kendaraan').val();
       $('#alatnya').text(ken);
       $('#noidnya').text(ser);
       serial = $("#serial").val();
+
       
       let out = {};
 
@@ -189,6 +208,7 @@
             }
           }
         })
+
       });
 
     $("#simpan").click(function(){
@@ -208,6 +228,7 @@
         datatopost[i] = new Array(
           $('#nama_mekanik').val(),
           $('#tanggal').val(),
+          $('#waktu').val(),
           $('#kendaraan').val(),
           $('#serial').val(),
           $("#"+datalocal[i].id+"")[0].accessKey,
@@ -241,10 +262,15 @@
         $("#"+radiofill[i]+"").attr('style','outline: 2px solid red;');
       }
     }
-
-
+ 
 
     });
 
+
+
   });
+
+
+
+
 </script>

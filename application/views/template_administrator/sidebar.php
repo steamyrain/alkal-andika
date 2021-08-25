@@ -199,6 +199,33 @@
             </div>
         </div>
     </li>
+    
+     <li class="nav-item">
+        <a 
+            class="nav-link collapsed" 
+            href="#"
+            data-toggle="collapse" 
+            data-target="#collapsePagess" 
+            aria-expanded="true" 
+            aria-controls="collapsePages"
+        >
+            <i class="fas fa-check-double" style="color:black;"></i>
+            <span style="color:black;">E-Ceklis</span>
+        </a>
+        <div 
+            id="collapsePagess"
+            class="collapse" 
+            aria-labelledby="headingPages" 
+            data-parent="#accordionSidebar"
+        >
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
+               <!--  <a class="collapse-item"  href="<?php echo base_URL('administrator/ceklist')?>">Laporan Berskala</a> -->
+                <a class="collapse-item"  href="<?php echo base_URL('administrator/ceklist_harian')?>">Kendaraan & Peralatan</a>
+                <!-- <a class="collapse-item"  href="<?php echo base_URL('administrator/ceklist_db')?>">Data Base</a> -->
+            </div>
+        </div>
+    </li>
 
 
     <li class="nav-item">

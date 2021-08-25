@@ -97,19 +97,27 @@ class Ceklist extends CI_Controller{
 
       $data        = $this->input->post('data');
       // var_dump($data);
+       $sql = $this->db->insert('tbl_header',array(
+            "kode_header"=>uniqid(),
+            "tanggal"=>date('Y-m-d')
+        ));
+
+        $id = $this->db->insert_id();
 
       for ($i = 0; $i < count($data) ; $i++) {
         
         echo $data[$i][1]; //tgl
+        echo $data[$i][2];
         echo $data[$i][0]; //nama mek
-        echo $data[$i][2]; //kendaraan
+                           //kendaraan
         echo $data[$i][3]; //serial
         echo $data[$i][4]; //kategori
         echo $data[$i][5]; //item
         echo $data[$i][6]; //kondisi
         echo $data[$i][7]; //keterangan
+        echo $data[$i][8];
         
-        $this->ceklist_model->simpandata($data[$i][1],$data[$i][0],$data[$i][2],$data[$i][3],$data[$i][4],$data[$i][5],$data[$i][6],$data[$i][7]);
+        $this->ceklist_model->simpandata($id,$data[$i][1],$data[$i][2],$data[$i][0],$data[$i][3],$data[$i][4],$data[$i][5],$data[$i][6],$data[$i][7],$data[$i][8]);
         //tabel kolom  tgl,namamek,kenda,serial,kate,item,stateu,ket
 
         

@@ -136,10 +136,13 @@ public function getdataceklist($serial=''){
     return $q->result();
 }
 
-function simpandata($tanggal,$nama_mekanik,$kendaraan,$serial,$nama_category,$nama_item,$kondisi,$keterangan)
+function simpandata($id,$tanggal,$waktu,$nama_mekanik,$kendaraan,$serial,$nama_category,$nama_item,$kondisi,$keterangan)
     {
-        $query="INSERT INTO `alkal_ceklist`( `tanggal`, `nama_mekanik`, `kendaraan`, `serial`,`nama_category`,`nama_item`,`kondisi`,`keterangan`) 
-        VALUES ('$tanggal','$nama_mekanik','$kendaraan','$serial','$nama_category','$nama_item','$kondisi','$keterangan')";
+
+       
+
+        $query="INSERT INTO `alkal_ceklist`(`id_header`, `tanggal`, `waktu`, `nama_mekanik`, `kendaraan`, `serial`,`nama_category`,`nama_item`,`kondisi`,`keterangan`) 
+        VALUES ('$id','$tanggal','$waktu','$nama_mekanik','$kendaraan','$serial','$nama_category','$nama_item','$kondisi','$keterangan')";
         $this->db->query($query);
     }
 
@@ -163,22 +166,22 @@ public function getdataceklis_dt($serial=''){
     return $q->result();
 }
 
-function simpandata_dt($data,$tanggal,$nama_mekanik,$kendaraan,$serial,$nama_category,$nama_item,$kondisi,$keterangan)
-    {
-        $query="INSERT INTO `alkal_ceklist`( `tanggal`, `nama_mekanik`, `kendaraan`, `serial`,`nama_category`,`nama_item`,`kondisi`,`keterangan`) 
-        VALUES ('$tanggal','$nama_mekanik','$kendaraan','$serial','$nama_category','$nama_item','$kondisi','$keterangan')";
-        $cek = $this->db->query($query);
+// function simpandata_dt($data,$tanggal,$nama_mekanik,$kendaraan,$serial,$nama_category,$nama_item,$kondisi,$keterangan)
+//     {
+//         $query="INSERT INTO `alkal_ceklist`( `tanggal`, `nama_mekanik`, `kendaraan`, `serial`,`nama_category`,`nama_item`,`kondisi`,`keterangan`) 
+//         VALUES ('$tanggal','$nama_mekanik','$kendaraan','$serial','$nama_category','$nama_item','$kondisi','$keterangan')";
+//         $cek = $this->db->query($query);
 
         
-    }
+//     }
 
 
 
 
 
-function getdatacetak($tanggal,$kendaraan,$serial)
+function getdatacetak($id,$tanggal,$kendaraan,$serial)
 {
-    $q = $this->db->query('SELECT * FROM alkal_ceklist WHERE tanggal = "'.$tanggal.'" and kendaraan = "'.$kendaraan.'" and serial = "'.$serial.'" ORDER BY nama_category asc');
+    $q = $this->db->query('SELECT * FROM alkal_ceklist WHERE id_header = "'.$id.'" and tanggal = "'.$tanggal.'" and kendaraan = "'.$kendaraan.'" and serial = "'.$serial.'" ORDER BY nama_category asc');
     // echo $q;
     return $q->result();
 }
@@ -187,6 +190,14 @@ function getdatalaporan()
 {
     $q = $this->db->query('SELECT * FROM alkal_ceklist ORDER BY nama_category asc');
     // echo $q;
+    return $q->result();
+}
+
+
+function getdatalaporan_by_id($id)
+{
+    $q = $this->db->query("SELECT * FROM alkal_ceklist where id_header = $id  ORDER BY nama_category asc");
+     // echo $q;
     return $q->result();
 }
 

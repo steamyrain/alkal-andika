@@ -8,9 +8,10 @@
   <h4 class="alert-heading">Selamat Datang!</h4>
   <p>Selamat Datang <strong><?php echo $username ?></strong> di Sistem Pengelolaan Peralatan Bina Marga, Anda Login sebagai <strong><?php echo $level; ?></strong></p>
   <hr>
-  <!--
+ 
+  
   <a href="<?php echo base_url('mekanik/ceklist') ?>" class="btn btn-warning"  style="background : yellow; color: black;" >
-  <i class="fas fa-check-double"> Ceklist Harian </i></a> -->
+  <i class="fas fa-check-double"> Ceklist Kendaraan & Peralatan </i></a> 
 </button>
 </div>
 <!-- Button trigger modal -->
