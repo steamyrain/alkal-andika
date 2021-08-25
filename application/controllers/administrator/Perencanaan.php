@@ -757,10 +757,11 @@ class Perencanaan extends CI_Controller {
            echo 1;
         }
 
-       public function updatepy($id,$val){
+       public function updatepy(){
+        $id = $this->input->post('id');
+        $val = $this->input->post('keterangan');
         $this->db->where('id_pr',$id);
         $update = $this->db->update('alkal_perencanaan',array('keterangan'=>$val));
-        echo 1;
       }
 
       public function get_user(){

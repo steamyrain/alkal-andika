@@ -138,10 +138,13 @@
                     }
                     
                      function updatePz(id){
-                       var val = $('#idy-'+id).val();
+                       let val = $('#idy-'+id).val();
+                       let data = {id: id,keterangan: val} 
                        $.ajax({
-                        url:"<?php echo base_url('/administrator/perencanaan/updatepy/') ?>"+id+"/"+val,
-                        type:"get",
+                        url:"<?php echo base_url('/administrator/perencanaan/updatepy/') ?>"
+                        type:"post",
+                        data: data,
+                        dataType: "json", 
                         success:function(res){
                             console.log(res)
                         },error:function(err){
