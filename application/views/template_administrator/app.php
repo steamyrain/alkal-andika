@@ -104,6 +104,16 @@
                         })
 
                     }
+                    
+                    $scope.updatePz = function(row){
+                                        $http.post("<?php echo base_url('/administrator/perencanaan/updatepz/') ?>",row).then(res=>{
+                                              console.log(res.data)
+                                        },function errorCallBack(err){
+                                            console.log(err)
+                                        })
+
+                                    }
+
 
 
 
@@ -118,6 +128,19 @@
                        var val = $('#idx-'+id).val();
                        $.ajax({
                         url:"<?php echo base_url('/administrator/perencanaan/updatepx/') ?>"+id+"/"+val,
+                        type:"get",
+                        success:function(res){
+                            console.log(res)
+                        },error:function(err){
+                            console.log(err)
+                        }
+                       })
+                    }
+                    
+                     function updatePz(id){
+                       var val = $('#idy-'+id).val();
+                       $.ajax({
+                        url:"<?php echo base_url('/administrator/perencanaan/updatepy/') ?>"+id+"/"+val,
                         type:"get",
                         success:function(res){
                             console.log(res)

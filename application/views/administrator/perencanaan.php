@@ -112,7 +112,7 @@
             </select>
             </td>
 
-          <td><?php echo $pr->keterangan ?></td> 
+           <td><input style="width:100px " type="text" value="<?=$pr->keterangan?>" id="idy-<?=$pr->id_pr?>" onchange="updatePz('<?=$pr->id_pr?>')" /></td> 
           <td></td>
       </tr>
      
