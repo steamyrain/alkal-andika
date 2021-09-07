@@ -177,36 +177,15 @@
 <script type="text/JavaScript">
   $(document).ready(function() {
     var table = $('#data-tabel').DataTable( {
-        lengthChange: false,
-         buttons: [
-            {
-            //     extend: 'print',
-            //     exportOptions: {
-            //         columns: ':visible'
-            //     }
-            // },
-            //  {
-            //     extend: 'pdf',
-            //     exportOptions: {
-            //         columns: ':visible'
-            //     }
-            // },
-            //  {
-            //     extend: 'excel',
-            //     exportOptions: {
-            //         columns: ':visible'
-            //     }
-            },
-            'colvis'
-        ],
-        columnDefs: [ {
-            targets: -1,
-            visible: false
-        } ]
+        
+       
+        
+        
     } );
  
     table.buttons().container()
         .appendTo( '#data-tabel_wrapper .col-md-6:eq(0)' );
+ 
 
 
   $('.select2').select2({

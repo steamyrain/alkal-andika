@@ -39,8 +39,8 @@
 
 
      <div class="form-group">
-      <label for="exampleFormControlSelect1">Kendaraan & Peralatan</label>
-      <select class="form-control select2" id="kendaraan" name="kendaraan">
+      <label for="exampleFormControlSelect1">Kendaraan & Peralatan</label></br>
+      <select class="select2" id="kendaraan" name="kendaraan" style="width:300px;">
         <option value="">Pilih</option>
         <?php foreach ($kendaraan as $k) : ?>
           <option value="<?php echo $k->category ?> <?php echo $k->type ?>"><?php echo $k->category ?>
@@ -51,8 +51,8 @@
   </div>
 
   <div class="form-group">
-    <label for="exampleFormControlSelect1">Nomer Identitas</label>
-    <select class="form-control select2" id="serial" name="serial">
+    <label for="exampleFormControlSelect1">Nomer Identitas</label></br>
+    <select class="select3" id="serial" name="serial" style="width:300px;">
      <option value="">Pilih No</option>
      <?php foreach ($serial as $s) : ?>
 
@@ -82,7 +82,7 @@
 <div class="row">
   <div class="col-lg-12">
    <div class="alert alert-success" role="alert" style="background: yellow; color: black;">
-     <i class="fas fa-check-double" style="color:black;"></i> Table Ceklist
+     <i class="fas fa-check-double" style="color:black;"></i> Table Ceklis
    </div>
 
    <label>Alat / Kendaraan : <span id="alatnya"></span></label><br>
@@ -128,16 +128,22 @@
  -->
 <script>
 
+    $('.select2').select2({
+     placeholder: "Pilih Kendaraan & Peralatan",
+        allowClear:true,
+        debug:true,
 
-  $(document).ready(function() {
+  });
 
-      // $('.select2').select2();
-    // $('input').attr('required', true);   
-    // $('input').prop('required', true); 
+  $('.select3').select2({
+     placeholder: "Pilih Identitas",
+        allowClear:true,
+        debug:true,
 
+  });
 
-    $("#serial").change(function() {
-
+  // Bind an event
+$('.select3').on('select2:select', function (e) { 
 
       
       let ser = $('#serial').val();
@@ -149,7 +155,7 @@
       
       let out = {};
 
-        // console.log($("#serial").val())
+        console.log($("#serial").val())
         $.ajax({
           url: "<?php echo base_url("mekanik/ceklist/getlistceklis");?>",
           type: "POST",
@@ -208,8 +214,93 @@
             }
           }
         })
+});
 
-      });
+ 
+
+
+  $(document).ready(function() {
+
+      // $('.select2').select2();
+    // $('input').attr('required', true);   
+    // $('input').prop('required', true); 
+
+
+
+    // $("#serial").change(function() {
+
+
+      
+    //   let ser = $('#serial').val();
+    //   let ken = $('#kendaraan').val();
+    //   $('#alatnya').text(ken);
+    //   $('#noidnya').text(ser);
+    //   serial = $("#serial").val();
+
+      
+    //   let out = {};
+
+    //     console.log($("#serial").val())
+    //     $.ajax({
+    //       url: "<?php echo base_url("mekanik/ceklist/getlistceklis");?>",
+    //       type: "POST",
+    //       data: {
+    //         type: 1,
+    //         kode: serial
+    //       },
+    //       cache: false,
+    //       success: function(dataResult){
+    //         // console.log(dataResult);
+    //         $( "#ibu" ).empty();
+    //         for (var i = 0; i < dataResult.length; i++) {
+    //              //get key
+    //              out[dataResult[i].nama_category] = [];
+    //            }
+
+
+    //         //store to variable
+    //         for (var i = 0; i < dataResult.length; i++) {
+    //              //post to key if same
+    //              for (obj in out) {
+    //               if(obj == dataResult[i].nama_category){
+    //                 out[obj].push(dataResult[i].nama_item)
+    //                   // console.log(dataResult[i].nama_item)
+    //                 }
+    //               }
+
+    //             }
+
+
+    //         //to display
+    //         for (objt in out) {
+
+    //           $( "#ibu" ).append(`
+    //             <tr style="background: green; color: #fff">
+    //             <td></td>
+    //             <td><b><span id='nama_category'>${objt}</span></b></td>
+    //             <td></td>
+    //             <td></td>
+                
+    //             <td></td>
+    //             </tr>`);
+
+    //           let nos = 1;
+    //           for(var i = 0; i < out[objt].length; i++){
+    //             $( "#ibu" ).append(`
+    //               <tr accessKey="${objt}" id='item${i+objt.replace(' ','')}'>
+    //               <td>${nos}</td>
+    //               <td><span   id='Nameunit${i}'>${out[objt][i]}</span></td>
+    //               <td><input type="radio" name="Statusunit${i+objt.replace(' ','')}" value='baik'  id='Statusunit${i+objt.replace(' ','')}'></td>
+    //               <td><input type="radio" name="Statusunit${i+objt.replace(' ','')}" value='tidak'  id='Statusunit${i+objt.replace(' ','')}'></td>
+    //               <td> <input type="text" name="Keteranganunit${i+objt.replace(' ','')}" value="" class="form-control"  id="Keteranganunit${i+objt.replace(' ','')}"></td>
+    //               </tr>`);
+    //             nos++; 
+    //           }
+    //         }
+    //       }
+    //     })
+
+    //   });
 
     $("#simpan").click(function(){
 

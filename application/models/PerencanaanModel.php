@@ -117,6 +117,15 @@ class PerencanaanModel extends CI_Model{
         $this->db->group_by('type','asc');
         return $this->db->get();
     }
+    
+    
+     public function getAlatkdo() {
+        $this->db->select('alkal_kdo.id as id,type,plate_number,catId');
+        $this->db->from("alkal_kdo");
+        $this->db->join('alkal_category_kdo','alkal_category_kdo.id = .alkal_kdo.catId');
+        $this->db->group_by('type','asc');
+        return $this->db->get();
+    }
    
 
     public function insert_data($data,$table){

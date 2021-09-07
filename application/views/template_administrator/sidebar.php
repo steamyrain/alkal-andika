@@ -226,6 +226,32 @@
             </div>
         </div>
     </li>
+    
+     <li class="nav-item">
+        <a 
+            class="nav-link collapsed" 
+            href="#"
+            data-toggle="collapse" 
+            data-target="#collapseSmart" 
+            aria-expanded="true" 
+            aria-controls="collapseSmart"
+        >
+              <i class="fas fa-folder" style="color:black;"></i>
+            <span style="color:black;">Smart Filing</span>
+        </a>
+        <div 
+            id="collapseSmart"
+            class="collapse" 
+            aria-labelledby="headingSmart" 
+            data-parent="#accordionSidebar"
+        >
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header" style="color:black;">Pilihan :</h6>
+                <a class="collapse-item"  href="<?php echo base_URL('administrator/smart_filing_in')?>">Surat Masuk</a> 
+                <a class="collapse-item"  href="<?php echo base_URL('administrator/smart_filing_out')?>">Surat Keluar</a>
+            </div>
+        </div>
+    </li>
 
 
     <li class="nav-item">

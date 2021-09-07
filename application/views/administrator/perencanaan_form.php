@@ -1,4 +1,6 @@
-<div class="container-fluid" ng-app="myApp" ng-controller="appCtrl">
+
+
++<div class="container-fluid" ng-app="myApp" ng-controller="appCtrl">
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?php echo $title ?></h1>
@@ -40,11 +42,27 @@
                         <option value="Dump Truck <?php echo $d->category ?>"> Dump Truck <?php echo $d->category ?>
                         </option>
                          <?php endforeach; ?>
-                        
-                         <option value="">--- KDOL ---</strong></option>
-                         <option value="Panther">Panther</option>
+                         
+                         
+                     <option value="">--- KDO ---</strong></option>
+                        <?php foreach ($kdo as $kd) : ?>
+                        <option value="<?php echo $kd->type ?>"><?php echo $kd->type ?>
+                        </option>
+                         <?php endforeach; ?>
+                         
                          <option value="Pregio">Pregio</option>
                          <option value="Strada">Strada</option>
+                         <option value="Panther">Panther</option>
+                         <option value="Pregio">Sepeda Motor</option>
+                         
+                         
+                         
+                        
+                        
+                        
+                        
+                        
+            
 
                        
                         
@@ -73,16 +91,29 @@
                         <option value="<?php echo $dt->plate_number ?>"><?php echo $dt->plate_number ?></option>
                         <?php endforeach; ?>
                         
-                        <option value="">-- KDOL --</option>
-                        <option value="B9830PQV">B 9830 PQV</option>
-                        <option value="B 1262 VQ">B 1262 VQ</option>
-                        <option value="B 9541 PQU">B 9541 PQU</option>
-                        <option value="B 9540 PQU">B 9540 PQU</option>
-                        <option value="B 9913 PSC">B 9913 PSC</option>
-                        <option value="B 9420 OQ">B 9420 OQ</option>
-                        <option value="B 9942 PQ">B 9942 PQ</option>
-                        <option value="B 1841 PQN">B 1841 PQN</option>
-                        <option value="B 9432 BQ">B 9432 BQ</option>
+                        
+                        <option value="">-- KDO --</option>
+                        <?php foreach ($no_kdo as $kd) : ?>
+                        <option value="<?php echo $kd->plate_number ?>"><?php echo $kd->plate_number ?></option>
+                        <?php endforeach; ?>
+                        <option value="B9830PQV">B 9831 PQV</option>
+                        <option value="B 1841 PQN">B 9162 PQV</option>
+                        <option value="B 9432 BQ">B 7667 PPA</option>
+                        <option value="B 9600 PTA">B 9600 PTA</option>
+                        
+                    
+                        
+                        
+                        <!--<option value="">-- KDOL --</option>-->
+                        <!--<option value="B9830 PQV">B 9830 PQV</option>-->
+                        <!--<option value="B 1262 VQ">B 1262 VQ</option>-->
+                        <!--<option value="B 9541 PQU">B 9541 PQU</option>-->
+                        <!--<option value="B 9540 PQU">B 9540 PQU</option>-->
+                        <!--<option value="B 9913 PSC">B 9913 PSC</option>-->
+                        <!--<option value="B 9420 OQ">B 9420 OQ</option>-->
+                        <!--<option value="B 9942 PQ">B 9942 PQ</option>-->
+                        <!--<option value="B 1841 PQN">B 1841 PQN</option>-->
+                        <!--<option value="B 9432 BQ">B 9432 BQ</option>-->
                     </select>
 
                     <label>Pengguna &nbsp&nbsp&nbsp </label>
