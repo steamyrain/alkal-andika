@@ -26,7 +26,7 @@ class ServiceHistoryModel extends CI_Model {
             $this->db->join('alkal_category_dt_service_lookup d','d.category_service_id = c.category_service_id');
             $this->db->join('alkal_dump_truck e','e.catId = d.category_id');
             $this->db->where('e.id = '.$id);
-            $this->db->order_by('b.id');
+            $this->db->order_by('b.service_id');
             return $this->db->get();
         } else {
             $this->db->select('a.id as id, a.service_name as service_name');
@@ -45,6 +45,17 @@ class ServiceHistoryModel extends CI_Model {
             $this->db->where('alkal_dump_truck.id = '.$id);
             return $this->db->get();
         }
+    }
+
+    public function getDTServiceSublist($service_id){
+      $this->db->select('id, service_id, subservice_name, unit');
+      $this->db->from('alkal_service_sublist_dt');
+      $this->db->where('service_id = '.$service_id);
+      return $this->db->get();
+    }
+
+    public function setDTServiceSublist($data){
+      $this->db->insert('alkal_service_sublist_dt',$data);
     }
 
     public function setDTServiceHistory($data) {

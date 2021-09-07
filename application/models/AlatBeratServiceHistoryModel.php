@@ -56,6 +56,7 @@ class AlatBeratServiceHistoryModel extends CI_Model {
             $this->db->join('alkal_service_ab_lookup','alkal_service_ab_lookup.category_service_id = alkal_alat_berat.catId');
             $this->db->join('alkal_service_list_ab','alkal_service_list_ab.id = alkal_service_ab_lookup.service_id');
             $this->db->where('alkal_alat_berat.id = '.$id);
+            $this->db->order_by('alkal_service_ab_lookup.service_id');
             return $this->db->get();
         }
     }
