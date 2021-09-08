@@ -223,6 +223,56 @@ class Abservicehistory extends CI_Controller {
         }
     } 
 
+    public function sublistapi() {
+        /* check if truly admin and a verificator */
+        $this->is_loggedIn();
+        $this->is_admin();
+        /*-----------------*/
+
+        switch($_SERVER["REQUEST_METHOD"]) {
+            case 'GET':
+                $sublist = $this->AlatBeratServiceHistoryModel->getABServiceSublist($id)->result();
+                echo json_encode($sublist);
+                break;
+            case 'POST':
+                $service_id = $this->input->post('service_id');
+                $subservice_name = $this->input->post('subservice_name');
+                $unit = $this->input->post('unit');
+                $subservice_input = [
+                  "service_id"=>$service_id,
+                  "subservice_name"=>$subservice_name,
+                  "unit"=>$unit
+                ];
+                $this->AlatBeratServiceHistoryModel->setABServiceSublist($subservice_input);
+                $this->session->set_flashdata('pesan',
+                    '<div 
+                        class=" alert 
+                                alert-success 
+                                dismissible 
+                                fade 
+                                show
+                                " 
+                        role="alert">
+                    Data Berhasil Ditambahkan!
+                    <button 
+                        type="button" 
+                        class="close" 
+                        data-dismiss="alert" 
+                        aria-label="Close">
+                    <span 
+                        aria-hidden="true">
+                    &times;
+                    </span>
+                    </button>
+                    </div>');
+                $this->output->set_status_header(200);
+                break;
+            default:
+                $this->output->set_status_header(405);
+                break;
+        }
+    }
+
     public function input() {
         /* check if truly admin and a verificator */
         $this->is_loggedIn();

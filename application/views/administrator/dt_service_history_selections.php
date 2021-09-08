@@ -157,6 +157,7 @@
                 data: $("form#addDTSublist").serialize(),
                 success: function(r){
                     $("#dtSublistModal").modal('hide');
+                    location.reload();
                 },
                 error: function(r){
                     $("#dtSublistModal").modal('hide');
@@ -175,8 +176,8 @@
         // submitButton handler
         let submitButton = $("#submitButton")
         submitButton.on('click',()=>{
-        $("form#addDTSublist").submit()
-})
+          $("form#addDTSublist").submit()
+        })
         // form addDTSublist submit event handler
         $("#addDTSublist").on('submit',function(e){
             e.preventDefault();

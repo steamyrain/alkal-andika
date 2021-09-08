@@ -14,7 +14,11 @@ class AlatBeratServiceHistoryModel extends CI_Model {
     }
 
     public function getServiceList($ab_id){
-        if(!isset($ab_id) && empty($ab_id)) return null;
+      if(!isset($ab_id) && empty($ab_id)) {
+        $this->db->select('a.id as id, a.service_name as service_name');
+        $this->db->from('alkal_service_list_ab a');
+        return $this->db->get();
+      } else {
         $this->db->select('a.id service_id,a.service_name service_name,b.id subservice_id, b.subservice_name subservice_name,b.unit unit_unit');
         $this->db->from('alkal_service_list_ab a');
         $this->db->join('alkal_service_sublist_ab b','b.service_id = a.id');
@@ -22,6 +26,18 @@ class AlatBeratServiceHistoryModel extends CI_Model {
         $this->db->join('alkal_alat_berat d','d.catId = c.category_service_id');
         $this->db->where('d.id = '.$ab_id);
         return $this->db->get();
+      }
+    }
+
+    public function getABServiceSublist($service_id){
+      $this->db->select('id, service_id, subservice_name, unit');
+      $this->db->from('alkal_service_sublist_ab');
+      $this->db->where('service_id = '.$service_id);
+      return $this->db->get();
+    }
+
+    public function setABServiceSublist($data){
+      $this->db->insert('alkal_service_sublist_ab',$data);
     }
 
     public function setABServiceHistory($data){
