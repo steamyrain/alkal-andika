@@ -81,6 +81,8 @@ class Perencanaan extends CI_Controller {
         $data['kendaraan'] = $this->perencanaanModel->getAlat()->result();
         $data['dump_truck'] = $this->perencanaanModel->get_data('alkal_category_dt')->result();
         $data['no_dt'] = $this->perencanaanModel->get_data('alkal_dump_truck')->result();
+        $data['no_kdo'] = $this->perencanaanModel->get_data('alkal_kdo')->result();
+        $data['kdo'] = $this->perencanaanModel->getAlatkdo()->result();
 
         $data['perencanaan'] = $this->perencanaanModel->get_data('alkal_perencanaan')->result();
 

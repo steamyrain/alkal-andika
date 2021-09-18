@@ -55,7 +55,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /tests/results/
 
 ## assets
-/assets/upload/
+/assets/uploads/
 
 # htaccess
 /.htaccess
