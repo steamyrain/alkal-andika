@@ -22,8 +22,7 @@
                             echo '</optgroup>';
                         }
                     }
-                    if($d->plate_number){
-                        echo "<option value=".$d->id.">".$d->plate_number."</option>";
+                    if($d->plate_number){ echo "<option value=".$d->id.">".$d->plate_number."</option>";
                     } else {
                         echo "<option value=".$d->id.">".$d->serial_number."</option>";
                     }

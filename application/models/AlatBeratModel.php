@@ -80,4 +80,12 @@ class AlatBeratModel extends CI_Model {
         $this->db->join('alkal_category_alat_berat','alkal_category_alat_berat.id='.$this->table.'.catId');
         return $this->db->get();
     }
+
+    public function getJenisAB(){
+      $this->db->distinct();
+      $this->db->select('b.id as id, b.category as category, a.sub_category as sub_category');
+      $this->db->from('alkal_alat_berat a');
+      $this->db->join('alkal_category_alat_berat b','b.id = a.catId');
+      return $this->db->get();
+    }
 }
