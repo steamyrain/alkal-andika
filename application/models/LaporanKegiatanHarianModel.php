@@ -16,8 +16,26 @@
     }
     public function setLaporanKegiatanHarian($kegiatanharian,$tk,$ab){
       $this->db->trans_start();
-      $this->db->insert($table,$kegiatanharian);
-      $KegiatanId = $this->db->query('SELECT LAST(KegiatanId) from alkal_kegiatan_harian LIMIT 1');
+      $this->db->insert($this->table,$kegiatanharian);
+      $KegiatanId = $this->db->query('SELECT KegiatanId from alkal_kegiatan_harian ORDER BY KegiatanId DESC LIMIT 1')->result()[0]->KegiatanId;
+      $tk = array_map(fn($value): array => ['KegiatanId'=>$KegiatanId, 'JobId'=>$value['JobId'], 'JobName'=>$value['JobName'], 'Jumlah'=>$value['Jumlah']],$tk);
+      $ab = array_map(fn($value): array => ['KegiatanId'=>$KegiatanId, 'ABId'=>$value['ABId'], 'JenisAB'=>$value['JenisAB'], 'Jumlah'=>$value['Jumlah']],$ab);
+      $this->db->insert_batch($this->tk_table,$tk);
+      $this->db->insert_batch($this->ab_table,$ab);
+      $this->db->trans_complete();      
+      return $this->db->trans_status();
+    }
+    public function getLKTK($KegiatanId){
+      $this->db->select('JobName, Jumlah');
+      $this->db->from($this->tk_table);
+      $this->db->where('KegiatanId',$KegiatanId);
+      return $this->db->get();
+    }
+    public function getLKAB($KegiatanId){
+      $this->db->select('JenisAB, Jumlah');
+      $this->db->from($this->ab_table);
+      $this->db->where('KegiatanId',$KegiatanId);
+      return $this->db->get();
     }
   }
 ?>

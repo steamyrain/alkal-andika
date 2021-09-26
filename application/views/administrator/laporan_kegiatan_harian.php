@@ -30,6 +30,7 @@
           <th class="text-center" rowspan="2">Uraian</th>
           <th class="text-center" rowspan="2">Lokasi</th>
           <th class="text-center" rowspan="2">Keterangan</th>
+          <th class="text-center" rowspan="2">Print</th>
           <th class="text-center" rowspan="2">Aksi</th>
         </tr>
         <tr>
@@ -58,6 +59,17 @@
     });
   }
 
+  function base64ToArrayBuffer(base64){
+      let binaryString = window.atob(base64);
+      let binaryLen = binaryString.length;
+      let bytes = new Uint8Array(binaryLen);
+      for (var i = 0; i < binaryLen; i++) {
+          var ascii = binaryString.charCodeAt(i);
+          bytes[i] = ascii;
+      }
+      return bytes;
+  }
+
   $(document).ready(function() {
     // initialize data table & its necessary config
     getLaporanKegiatanHarian() 
@@ -70,9 +82,44 @@
         {"data":"TanggalWaktuAkhir"},
         {"data":"Uraian"},
         {"data":"Lokasi"},
-        {"data":"Keterangan"}
+        {"data":"Keterangan"},
+        {
+            "data":"",
+            "render":function(data,type,row,meta){    
+                return '<div style="display: grid; place-items:center;"><button class="btn btn-sm btn-secondary btn-print" id="print-'+meta.row+'"><i class="fa fa-print"></i></button></div>'
+            }
+        },
+        {
+            "data":"",
+            "render":function(data,type,row,meta){    
+                return '<div style="display: grid;grid-template-columns: 1fr 1fr;grid-gap: 5px"><button class="btn btn-sm btn-danger btn-delete" id="del-'+meta.row+'"><i class="fa fa-trash"></i></button><button class="btn btn-sm btn-warning btn-edit" id="edt-'+meta.row+'"><i class="fa fa-edit"></i></button></div>'
+            }
+        }
       ]
     });
+    $("#data-tabel>tbody").on('click','.btn-print',function(){
+        let id = $(this).attr("id").match(/\d+/)[0];
+        let KegiatanId = table.row(id).data()['KegiatanId'];
+        let base_url = "<?php echo base_url('administrator/laporankegiatanharian/printapi'); ?>"
+        $.ajax({
+          type: 'GET',
+          url: base_url+'?kegiatanid='+KegiatanId,
+          statusCode: {
+              200: function(r) {
+                  let b = base64ToArrayBuffer(r);
+                  let blob = new Blob([b],{type: "application/pdf"})
+                  let link=document.createElement('a');
+                  link.href=window.URL.createObjectURL(blob);
+                  let today = new Date();
+                  let dd = String(today.getDate()).padStart(2,'0');
+                  let mm = String(today.getMonth()+1).padStart(2,'0');
+                  let yyyy = today.getFullYear();
+                  link.download=`laporan-kegiatan-harian-${dd+'/'+mm+'/'+yyyy}.pdf`;
+                  link.click();
+              }
+          }
+        });
+    })
   });
 
 </script>

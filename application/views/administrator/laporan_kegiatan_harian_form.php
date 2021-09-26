@@ -127,6 +127,7 @@
                     id="jumlah-tk-0" 
                     class="form-control"
                     step=1
+                    min=1
                     required
                 />
                 <button class="btn btn-danger form-control" id="delete-tk-btn-0" onClick="event.preventDefault();">
@@ -185,6 +186,7 @@
                     id="jumlah-ab-0" 
                     class="form-control"
                     step=1
+                    min=1
                     required
                 />
                 <button class="btn btn-danger form-control" id="delete-ab-btn-0" onClick="event.preventDefault();">
@@ -221,11 +223,14 @@
           job_role = r;
           initTK(0,job_role);
           onJenisTKChange(0)
+          onJumlahTKChange(0)
           deleteTKButton(0);
           $("#add-tk-btn").prop('disabled',false);
           $("#add-tk-btn").on('click',()=>{
             addTKButton()
             initTK(tk_counter,job_role);
+            onJenisTKChange(tk_counter);
+            onJumlahTKChange(tk_counter);
             deleteTKButton(tk_counter);
           });
         }
@@ -240,11 +245,14 @@
         jenis_ab = r;
         initAB(0,jenis_ab)
         onJenisABChange(0)
+        onJumlahABChange(0)
         deleteABButton(0)
         $("#add-ab-btn").prop('disabled',false);
         $("#add-ab-btn").on('click',()=>{
           addABButton()
           initAB(ab_counter,jenis_ab);
+          onJenisABChange(ab_counter);
+          onJumlahABChange(ab_counter);
           deleteABButton(ab_counter);
         });
       }
@@ -264,9 +272,11 @@
   }
   function initAB(nid,data){
     $(`#jenis-ab-${nid}`).prop('disabled',false);
+    let counter = 1;
     if((data !== null)&&(data !== undefined)){
       data.forEach((value)=>{
-        $(`#jenis-ab-${nid}`).append(`<option value=${value.id}>${value.category} ${value.sub_category}</option>`);
+        $(`#jenis-ab-${nid}`).append(`<option value=${counter}>${value.category} ${value.sub_category}</option>`);
+        counter++;
       })
     }
     let selectedOption = $(`#jenis-ab-${nid} option`).filter(':selected');
@@ -299,6 +309,7 @@
             id="jumlah-tk-${tk_counter}" 
             class="form-control"
             step=1
+            min=1
             required
         />
         <button class="btn btn-danger form-control" id="delete-tk-btn-${tk_counter}" onClick="event.preventDefault();">
@@ -332,6 +343,7 @@
             id="jumlah-ab-${ab_counter}" 
             class="form-control"
             step=1
+            min=1
             required
         />
         <button class="btn btn-danger form-control" id="delete-ab-btn-${ab_counter}" onClick="event.preventDefault();">
@@ -356,14 +368,22 @@
     $(`#jenis-tk-${nid}`).on('change',{id: nid,sel: selected_tk},(event)=>{
       event.data.sel[event.data.id].JobId = $(`#jenis-tk-${event.data.id}`).val();
       event.data.sel[event.data.id].JobName = $(`#jenis-tk-${event.data.id} option`).filter(':selected').text();
-      console.log(event.data.sel[event.data.id])
+    })
+  }
+  function onJumlahTKChange(nid){
+    $(`#jumlah-tk-${nid}`).on('change',{id: nid,sel: selected_tk},(event)=>{
+      event.data.sel[event.data.id].Jumlah = $(`#jumlah-tk-${nid}`).val();
     })
   }
   function onJenisABChange(nid) {
     $(`#jenis-ab-${nid}`).on('change',{id: nid,sel: selected_ab},(event)=>{
       event.data.sel[event.data.id].ABId = $(`#jenis-ab-${event.data.id}`).val();
       event.data.sel[event.data.id].JenisAB = $(`#jenis-ab-${event.data.id} option`).filter(':selected').text();
-      console.log(event.data.sel[event.data.id])
+    })
+  }
+  function onJumlahABChange(nid){
+    $(`#jumlah-ab-${nid}`).on('change',{id: nid,sel: selected_ab},(event)=>{
+      event.data.sel[event.data.id].Jumlah = $(`#jumlah-ab-${nid}`).val();
     })
   }
   $(document).ready(function(){
@@ -377,6 +397,7 @@
         Lokasi: $("#lokasi").val(),
         TanggalWaktuAwal: $("#tanggal-awal").val()+" "+$("#waktu-awal").val()+":00",
         TanggalWaktuAkhir: $("#tanggal-akhir").val()+" "+$("#waktu-akhir").val()+":00",
+        Keterangan: $("#keterangan").val(),
         TenagaKerjas: selected_tk,
         AlatBerats: selected_ab
       } 
@@ -384,11 +405,16 @@
           '<?php 
               echo base_url('administrator/laporankegiatanharian/api') 
           ?>',
-          JSON.stringify(data),
-          function(){
-              window.location.href = "<?php echo base_url('administrator/laporankegiatanharian') ?>";
-          }
-      );
+          JSON.stringify(data)
+      ).done(
+        function(){
+          window.location.href = "<?php echo base_url('administrator/laporankegiatanharian') ?>";
+        }
+      ).fail(
+        function(){
+          alert("Gagal Submit Data");
+        }
+      )
     })
   })
 </script>
