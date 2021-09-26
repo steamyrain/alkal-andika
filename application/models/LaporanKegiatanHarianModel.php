@@ -18,10 +18,22 @@
       $this->db->trans_start();
       $this->db->insert($this->table,$kegiatanharian);
       $KegiatanId = $this->db->query('SELECT KegiatanId from alkal_kegiatan_harian ORDER BY KegiatanId DESC LIMIT 1')->result()[0]->KegiatanId;
-      $tk = array_map(fn($value): array => ['KegiatanId'=>$KegiatanId, 'JobId'=>$value['JobId'], 'JobName'=>$value['JobName'], 'Jumlah'=>$value['Jumlah']],$tk);
-      $ab = array_map(fn($value): array => ['KegiatanId'=>$KegiatanId, 'ABId'=>$value['ABId'], 'JenisAB'=>$value['JenisAB'], 'Jumlah'=>$value['Jumlah']],$ab);
-      $this->db->insert_batch($this->tk_table,$tk);
-      $this->db->insert_batch($this->ab_table,$ab);
+      if(isset($tk) && !empty($tk)){
+        $tk = array_map(fn($value) => (isset($value)&&!empty($value))?array('KegiatanId'=>$KegiatanId, 'JobId'=>$value['JobId'], 'JobName'=>$value['JobName'], 'Jumlah'=>$value['Jumlah']):null,$tk);
+      }
+      if(isset($ab) && !empty($ab)){
+        $ab = array_map(fn($value) => (isset($value)&&!empty($value))?array('KegiatanId'=>$KegiatanId, 'ABId'=>$value['ABId'], 'JenisAB'=>$value['JenisAB'], 'Jumlah'=>$value['Jumlah']):null,$ab);
+      }
+      foreach($tk as $data){
+        if(isset($data)){
+          $this->db->insert($this->tk_table,$data);
+        }
+      }
+      foreach($ab as $data){
+        if(isset($data)){
+          $this->db->insert($this->ab_table,$data);
+        }
+      }
       $this->db->trans_complete();      
       return $this->db->trans_status();
     }
