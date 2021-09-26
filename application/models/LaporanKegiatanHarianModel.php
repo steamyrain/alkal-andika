@@ -18,7 +18,6 @@
       $this->db->trans_start();
       $this->db->insert($table,$kegiatanharian);
       $KegiatanId = $this->db->query('SELECT LAST(KegiatanId) from alkal_kegiatan_harian LIMIT 1');
-      
     }
   }
 ?>
