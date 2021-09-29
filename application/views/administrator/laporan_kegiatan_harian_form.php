@@ -3,18 +3,18 @@
     <form id="form-laporan-kegiatan">
         <!-- Uraian Kegiatan -->
         <div class="form-group">
-            <label for="uraian" class="col-form-label" aria-required="true" aria-invalid="false">Uraian Kegiatan</label>
+            <label for="uraian" class="col-form-label" aria-="true" aria-invalid="false">Uraian Kegiatan</label>
             <input id="uraian" name="uraian" class="form-control" required>
         </div>
         <!-- Lokasi Kegiatan -->
         <div class="form-group">
-            <label for="lokasi" class="col-form-label" aria-required="true" aria-invalid="false">Lokasi Kegiatan</label>
+            <label for="lokasi" class="col-form-label" aria-="true" aria-invalid="false">Lokasi Kegiatan</label>
             <input id="lokasi" name="lokasi" class="form-control" required>
         </div>
         <!-- waktu kegiatan -->
         <div class="form-group">
           <div>
-            <label class="col-form-label" aria-required="true" aria-invalid="false">Tanggal Waktu Awal / Akhir</label>
+            <label class="col-form-label" aria-="true" aria-invalid="false">Tanggal Waktu Awal / Akhir</label>
             <div
               style="
                 display: grid;
@@ -34,14 +34,14 @@
                   name="tanggal-awal" 
                   id="tanggal-awal" 
                   class="form-control"
-                  required
+                 required 
                 />
                 <input
                   type="time"
                   name="waktu-awal" 
                   id="waktu-awal" 
                   class="form-control"
-                  required
+                 required 
                 />
               </div>
               <div style="display: grid; place-items: center;">
@@ -59,14 +59,14 @@
                   name="tanggal-akhir" 
                   id="tanggal-akhir" 
                   class="form-control"
-                  required
+                 required 
                 />
                 <input
                   type="time"
                   name="waktu-akhir" 
                   id="waktu-akhir" 
                   class="form-control"
-                  required
+                 required 
                 />
               </div>
             </div>
@@ -74,7 +74,7 @@
         </div>
         <!-- Keterangan -->
         <div class="form-group">
-            <label for="keterangan" class="col-form-label" aria-required="true" aria-invalid="false">Keterangan Kegiatan</label>
+            <label for="keterangan" class="col-form-label" aria-="true" aria-invalid="false">Keterangan Kegiatan</label>
             <input id="keterangan" name="keterangan" class="form-control" >
         </div>
         <!-- tenaga kerja -->
@@ -128,7 +128,7 @@
                     class="form-control"
                     step=1
                     min=1
-                    required
+                   required 
                 />
                 <button class="btn btn-danger form-control" id="delete-tk-btn-0" onClick="event.preventDefault();">
                   <i class="fa fa-trash"></i>
@@ -187,13 +187,45 @@
                     class="form-control"
                     step=1
                     min=1
-                    required
+                   required 
                 />
                 <button class="btn btn-danger form-control" id="delete-ab-btn-0" onClick="event.preventDefault();">
                   <i class="fa fa-trash"></i>
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+        <div 
+          id="container-foto"
+          style="
+              border: 2px solid rgba(211,211,211,.5); 
+              -webkit-background-clip: padding-box;
+              bakground-clip: padding-box;
+              border-radius: 0.5rem; 
+              padding: 0.5vw;
+              margin-top: 1rem;
+          "
+        >
+          <!-- Peta Lokasi -->
+          <div class="form-group">
+            <label>Foto Peta Lokasi</label>
+            <input type='file' id='peta-lokasi-file' name='peta-lokasi-file' class="form-control" accept="image/png, image/jpeg">
+          </div>
+          <!-- Awal Kegiatan -->
+          <div class="form-group">
+            <label>Foto Awal Kegiatan</label>
+            <input type='file' id='awal-kegiatan-file' name='awal-kegiatan-file' class="form-control" accept="image/png, image/jpeg">
+          </div>
+          <!-- Proses Kegiatan -->
+          <div class="form-group">
+            <label>Foto Proses Kegiatan</label>
+            <input type='file' id='proses-kegiatan-file' name='proses-kegiatan-file' class="form-control" accept="image/png, image/jpeg">
+          </div>
+          <!-- Akhir Kegiatan -->
+          <div class="form-group">
+            <label>Foto Akhir Kegiatan</label>
+            <input type='file' id='akhir-kegiatan-file' name='akhir-kegiatan-file' class="form-control" accept="image/png, image/jpeg">
           </div>
         </div>
         <!-- Submit -->
@@ -310,7 +342,7 @@
             class="form-control"
             step=1
             min=1
-            required
+           required 
         />
         <button class="btn btn-danger form-control" id="delete-tk-btn-${tk_counter}" onClick="event.preventDefault();">
           <i class="fa fa-trash"></i>
@@ -344,7 +376,7 @@
             class="form-control"
             step=1
             min=1
-            required
+           required 
         />
         <button class="btn btn-danger form-control" id="delete-ab-btn-${ab_counter}" onClick="event.preventDefault();">
           <i class="fa fa-trash"></i>
@@ -389,9 +421,12 @@
   $(document).ready(function(){
     getJobRole();
     getJenisAB();
+
+
     // on submit
     $("#form-laporan-kegiatan").on("submit",(event)=>{
       event.preventDefault();
+
       let data = {
         Uraian: $("#uraian").val(),
         Lokasi: $("#lokasi").val(),
@@ -401,20 +436,55 @@
         TenagaKerjas: selected_tk,
         AlatBerats: selected_ab
       } 
-      $.post(
-          '<?php 
-              echo base_url('administrator/laporankegiatanharian/api') 
-          ?>',
-          JSON.stringify(data)
-      ).done(
-        function(){
-          window.location.href = "<?php echo base_url('administrator/laporankegiatanharian') ?>";
-        }
+
+      // get file
+      let fotoPetaLokasi = $("#peta-lokasi-file")
+      let fotoAwalKegiatan = $("#awal-kegiatan-file") 
+      let fotoAkhirKegiatan = $("#akhir-kegiatan-file") 
+      let fotoProsesKegiatan = $("#proses-kegiatan-file") 
+      let formData = new FormData()
+      
+      if(fotoPetaLokasi.val() != "" ) {
+        formData.append('peta',fotoPetaLokasi[0].files[0])
+      }
+      if(fotoAwalKegiatan.val() != ""){
+        formData.append('awal',fotoAwalKegiatan[0].files[0])
+      }
+      if(fotoAkhirKegiatan.val() != ""){
+        formData.append('akhir',fotoAkhirKegiatan[0].files[0])
+      }
+      if(fotoProsesKegiatan.val() != ""){
+        formData.append('proses',fotoProsesKegiatan[0].files[0])
+      }
+
+      $.ajax({
+        url: "<?php echo base_url('administrator/laporankegiatanharian/photoapi')?>",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false
+      }).done(
+        $.post(
+            '<?php 
+                echo base_url('administrator/laporankegiatanharian/api') 
+            ?>',
+            JSON.stringify(data)
+        ).done(
+          function(){
+            window.location.href = "<?php echo base_url('administrator/laporankegiatanharian') ?>";
+          }
+        ).fail(
+          function(){
+            alert("Gagal Submit Data");
+          }
+        )
       ).fail(
-        function(){
-          alert("Gagal Submit Data");
-        }
+          function(){
+            alert("Gagal Upload Foto");
+          }
       )
+
+
     })
   })
 </script>

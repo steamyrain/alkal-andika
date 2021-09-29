@@ -195,14 +195,48 @@
               break;
         }
       }
-    public function input(){
+
+      public function photoapi(){
         $this->is_loggedIn();
         $this->is_admin();
-      $this->load->view('template_administrator/header');
-      $this->load->view('template_administrator/sidebar');
-      $this->load->view('administrator/laporan_kegiatan_harian_form');
-      $this->load->view('template_administrator/footer');
-    }
-  }
+        switch($_SERVER['REQUEST_METHOD']){
+        case 'GET':
+          break;
+        case 'POST':
+          $config['upload_path'] = './assets/upload/';
+          $config['allowed_types'] = 'jpg|png';
+          $this->upload->initialize($config);
+          $data = array("peta"=>"");
+          if($this->upload->do_upload('peta')){
+            $data['peta'] = $this->upload->data('file_name');
+          }
+          if($this->upload->do_upload('awal')){
+            $data['awal'] = $this->upload->data('file_name');
+          }
+          if($this->upload->do_upload('akhir')){
+            $data['akhir'] = $this->upload->data('file_name');
+          }
+          if($this->upload->do_upload('proses')){
+            $data['proses'] = $this->upload->data('file_name');
+          }
+          if(count($data) > 0){
+            header('Content-Type: application/json');
+            echo json_encode($data);
+          } else {
+            $this->output->set_header(400);
+          }
+          break;
+        }
+      }
 
-?>
+      public function input(){
+        $this->is_loggedIn();
+        $this->is_admin();
+        $this->load->view('template_administrator/header');
+        $this->load->view('template_administrator/sidebar');
+        $this->load->view('administrator/laporan_kegiatan_harian_form');
+        $this->load->view('template_administrator/footer');
+      }
+    }
+
+  ?>
