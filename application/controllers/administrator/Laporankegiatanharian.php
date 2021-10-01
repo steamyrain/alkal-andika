@@ -62,31 +62,11 @@
                 );
                 $tenagakerjas = $data['TenagaKerjas'];
                 $alatberats = $data['AlatBerats'];
-                $status = $this->LaporanKegiatanHarianModel->setLaporanKegiatanHarian($kegiatan_harian,$tenagakerjas,$alatberats);
-                if($status === FALSE){
+                $kegiatanId = $this->LaporanKegiatanHarianModel->setLaporanKegiatanHarian($kegiatan_harian,$tenagakerjas,$alatberats);
+                if(!isset($kegiatanId)){
                   $this->output->set_status_header(500);
                 } else {
-                  $this->session->set_flashdata('pesan',
-                      '<div 
-                          class=" alert 
-                                  alert-success 
-                                  dismissible 
-                                  fade 
-                                  show
-                                  " 
-                          role="alert">
-                      Data Berhasil Ditambahkan!
-                      <button 
-                          type="button" 
-                          class="close" 
-                          data-dismiss="alert" 
-                          aria-label="Close">
-                      <span 
-                          aria-hidden="true">
-                      &times;
-                      </span>
-                      </button>
-                      </div>');
+                  $this->output->set_output(json_encode(array("KegiatanId"=>$kegiatanId)));
                   $this->output->set_status_header(200);
                 }
             } catch (Exception $e) {
@@ -96,6 +76,80 @@
           case 'PUT':
             break;
           case 'DELETE':
+            try{
+              $kegiatanId = $this->input->get('kegiatanid',true);
+              $status = $this->LaporanKegiatanHarianModel->deleteLKHarian($kegiatanId);
+              if($status === FALSE){
+                $this->session->set_flashdata('pesan',
+                    '<div 
+                        class=" alert 
+                                alert-danger 
+                                dismissible 
+                                fade 
+                                show
+                                " 
+                        role="alert">
+                    Data Gagal Dihapus!
+                    <button 
+                        type="button" 
+                        class="close" 
+                        data-dismiss="alert" 
+                        aria-label="Close">
+                    <span 
+                        aria-hidden="true">
+                    &times;
+                    </span>
+                    </button>
+                    </div>');
+                $this->output->set_status_header(400);
+              } else {
+                $this->session->set_flashdata('pesan',
+                    '<div 
+                        class=" alert 
+                                alert-success 
+                                dismissible 
+                                fade 
+                                show
+                                " 
+                        role="alert">
+                    Data Berhasil Dihapus!
+                    <button 
+                        type="button" 
+                        class="close" 
+                        data-dismiss="alert" 
+                        aria-label="Close">
+                    <span 
+                        aria-hidden="true">
+                    &times;
+                    </span>
+                    </button>
+                    </div>');
+                $this->output->set_status_header(200);
+              }
+            } catch (Exception $e) {
+              $this->session->set_flashdata('pesan',
+                  '<div 
+                      class=" alert 
+                              alert-danger 
+                              dismissible 
+                              fade 
+                              show
+                              " 
+                      role="alert">
+                  Data Gagal Dihapus!
+                  <button 
+                      type="button" 
+                      class="close" 
+                      data-dismiss="alert" 
+                      aria-label="Close">
+                  <span 
+                      aria-hidden="true">
+                  &times;
+                  </span>
+                  </button>
+                  </div>');
+              $this->output->set_status_header(500);
+            }
             break;
           default:
             break;
@@ -166,6 +220,7 @@
               $lapKegiatan = array($lapKegiatan->Uraian,$lapKegiatan->Lokasi,$lapKegiatan->TanggalWaktuAwal.' S.D. '.$lapKegiatan->TanggalWaktuAkhir,$lapKegiatan->Keterangan);
               $lktk = $this->LaporanKegiatanHarianModel->getLKTK($this->input->get('kegiatanid',true))->result();
               $lkab = $this->LaporanKegiatanHarianModel->getLKAB($this->input->get('kegiatanid',true))->result();
+              $lkdk = $this->LaporanKegiatanHarianModel->getLKDK($this->input->get('kegiatanid',true))->result();
               $this->load->library('LaporanKegiatanPdf');
               $pdf = new LaporanKegiatanPdf();
               $pdf->AddPage("");
@@ -178,6 +233,9 @@
               $pdf->SubHeader("ITEM KEGIATAN");
               $pdf->ItemTHead(array("URAIAN","LOKASI KEGIATAN","TANGGAL WAKTU","KETERANGAN"),190);
               $pdf->ItemKegiatanItems($lapKegiatan,190);
+              $pdf->SubHeader("DOKUMENTASI KEGIATAN");
+              $pdf->ItemTHead(array("PETA","AWAL","PROSES","AKHIR"),190);
+              $pdf->DKItems($lkdk,190);
               $pdf->SubHeader("TENAGA KERJA");
               $pdf->ItemTHead(array("JENIS","JUMLAH"),190);
               $pdf->JenisTKItems($lktk,190);
@@ -185,14 +243,15 @@
               $pdf->ItemTHead(array("JENIS","JUMLAH"),190);
               $pdf->JenisABItems($lkab,190);
               $final = $pdf->Output("laporankegiatanharian.pdf","S");
+              $final = $pdf->Output("laporankegiatanharian.pdf","S");
               $this->output->set_content_type('application/pdf');
               $this->output->set_output(base64_encode($final));
               $this->output->set_status_header(200);
             }
             break;
           Default:
-              $this->output->set_status_header(500);
-              break;
+            $this->output->set_status_header(500);
+            break;
         }
       }
 
@@ -206,22 +265,60 @@
           $config['upload_path'] = './assets/upload/';
           $config['allowed_types'] = 'jpg|png';
           $this->upload->initialize($config);
-          $data = array("peta"=>"");
+          $kegiatanId = $this->input->post('KegiatanId');
+          $buffer = array( );
           if($this->upload->do_upload('peta')){
-            $data['peta'] = $this->upload->data('file_name');
+            $data['KegiatanId']=$kegiatanId;
+            $data['FileName']= $this->upload->data('file_name');
+            $data['JenisDokumentasi']="peta";
+            array_push($buffer,$data);
           }
           if($this->upload->do_upload('awal')){
-            $data['awal'] = $this->upload->data('file_name');
+            $data['KegiatanId']=$kegiatanId;
+            $data['FileName']= $this->upload->data('file_name');
+            $data['JenisDokumentasi']="awal";
+            array_push($buffer,$data);
           }
           if($this->upload->do_upload('akhir')){
-            $data['akhir'] = $this->upload->data('file_name');
+            $data['KegiatanId']=$kegiatanId;
+            $data['FileName']= $this->upload->data('file_name');
+            $data['JenisDokumentasi']="akhir";
+            array_push($buffer,$data);
           }
           if($this->upload->do_upload('proses')){
-            $data['proses'] = $this->upload->data('file_name');
+            $data['KegiatanId']=$kegiatanId;
+            $data['FileName']= $this->upload->data('file_name');
+            $data['JenisDokumentasi']="proses";
+            array_push($buffer,$data);
           }
-          if(count($data) > 0){
-            header('Content-Type: application/json');
-            echo json_encode($data);
+          if(count($buffer) > 0){
+            try {
+              $this->LaporanKegiatanHarianModel->setDokumentasi($buffer);
+              $this->session->set_flashdata('pesan',
+                  '<div 
+                      class=" alert 
+                              alert-success 
+                              dismissible 
+                              fade 
+                              show
+                              " 
+                      role="alert">
+                  Data Berhasil Ditambahkan!
+                  <button 
+                      type="button" 
+                      class="close" 
+                      data-dismiss="alert" 
+                      aria-label="Close">
+                  <span 
+                      aria-hidden="true">
+                  &times;
+                  </span>
+                  </button>
+                  </div>');
+              $this->output->set_header(200);
+            } catch (Exception $e) {
+              $this->output->set_header(500);
+            }
           } else {
             $this->output->set_header(400);
           }

@@ -12,15 +12,6 @@
       </button>'
     ) 
   ?>
-  <?php
-    echo anchor(
-      base_URL('administrator/laporankegiatanharian/print'),
-      '<button class="btn btn-sm btn-info mb-3">
-          <i class="fa fa-print"></i> 
-          Print
-      </button>'
-    ) 
-  ?>
   <div style="overflow-x:auto;">
     <table id="data-tabel" class="table table-bordered table-striped" style="width:100%">
       <thead>
@@ -119,6 +110,23 @@
               }
           }
         });
+    })
+    $("#data-tabel>tbody").on('click','.btn-delete',function(){
+        let id = $(this).attr("id").match(/\d+/)[0];
+        let KegiatanId = table.row(id).data()['KegiatanId'];
+        let base_url = "<?php echo base_url('administrator/laporankegiatanharian/api'); ?>"
+        if(confirm('Yakin Hapus?')){
+            $.ajax({
+                type: 'DELETE',
+                url: base_url+'?kegiatanid='+KegiatanId,
+                success: function (){
+                  location.reload()
+                },
+                fail: function(){
+                  location.reload()
+                }
+            });
+        }
     })
   });
 

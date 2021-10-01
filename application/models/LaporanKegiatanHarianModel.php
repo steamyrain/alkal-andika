@@ -3,6 +3,7 @@
     private $table='alkal_kegiatan_harian';
     private $tk_table='alkal_kegiatan_harian_tk';
     private $ab_table='alkal_kegiatan_harian_ab';
+    private $dokumentasi_table='alkal_kegiatan_harian_dokumentasi';
     public function getLaporanKegiatanHarian($kegiatanid) {
       if(isset($kegiatanid)){
         $this->db->select('KegiatanId,TanggalWaktuAwal,TanggalWaktuAkhir,Uraian,Lokasi,Keterangan');
@@ -34,8 +35,12 @@
           $this->db->insert($this->ab_table,$data);
         }
       }
-      $this->db->trans_complete();      
-      return $this->db->trans_status();
+      $this->db->trans_complete();
+      if($this->db->trans_status() === FALSE){
+        return null;
+      } else {
+        return $KegiatanId;
+      }
     }
     public function getLKTK($KegiatanId){
       $this->db->select('JobName, Jumlah');
@@ -48,6 +53,24 @@
       $this->db->from($this->ab_table);
       $this->db->where('KegiatanId',$KegiatanId);
       return $this->db->get();
+    }
+    public function getLKDK($KegiatanId){
+      $this->db->select('FileName, JenisDokumentasi');
+      $this->db->from($this->dokumentasi_table);
+      $this->db->where('KegiatanId',$KegiatanId);
+      return $this->db->get();
+    }
+    public function deleteLKHarian($kegiatanId){
+      $this->db->trans_start();
+      $this->db->delete($this->table,array('KegiatanId'=>$kegiatanId));
+      $this->db->delete($this->tk_table,array('KegiatanId'=>$kegiatanId));
+      $this->db->delete($this->ab_table,array('KegiatanId'=>$kegiatanId));
+      $this->db->delete($this->dokumentasi_table,array('KegiatanId'=>$kegiatanId));
+      $this->db->trans_complete();
+      return $this->db->trans_status();
+    }
+    public function setDokumentasi($data){
+      $this->db->insert_batch($this->dokumentasi_table,$data);
     }
   }
 ?>

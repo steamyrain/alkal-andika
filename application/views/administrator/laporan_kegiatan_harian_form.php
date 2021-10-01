@@ -457,31 +457,37 @@
         formData.append('proses',fotoProsesKegiatan[0].files[0])
       }
 
-      $.ajax({
-        url: "<?php echo base_url('administrator/laporankegiatanharian/photoapi')?>",
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false
-      }).done(
-        $.post(
-            '<?php 
-                echo base_url('administrator/laporankegiatanharian/api') 
-            ?>',
-            JSON.stringify(data)
-        ).done(
-          function(){
-            window.location.href = "<?php echo base_url('administrator/laporankegiatanharian') ?>";
-          }
-        ).fail(
-          function(){
-            alert("Gagal Submit Data");
-          }
-        )
+      $.post(
+          '<?php 
+              echo base_url('administrator/laporankegiatanharian/api') 
+          ?>',
+          JSON.stringify(data)
+      ).done(
+        function(r){
+          let response = JSON.parse(r)
+          let kegiatanId = response.KegiatanId
+          console.log(kegiatanId)
+          formData.append('KegiatanId',kegiatanId)
+          $.ajax({
+            url: "<?php echo base_url('administrator/laporankegiatanharian/photoapi')?>",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false
+          }).done(
+            function(){
+              window.location.href = "<?php echo base_url('administrator/laporankegiatanharian') ?>";
+            }
+          ).fail(
+              function(){
+                alert("Gagal Upload Foto");
+              }
+          )
+        }
       ).fail(
-          function(){
-            alert("Gagal Upload Foto");
-          }
+        function(){
+          alert("Gagal Kirim Data");
+        }
       )
 
 

@@ -84,6 +84,26 @@ class LaporanKegiatanPdf extends Fpdf
       }
     }
 
+    function DKItems($datas,$totalWidth){
+      $width = $totalWidth/4;
+      $leftMargin = 10;
+      $padding=2;
+      if(count($datas)!=0){
+        for($i=0;$i<count($datas);$i++){
+          $this->Image('./assets/upload/'.$datas[$i]->FileName,$leftMargin+($i*$width)+$padding,$this->GetY()+$padding,$width-2*$padding,$width-2*$padding);
+        }
+        $this->Cell($width,$width,'',1,0,'C');
+        $this->Cell($width,$width,'',1,0,'C');
+        $this->Cell($width,$width,'',1,0,'C');
+        $this->Cell($width,$width,'',1,1,'C');
+      } else {
+        $this->Cell($width,$width,'',1,0,'C');
+        $this->Cell($width,$width,'',1,0,'C');
+        $this->Cell($width,$width,'',1,0,'C');
+        $this->Cell($width,$width,'',1,1,'C');
+      }
+    }
+
     function row($data,$leftMargin){
         $nb=0;
         for($i=0;$i<sizeof($data);$i++) 
