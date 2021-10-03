@@ -4,12 +4,12 @@
         <!-- Uraian Kegiatan -->
         <div class="form-group">
             <label for="uraian" class="col-form-label" aria-="true" aria-invalid="false">Uraian Kegiatan</label>
-            <input id="uraian" name="uraian" class="form-control" required>
+            <input id="uraian" name="uraian" class="form-control" required value="<?php echo $Uraian ?>">
         </div>
         <!-- Lokasi Kegiatan -->
         <div class="form-group">
             <label for="lokasi" class="col-form-label" aria-="true" aria-invalid="false">Lokasi Kegiatan</label>
-            <input id="lokasi" name="lokasi" class="form-control" required>
+            <input id="lokasi" name="lokasi" class="form-control" required value="<?php echo $Lokasi ?>">
         </div>
         <!-- waktu kegiatan -->
         <div class="form-group">
@@ -34,6 +34,13 @@
                   name="tanggal-awal" 
                   id="tanggal-awal" 
                   class="form-control"
+                  value=
+                  "<?php 
+                    $TanggalWaktuAwal = date("c",strtotime($TanggalWaktuAwal));
+                    list($Date,$Time)=explode('T',$TanggalWaktuAwal);
+                    list($Hour,$TimeZone)=explode('+',$Time);
+                    echo $Date;
+                  ?>"
                  required 
                 />
                 <input
@@ -41,6 +48,10 @@
                   name="waktu-awal" 
                   id="waktu-awal" 
                   class="form-control"
+                  value=
+                  "<?php 
+                    echo $Hour; 
+                  ?>"
                  required 
                 />
               </div>
@@ -59,6 +70,13 @@
                   name="tanggal-akhir" 
                   id="tanggal-akhir" 
                   class="form-control"
+                  value=
+                  "<?php 
+                    $TanggalWaktuAkhir = date("c",strtotime($TanggalWaktuAkhir));
+                    list($Date,$Time)=explode('T',$TanggalWaktuAkhir);
+                    list($Hour,$TimeZone)=explode('+',$Time);
+                    echo $Date; 
+                  ?>"
                  required 
                 />
                 <input
@@ -66,6 +84,10 @@
                   name="waktu-akhir" 
                   id="waktu-akhir" 
                   class="form-control"
+                  value=
+                  "<?php 
+                    echo $Hour; 
+                  ?>"
                  required 
                 />
               </div>
@@ -75,7 +97,7 @@
         <!-- Keterangan -->
         <div class="form-group">
             <label for="keterangan" class="col-form-label" aria-="true" aria-invalid="false">Keterangan Kegiatan</label>
-            <input id="keterangan" name="keterangan" class="form-control">
+            <input id="keterangan" name="keterangan" class="form-control" value="<?php $Keterangan ?>">
         </div>
         <!-- tenaga kerja -->
         <div 
@@ -406,7 +428,7 @@
     let counter = 1;
     if((data !== null)&&(data !== undefined)){
       data.forEach((value)=>{
-        $(`#jenis-dt-${nid}`).append(`<option value=${counter}>dt ${value.category}</option>`);
+        $(`#jenis-dt-${nid}`).append(`<option value=${counter}>${value.category}</option>`);
         counter++;
       })
     }
@@ -586,7 +608,7 @@
         Keterangan: $("#keterangan").val(),
         TenagaKerjas: selected_tk,
         AlatBerats: selected_ab,
-        DumpTrucks: selected_dt
+        DumptTrucs: selected_dt
       } 
 
       // get file

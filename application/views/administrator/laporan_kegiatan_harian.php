@@ -128,6 +128,12 @@
             });
         }
     })
+    $("#data-tabel>tbody").on('click','.btn-edit',function(){
+        let id = $(this).attr("id").match(/\d+/)[0];
+        let KegiatanId = table.row(id).data()['KegiatanId'];
+        let base_url = "<?php echo base_url('administrator/laporankegiatanharian/edit'); ?>"
+        window.location.href = base_url+`/${KegiatanId}`
+    })
   });
 
 </script>

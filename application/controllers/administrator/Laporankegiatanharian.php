@@ -62,7 +62,8 @@
                 );
                 $tenagakerjas = $data['TenagaKerjas'];
                 $alatberats = $data['AlatBerats'];
-                $kegiatanId = $this->LaporanKegiatanHarianModel->setLaporanKegiatanHarian($kegiatan_harian,$tenagakerjas,$alatberats);
+                $dumptrucks = $data['DumpTrucks'];
+                $kegiatanId = $this->LaporanKegiatanHarianModel->setLaporanKegiatanHarian($kegiatan_harian,$tenagakerjas,$alatberats,$dumptrucks);
                 if(!isset($kegiatanId)){
                   $this->output->set_status_header(500);
                 } else {
@@ -187,27 +188,48 @@
         }
       }
 
-      public function edit($lapId) {
+      public function jenisdt() {
+        /* check if truly admin and a verificator */
         $this->is_loggedIn();
         $this->is_admin();
-        // Populate username for form field username
-        $operators = $this->populateOperator();
-        // Populate vin for form field plate_number and serial_number
-        $vin = $this->populateVin();
-        $record = $this->LapKerjaModel->getDataLaporanSpecific($lapId)->row();
-        $isPlateNumber = $this->isPlateNumber($record);
-        $data = [
-            'isPlateNumber'=>$isPlateNumber,
-            'username'=>$operators['username'],
-            'oId'=>$operators['oId'],
-            'plate_number'=>$vin['plate_number'],
-            'serial_number'=>$vin['serial_number'],
-            'record'=>$record
-        ];
-        $this->load->view('template_administrator/header');
-        $this->load->view('template_administrator/sidebar');
-        $this->load->view('administrator/laporan_kerja_edit',$data);
-        $this->load->view('template_administrator/footer');
+        /*-----------------*/
+        switch($_SERVER['REQUEST_METHOD']) {
+          case 'GET':
+            try {
+              $jenis_dt = $this->DumpTruckModel->getJenisDT()->result();
+              header('Content-Type: application/json');
+              echo json_encode($jenis_dt);
+            } catch(exception $e){
+              $this->set_header(500);
+            }
+            break;
+        }
+      }
+
+      public function edit($kegiatanId) {
+        $this->is_loggedIn();
+        $this->is_admin();
+        $lkHarian = $this->LaporanKegiatanHarianModel->getLaporanKegiatanHarian($kegiatanId)->result();
+        $lktk = $this->LaporanKegiatanHarianModel->getLKTK($kegiatanId)->result();
+        $lkab = $this->LaporanKegiatanHarianModel->getLKAB($kegiatanId)->result();
+        $lkdk = $this->LaporanKegiatanHarianModel->getLKDK($kegiatanId)->result();
+        if(isset($lkHarian) && !empty($lkHarian)){
+          $data = [
+            'KegiatanId'=>$lkHarian[0]->KegiatanId,
+            'TanggalWaktuAwal'=>$lkHarian[0]->TanggalWaktuAwal,
+            'TanggalWaktuAkhir'=>$lkHarian[0]->TanggalWaktuAkhir,
+            'Uraian'=>$lkHarian[0]->Uraian,
+            'Lokasi'=>$lkHarian[0]->Lokasi,
+            'Keterangan'=>$lkHarian[0]->Keterangan,
+            'Tenagakerjas'=>$lktk,
+            'AlatBerats'=>$lkab,
+            'Dokumentasi'=>$lkdk,
+          ];
+          $this->load->view('template_administrator/header');
+          $this->load->view('template_administrator/sidebar');
+          $this->load->view('administrator/laporan_kegiatan_harian_edit',$data);
+          $this->load->view('template_administrator/footer');
+        }
       }
 
       public function printapi() {
@@ -221,6 +243,7 @@
               $lktk = $this->LaporanKegiatanHarianModel->getLKTK($this->input->get('kegiatanid',true))->result();
               $lkab = $this->LaporanKegiatanHarianModel->getLKAB($this->input->get('kegiatanid',true))->result();
               $lkdk = $this->LaporanKegiatanHarianModel->getLKDK($this->input->get('kegiatanid',true))->result();
+              $lkdt = $this->LaporanKegiatanHarianModel->getLKDT($this->input->get('kegiatanid',true))->result();
               $this->load->library('LaporanKegiatanPdf');
               $pdf = new LaporanKegiatanPdf();
               $pdf->AddPage("");
@@ -242,6 +265,7 @@
               $pdf->SubHeader("PERALATAN");
               $pdf->ItemTHead(array("JENIS","JUMLAH"),190);
               $pdf->JenisABItems($lkab,190);
+              $pdf->JenisDTItems($lkdt,190);
               $final = $pdf->Output("laporankegiatanharian.pdf","S");
               $final = $pdf->Output("laporankegiatanharian.pdf","S");
               $this->output->set_content_type('application/pdf');

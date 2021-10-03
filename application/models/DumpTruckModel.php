@@ -58,4 +58,10 @@ class DumpTruckModel extends CI_Model {
         $this->db->from($this->table);
         return $this->db->get();
     }
+
+    public function getJenisDT(){
+      $this->db->select('category');
+      $this->db->from('alkal_category_dt');
+      return $this->db->get();
+    }
 }

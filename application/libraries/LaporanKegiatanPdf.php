@@ -84,6 +84,18 @@ class LaporanKegiatanPdf extends Fpdf
       }
     }
 
+    function JenisDTItems($datas,$totalWidth){
+      $width = $totalWidth/2;
+      $this->SetFont('Times','',8);
+      $this->widths = [$width,$width];
+      if(count($datas)!=0){
+        foreach($datas as $data){
+          $this->row([$data->JenisDT,$data->Jumlah],10);
+        }
+      } else {
+      }
+    }
+
     function DKItems($datas,$totalWidth){
       $width = $totalWidth/4;
       $leftMargin = 10;

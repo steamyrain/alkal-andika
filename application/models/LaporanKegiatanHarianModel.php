@@ -3,6 +3,7 @@
     private $table='alkal_kegiatan_harian';
     private $tk_table='alkal_kegiatan_harian_tk';
     private $ab_table='alkal_kegiatan_harian_ab';
+    private $dt_table='alkal_kegiatan_harian_dt';
     private $dokumentasi_table='alkal_kegiatan_harian_dokumentasi';
     public function getLaporanKegiatanHarian($kegiatanid) {
       if(isset($kegiatanid)){
@@ -15,7 +16,7 @@
       }
       return $this->db->get();
     }
-    public function setLaporanKegiatanHarian($kegiatanharian,$tk,$ab){
+    public function setLaporanKegiatanHarian($kegiatanharian,$tk,$ab,$dt){
       $this->db->trans_start();
       $this->db->insert($this->table,$kegiatanharian);
       $KegiatanId = $this->db->query('SELECT KegiatanId from alkal_kegiatan_harian ORDER BY KegiatanId DESC LIMIT 1')->result()[0]->KegiatanId;
@@ -25,6 +26,9 @@
       if(isset($ab) && !empty($ab)){
         $ab = array_map(fn($value) => (isset($value)&&!empty($value))?array('KegiatanId'=>$KegiatanId, 'ABId'=>$value['ABId'], 'JenisAB'=>$value['JenisAB'], 'Jumlah'=>$value['Jumlah']):null,$ab);
       }
+      if(isset($dt) && !empty($dt)){
+        $dt = array_map(fn($value) => (isset($value)&&!empty($value))?array('KegiatanId'=>$KegiatanId, 'DTId'=>$value['DTId'], 'JenisDT'=>$value['JenisDT'], 'Jumlah'=>$value['Jumlah']):null,$dt);
+      }
       foreach($tk as $data){
         if(isset($data)){
           $this->db->insert($this->tk_table,$data);
@@ -33,6 +37,11 @@
       foreach($ab as $data){
         if(isset($data)){
           $this->db->insert($this->ab_table,$data);
+        }
+      }
+      foreach($dt as $data){
+        if(isset($data)){
+          $this->db->insert($this->dt_table,$data);
         }
       }
       $this->db->trans_complete();
@@ -57,6 +66,12 @@
     public function getLKDK($KegiatanId){
       $this->db->select('FileName, JenisDokumentasi');
       $this->db->from($this->dokumentasi_table);
+      $this->db->where('KegiatanId',$KegiatanId);
+      return $this->db->get();
+    }
+    public function getLKDT($KegiatanId){
+      $this->db->select('JenisDT, Jumlah');
+      $this->db->from($this->dt_table);
       $this->db->where('KegiatanId',$KegiatanId);
       return $this->db->get();
     }
