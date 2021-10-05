@@ -164,10 +164,21 @@
         /*-----------------*/
         switch($_SERVER['REQUEST_METHOD']) {
           case 'GET':
-            $ids = array(5,6,7);
-            $jobs = $this->JobRoleModel->getAllJobRoleExcept($ids)->result();
-            header('Content-Type: application/json');
-            echo json_encode($jobs);
+            try{
+              $kegiatanId = $this->input->get('kegiatanid',true);
+              if (isset($kegiatanId) && !empty($kegiatanId)){
+                $lktk = $this->LaporanKegiatanHarianModel->getLKTK($kegiatanId)->result();
+                header('Content-Type: application/json');
+                echo json_encode($lktk);
+              }else{
+                $ids = array(5,6,7);
+                $jobs = $this->JobRoleModel->getAllJobRoleExcept($ids)->result();
+                header('Content-Type: application/json');
+                echo json_encode($jobs);
+              }
+            } catch(exception $e){
+              $this->output->set_header(500);
+            }
             break;
           default:
             break;
@@ -181,9 +192,20 @@
         /*-----------------*/
         switch($_SERVER['REQUEST_METHOD']) {
           case 'GET':
-            $jenis_ab = $this->AlatBeratModel->getJenisAB()->result();
-            header('Content-Type: application/json');
-            echo json_encode($jenis_ab);
+            try{
+              $kegiatanId = $this->input->get('kegiatanid',true);
+              if(isset($kegiatanId) && !empty($kegiatanId)){
+                $lkab = $this->LaporanKegiatanHarianModel->getLKAB($kegiatanId)->result();
+                header('Content-Type: application/json');
+                echo json_encode($lkab);
+              }else {
+                $jenis_ab = $this->AlatBeratModel->getJenisAB()->result();
+                header('Content-Type: application/json');
+                echo json_encode($jenis_ab);
+              }
+            } catch(exception $e) {
+              $this->output->set_header(500);
+            }
             break;
         }
       }
@@ -196,9 +218,16 @@
         switch($_SERVER['REQUEST_METHOD']) {
           case 'GET':
             try {
-              $jenis_dt = $this->DumpTruckModel->getJenisDT()->result();
-              header('Content-Type: application/json');
-              echo json_encode($jenis_dt);
+              $kegiatanId = $this->input->get('kegiatanid',true);
+              if(isset($kegiatanId) && !empty($kegiatanId)){
+                $lkdt = $this->LaporanKegiatanHarianModel->getLKDT($kegiatanId)->result();
+                header('Content-Type: application/json');
+                echo json_encode($lkdt);
+              } else {
+                $jenis_dt = $this->DumpTruckModel->getJenisDT()->result();
+                header('Content-Type: application/json');
+                echo json_encode($jenis_dt);
+              }
             } catch(exception $e){
               $this->set_header(500);
             }

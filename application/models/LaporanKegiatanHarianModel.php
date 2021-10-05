@@ -52,25 +52,25 @@
       }
     }
     public function getLKTK($KegiatanId){
-      $this->db->select('JobName, Jumlah');
+      $this->db->select('KegiatanId,JobId,JobName,Jumlah');
       $this->db->from($this->tk_table);
       $this->db->where('KegiatanId',$KegiatanId);
       return $this->db->get();
     }
     public function getLKAB($KegiatanId){
-      $this->db->select('JenisAB, Jumlah');
+      $this->db->select('KegiatanId,ABId,JenisAB,Jumlah');
       $this->db->from($this->ab_table);
       $this->db->where('KegiatanId',$KegiatanId);
       return $this->db->get();
     }
     public function getLKDK($KegiatanId){
-      $this->db->select('FileName, JenisDokumentasi');
+      $this->db->select('KegiatanId,DokumentasiId,FileName,JenisDokumentasi');
       $this->db->from($this->dokumentasi_table);
       $this->db->where('KegiatanId',$KegiatanId);
       return $this->db->get();
     }
     public function getLKDT($KegiatanId){
-      $this->db->select('JenisDT, Jumlah');
+      $this->db->select('KegiatanId,DTId,JenisDT,Jumlah');
       $this->db->from($this->dt_table);
       $this->db->where('KegiatanId',$KegiatanId);
       return $this->db->get();

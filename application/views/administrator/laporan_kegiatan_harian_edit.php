@@ -97,7 +97,7 @@
         <!-- Keterangan -->
         <div class="form-group">
             <label for="keterangan" class="col-form-label" aria-="true" aria-invalid="false">Keterangan Kegiatan</label>
-            <input id="keterangan" name="keterangan" class="form-control" value="<?php $Keterangan ?>">
+            <input id="keterangan" name="keterangan" class="form-control" value="<?php echo $Keterangan ?>">
         </div>
         <!-- tenaga kerja -->
         <div 
@@ -125,35 +125,6 @@
                 <label>Jenis TK / Jumlah TK</label>
                 <button id="add-tk-btn" class="btn btn-primary" disabled onClick="event.preventDefault()">
                   <i class="fa fa-plus"></i>
-                </button>
-              </div>
-              <div 
-                id="div-tk-0"
-                style="
-                  display: grid;
-                  grid-template-columns: auto min(150px,20%) min(40px);
-                  grid-gap: 0.75vw;
-                "
-              >
-                <select 
-                  id="jenis-tk-0" 
-                  name="jenis-tk-0" 
-                  class="form-control" 
-                  required 
-                  disabled
-                >
-                </select>
-                <input 
-                    type="number" 
-                    name="jumlah-tk-0" 
-                    id="jumlah-tk-0" 
-                    class="form-control"
-                    step=1
-                    min=1
-                   required 
-                />
-                <button class="btn btn-danger form-control" id="delete-tk-btn-0" onClick="event.preventDefault();">
-                  <i class="fa fa-trash"></i>
                 </button>
               </div>
             </div>
@@ -186,35 +157,6 @@
                   <i class="fa fa-plus"></i>
                 </button>
               </div>
-              <div 
-                id="div-ab-0"
-                style="
-                  display: grid;
-                  grid-template-columns: auto min(150px,20%) min(40px);
-                  grid-gap: 0.75vw;
-                "
-              >
-                <select 
-                  id="jenis-ab-0" 
-                  name="jenis-ab-0" 
-                  class="form-control" 
-                  required 
-                  disabled
-                >
-                </select>
-                <input 
-                    type="number" 
-                    name="jumlah-ab-0" 
-                    id="jumlah-ab-0" 
-                    class="form-control"
-                    step=1
-                    min=1
-                   required 
-                />
-                <button class="btn btn-danger form-control" id="delete-ab-btn-0" onClick="event.preventDefault();">
-                  <i class="fa fa-trash"></i>
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -243,35 +185,6 @@
                 <label>Jenis DT / Jumlah DT</label>
                 <button id="add-dt-btn" class="btn btn-primary" disabled onClick="event.preventDefault()">
                   <i class="fa fa-plus"></i>
-                </button>
-              </div>
-              <div 
-                id="div-dt-0"
-                style="
-                  display: grid;
-                  grid-template-columns: auto min(150px,20%) min(40px);
-                  grid-gap: 0.75vw;
-                "
-              >
-                <select 
-                  id="jenis-dt-0" 
-                  name="jenis-dt-0" 
-                  class="form-control" 
-                  required 
-                  disabled
-                >
-                </select>
-                <input 
-                    type="number" 
-                    name="jumlah-dt-0" 
-                    id="jumlah-dt-0" 
-                    class="form-control"
-                    step=1
-                    min=1
-                   required 
-                />
-                <button class="btn btn-danger form-control" id="delete-dt-btn-0" onClick="event.preventDefault();">
-                  <i class="fa fa-trash"></i>
                 </button>
               </div>
             </div>
@@ -331,6 +244,249 @@
   let selected_tk = Array();
   let selected_ab = Array();
   let selected_dt = Array();
+  let selected_og_tk = Array();
+  let selected_og_ab = Array();
+  let selected_og_dt = Array();
+  let deleted_og_tk = Array();
+  let deleted_og_ab = Array();
+  let deleted_og_dt = Array();
+  let ogTK;
+  let ogAB;
+  let ogDT;
+  let ogDK;
+  let KegiatanId = <?php echo $KegiatanId; ?>;
+
+  function getOGTK(){
+    return $.ajax({
+      type: 'GET',
+      url: '<?php echo base_url('administrator/laporankegiatanharian/jenistk')?>'+`?kegiatanid=${KegiatanId}`,
+      dataType: 'json',
+      success: function(r) {
+        ogTK = r;
+        getJobRole();
+      }
+    })
+  }
+
+  function getOGAB(){
+    return $.ajax({
+      type: 'GET',
+      url: '<?php echo base_url('administrator/laporankegiatanharian/jenisab')?>'+`?kegiatanid=${KegiatanId}`,
+      dataType: 'json',
+      success: function(r) {
+        ogAB = r;
+        getJenisAB();
+      }
+    })
+  }
+
+  function getOGDT(){
+    return $.ajax({
+      type: 'GET',
+      url: '<?php echo base_url('administrator/laporankegiatanharian/jenisdt')?>'+`?kegiatanid=${KegiatanId}`,
+      dataType: 'json',
+      success: function(r) {
+        ogDT = r;
+        getJenisDT();
+      }
+    })
+  }
+
+  function initOGTK(data){
+    const tk_wrapper = $("div#jenis-tk-wrapper")
+    let og_counter = 0;
+    ogTK.forEach((val)=>{
+      let div = document.createElement('div');
+      let select = document.createElement('select');
+      let input = document.createElement('input');
+      let button = document.createElement('button');
+      // div
+      div.id = `div-og-tk-${og_counter}`;
+      div.style = "display: grid;grid-template-columns: auto min(150px,20%) min(40px);grid-gap: 0.75vw;";
+      // select
+      select.id = `jenis-og-tk-${og_counter}`;
+      select.className = "form-control";
+      select.required = true;
+      select.disabled = true;
+      // input
+      input.type = "number";
+      input.id = `jumlah-og-tk-${og_counter}`;
+      input.className = "form-control";
+      input.step = 1;
+      input.min = 1;
+      input.required = true;
+      input.disabled = true;
+      // button
+      button.className = "btn btn-danger form-control";
+      button.id = `delete-og-tk-btn-${og_counter}`;
+      button.onClick = "event.preventDefault()";
+      button.innerHTML = '<i class="fa fa-trash"></i>';
+      button.disabled = true;
+      // append
+      div.appendChild(select);
+      div.appendChild(input);
+      div.appendChild(button);
+      tk_wrapper.append(div);
+      if((data !== null)&&(data !== undefined)){
+        let option;
+        select.disabled = false;
+        input.disabled = false;
+        button.disabled = false;
+        data.forEach((value)=>{
+          option = document.createElement('option');
+          if(value.id === val.JobId){
+            option.value = value.id;
+            option.innerHTML = value.role_name;
+            option.selected = true;
+            select.appendChild(option);
+          } else {
+            option.value = value.id;
+            option.innerHTML = value.role_name;
+            select.appendChild(option);
+          }
+        })
+        input.value = val.Jumlah;
+      }
+      let selectedOption = $(`#jenis-og-tk-${og_counter} option`).filter(':selected');
+      let jumlah = $(`#jumlah-og-tk-${og_counter}`);
+      selected_og_tk[og_counter]={KegiatanId: KegiatanId, JobId: selectedOption.val(),JobName: selectedOption.text(),Jumlah: jumlah.val()};
+      onJenisOGTKChange(og_counter);
+      onJumlahOGTKChange(og_counter);
+      deleteOGTKButton(og_counter);
+      og_counter++;
+    })
+  }
+
+  function initOGAB(data){
+    const ab_wrapper = $("div#jenis-ab-wrapper")
+    let og_counter = 0;
+    ogAB.forEach((val)=>{
+      let div = document.createElement('div');
+      let select = document.createElement('select');
+      let input = document.createElement('input');
+      let button = document.createElement('button');
+      // div
+      div.id = `div-og-ab-${og_counter}`;
+      div.style = "display: grid;grid-template-columns: auto min(150px,20%) min(40px);grid-gap: 0.75vw;";
+      // select
+      select.id = `jenis-og-ab-${og_counter}`;
+      select.className = "form-control";
+      select.required = true;
+      select.disabled = true;
+      // input
+      input.type = "number";
+      input.id = `jumlah-og-ab-${og_counter}`;
+      input.className = "form-control";
+      input.step = 1;
+      input.min = 1;
+      input.required = true;
+      input.disabled = true;
+      // button
+      button.className = "btn btn-danger form-control";
+      button.id = `delete-og-ab-btn-${og_counter}`;
+      button.onClick = "event.preventDefault()";
+      button.innerHTML = '<i class="fa fa-trash"></i>';
+      button.disabled = true;
+      // append
+      div.appendChild(select);
+      div.appendChild(input);
+      div.appendChild(button);
+      ab_wrapper.append(div);
+      if((data !== null)&&(data !== undefined)){
+        let option;
+        select.disabled = false;
+        input.disabled = false;
+        button.disabled = false;
+        data.forEach((value)=>{
+          option = document.createElement('option');
+          if(value.id === val.ABId){
+            option.value = value.id;
+            option.innerHTML = value.category+' '+value.sub_category;
+            option.selected = true;
+            select.appendChild(option);
+          } else {
+            option.value = value.id;
+            option.innerHTML = value.category+' '+value.sub_category;
+            select.appendChild(option);
+          }
+        })
+        input.value = val.Jumlah;
+      }
+      let selectedOption = $(`#jenis-og-ab-${og_counter} option`).filter(':selected');
+      let jumlah = $(`#jumlah-og-ab-${og_counter}`);
+      selected_og_ab[og_counter]={KegiatanId: KegiatanId, ABId: selectedOption.val(), JenisAB: selectedOption.text(),Jumlah: jumlah.val()};
+      onJenisOGABChange(og_counter);
+      onJumlahOGABChange(og_counter);
+      deleteOGABButton(og_counter);
+      og_counter++;
+    })
+  }
+
+  function initOGDT(data){
+    const dt_wrapper = $("div#jenis-dt-wrapper")
+    let og_counter = 0;
+    ogDT.forEach((val)=>{
+      let div = document.createElement('div');
+      let select = document.createElement('select');
+      let input = document.createElement('input');
+      let button = document.createElement('button');
+      // div
+      div.id = `div-og-dt-${og_counter}`;
+      div.style = "display: grid;grid-template-columns: auto min(150px,20%) min(40px);grid-gap: 0.75vw;";
+      // select
+      select.id = `jenis-og-dt-${og_counter}`;
+      select.className = "form-control";
+      select.required = true;
+      select.disabled = true;
+      // input
+      input.type = "number";
+      input.id = `jumlah-og-dt-${og_counter}`;
+      input.className = "form-control";
+      input.step = 1;
+      input.min = 1;
+      input.required = true;
+      input.disabled = true;
+      // button
+      button.className = "btn btn-danger form-control";
+      button.id = `delete-og-dt-btn-${og_counter}`;
+      button.onClick = "event.preventDefault()";
+      button.innerHTML = '<i class="fa fa-trash"></i>';
+      button.disabled = true;
+      // append
+      div.appendChild(select);
+      div.appendChild(input);
+      div.appendChild(button);
+      dt_wrapper.append(div);
+      if((data !== null)&&(data !== undefined)){
+        let option;
+        select.disabled = false;
+        input.disabled = false;
+        button.disabled = false;
+        data.forEach((value)=>{
+          option = document.createElement('option');
+          if(value.id === val.DTId){
+            option.value = value.id;
+            option.innerHTML = 'dt '+value.category;
+            option.selected = true;
+            select.appendChild(option);
+          } else {
+            option.value = value.id;
+            option.innerHTML = 'dt '+value.category;
+            select.appendChild(option);
+          }
+        })
+        input.value = val.Jumlah;
+      }
+      let selectedOption = $(`#jenis-og-dt-${og_counter} option`).filter(':selected');
+      let jumlah = $(`#jumlah-og-dt-${og_counter}`);
+      selected_og_dt[og_counter]={KegiatanId: KegiatanId, DTId: selectedOption.val(), JenisDT: selectedOption.text(),Jumlah: jumlah.val()};
+      onJenisOGDTChange(og_counter);
+      onJumlahOGDTChange(og_counter);
+      deleteOGDTButton(og_counter);
+      og_counter++;
+    })
+  }
+
   function getJobRole(){
     return $.ajax({
         type: 'GET',
@@ -338,10 +494,7 @@
         dataType: 'json',
         success: function (r){
           job_role = r;
-          initTK(0,job_role);
-          onJenisTKChange(0)
-          onJumlahTKChange(0)
-          deleteTKButton(0);
+          initOGTK(job_role);
           $("#add-tk-btn").prop('disabled',false);
           $("#add-tk-btn").on('click',()=>{
             addTKButton()
@@ -353,6 +506,7 @@
         }
     });
   }
+
   function getJenisAB(){
     return $.ajax({
       type: 'GET',
@@ -360,10 +514,7 @@
       dataType: 'json',
       success: function(r){
         jenis_ab = r;
-        initAB(0,jenis_ab)
-        onJenisABChange(0)
-        onJumlahABChange(0)
-        deleteABButton(0)
+        initOGAB(jenis_ab);
         $("#add-ab-btn").prop('disabled',false);
         $("#add-ab-btn").on('click',()=>{
           addABButton()
@@ -375,6 +526,7 @@
       }
     })
   }
+
   function getJenisDT(){
     return $.ajax({
       type:'GET',
@@ -382,10 +534,7 @@
       dataType: 'json',
       success: function(r){
         jenis_dt = r;
-        initDT(0,jenis_dt);
-        onJenisDTChange(0);
-        onJumlahDTChange(0);
-        deleteDTButton(0)
+        initOGDT(jenis_dt);
         $("#add-dt-btn").prop('disabled',false);
         $("#add-dt-btn").on('click',()=>{
           addDTButton()
@@ -397,6 +546,7 @@
       }
     })
   }
+
   function initTK(nid,data){
     $(`#jenis-tk-${nid}`).prop('disabled',false);
     if((data !== null)&&(data !== undefined)){
@@ -409,12 +559,13 @@
     jumlah.val(0)
     selected_tk[nid]={JobId: selectedOption.val(),JobName: selectedOption.text(),Jumlah: jumlah.val()};
   }
+
   function initAB(nid,data){
     $(`#jenis-ab-${nid}`).prop('disabled',false);
     let counter = 1;
     if((data !== null)&&(data !== undefined)){
       data.forEach((value)=>{
-        $(`#jenis-ab-${nid}`).append(`<option value=${counter}>${value.category} ${value.sub_category}</option>`);
+        $(`#jenis-ab-${nid}`).append(`<option value=${value.id}>${value.category} ${value.sub_category}</option>`);
         counter++;
       })
     }
@@ -423,12 +574,13 @@
     jumlah.val(0)
     selected_ab[nid]={ABId: selectedOption.val(),JenisAB: selectedOption.text(),Jumlah: jumlah.val()};
   }
+
   function initDT(nid,data){
     $(`#jenis-dt-${nid}`).prop('disabled',false);
     let counter = 1;
     if((data !== null)&&(data !== undefined)){
       data.forEach((value)=>{
-        $(`#jenis-dt-${nid}`).append(`<option value=${counter}>${value.category}</option>`);
+        $(`#jenis-dt-${nid}`).append(`<option value=${value.id}>dt ${value.category}</option>`);
         counter++;
       })
     }
@@ -437,6 +589,7 @@
     jumlah.val(0)
     selected_dt[nid]={DTId: selectedOption.val(),JenisDT: selectedOption.text(),Jumlah: jumlah.val()}
   }
+
   function addTKButton(){
     tk_counter++;
     $("#jenis-tk-wrapper").append(`
@@ -471,6 +624,7 @@
       </div>
     `)
   }
+
   function addABButton(){
     ab_counter++;
     $("#jenis-ab-wrapper").append(`
@@ -505,6 +659,7 @@
       </div>
     `)
   }
+
   function addDTButton(){
     dt_counter++;
     $("#jenis-dt-wrapper").append(`
@@ -539,10 +694,35 @@
       </div>
     `)
   }
+
   function deleteTKButton(nid){
     $(`#delete-tk-btn-${nid}`).on('click',()=>{
       $(`#div-tk-${nid}`).remove();
       selected_tk[nid]={};
+    })
+  }
+  function deleteOGTKButton(nid){
+    return $(`#delete-og-tk-btn-${nid}`).on('click',()=>{
+      $(`#div-og-tk-${nid}`).remove();
+      deleted_og_tk.push(selected_og_tk[nid]);
+      selected_og_tk[nid]={};
+      console.log(deleted_og_tk);
+    })
+  }
+  function deleteOGABButton(nid){
+    return $(`#delete-og-ab-btn-${nid}`).on('click',()=>{
+      $(`#div-og-ab-${nid}`).remove();
+      deleted_og_ab.push(selected_og_ab[nid]);
+      selected_og_ab[nid]={};
+      console.log(deleted_og_ab);
+    })
+  }
+  function deleteOGDTButton(nid){
+    return $(`#delete-og-dt-btn-${nid}`).on('click',()=>{
+      $(`#div-og-dt-${nid}`).remove();
+      deleted_og_dt.push(selected_og_dt[nid]);
+      selected_og_dt[nid]={};
+      console.log(deleted_og_dt);
     })
   }
   function deleteABButton(nid){
@@ -557,6 +737,8 @@
       selected_dt[nid]={};
     })
   }
+  
+  // jenis tk
   function onJenisTKChange(nid) {
     $(`#jenis-tk-${nid}`).on('change',{id: nid,sel: selected_tk},(event)=>{
       event.data.sel[event.data.id].JobId = $(`#jenis-tk-${event.data.id}`).val();
@@ -568,16 +750,27 @@
       event.data.sel[event.data.id].Jumlah = $(`#jumlah-tk-${nid}`).val();
     })
   }
+
+  // og jenis tk
+  function onJenisOGTKChange(nid) {
+    return $(`#jenis-og-tk-${nid}`).on('change',{id: nid,sel: selected_og_tk},(event)=>{
+      event.data.sel[event.data.id].JobId = $(`#jenis-og-tk-${event.data.id}`).val();
+      event.data.sel[event.data.id].JobName = $(`#jenis-og-tk-${event.data.id} option`).filter(':selected').text();
+      console.log(selected_og_tk);
+    });
+  }
+  function onJumlahOGTKChange(nid){
+    return $(`#jumlah-og-tk-${nid}`).on('change',{id: nid,sel: selected_og_tk},(event)=>{
+      event.data.sel[event.data.id].Jumlah = $(`#jumlah-og-tk-${nid}`).val();
+      console.log(selected_og_tk);
+    })
+  }
+
+  // jenis ab
   function onJenisABChange(nid) {
     $(`#jenis-ab-${nid}`).on('change',{id: nid,sel: selected_ab},(event)=>{
       event.data.sel[event.data.id].ABId = $(`#jenis-ab-${event.data.id}`).val();
       event.data.sel[event.data.id].JenisAB = $(`#jenis-ab-${event.data.id} option`).filter(':selected').text();
-    })
-  }
-  function onJenisDTChange(nid) {
-    $(`#jenis-dt-${nid}`).on('change',{id: nid,sel: selected_dt},(event)=>{
-      event.data.sel[event.data.id].DTId = $(`#jenis-dt-${event.data.id}`).val();
-      event.data.sel[event.data.id].JenisDT = $(`#jenis-dt-${event.data.id} option`).filter(':selected').text();
     })
   }
   function onJumlahABChange(nid){
@@ -585,13 +778,56 @@
       event.data.sel[event.data.id].Jumlah = $(`#jumlah-ab-${nid}`).val();
     })
   }
+
+  // og jenis ab
+  function onJenisOGABChange(nid) {
+    return $(`#jenis-og-ab-${nid}`).on('change',{id: nid,sel: selected_og_ab},(event)=>{
+      event.data.sel[event.data.id].ABId = $(`#jenis-og-ab-${event.data.id}`).val();
+      event.data.sel[event.data.id].JenisAB = $(`#jenis-og-ab-${event.data.id} option`).filter(':selected').text();
+      console.log(selected_og_ab);
+    });
+  }
+
+  function onJumlahOGABChange(nid){
+    return $(`#jumlah-og-ab-${nid}`).on('change',{id: nid,sel: selected_og_ab},(event)=>{
+      event.data.sel[event.data.id].Jumlah = $(`#jumlah-og-ab-${nid}`).val();
+      console.log(selected_og_ab);
+    })
+  }
+
+  // jenis dt
+  function onJenisDTChange(nid) {
+    $(`#jenis-dt-${nid}`).on('change',{id: nid,sel: selected_dt},(event)=>{
+      event.data.sel[event.data.id].DTId = $(`#jenis-dt-${event.data.id}`).val();
+      event.data.sel[event.data.id].JenisDT = $(`#jenis-dt-${event.data.id} option`).filter(':selected').text();
+    })
+  }
   function onJumlahDTChange(nid){
     $(`#jumlah-dt-${nid}`).on('change',{id: nid,sel: selected_dt},(event)=>{
       event.data.sel[event.data.id].Jumlah = $(`#jumlah-dt-${nid}`).val();
     })
   }
+
+  // og jenis dt
+  function onJenisOGDTChange(nid) {
+    return $(`#jenis-og-dt-${nid}`).on('change',{id: nid,sel: selected_og_dt},(event)=>{
+      event.data.sel[event.data.id].DTId = $(`#jenis-og-dt-${event.data.id}`).val();
+      event.data.sel[event.data.id].JenisDT = $(`#jenis-og-dt-${event.data.id} option`).filter(':selected').text();
+      console.log(selected_og_dt);
+    });
+  }
+  function onJumlahOGDTChange(nid){
+    return $(`#jumlah-og-dt-${nid}`).on('change',{id: nid,sel: selected_og_dt},(event)=>{
+      event.data.sel[event.data.id].Jumlah = $(`#jumlah-og-dt-${nid}`).val();
+      console.log(selected_og_dt);
+    })
+  }
+
   $(document).ready(function(){
-    getJobRole();
+    getOGTK();
+    getOGAB();
+    getOGDT();
+    /*
     getJenisAB();
     getJenisDT();
 
@@ -662,8 +898,7 @@
           alert("Gagal Kirim Data");
         }
       )
-
-
     })
+    */
   })
 </script>
