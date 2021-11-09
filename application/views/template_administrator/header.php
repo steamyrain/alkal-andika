@@ -10,6 +10,8 @@
     <meta name="author" content="">
 
     <title>Dinas Bina Marga</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo base_url() ?>assets/img/favicon-32x32.png">
+
 
     <!-- Custom fonts for this template-->
     <link href="<?php echo base_url() ?>assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
